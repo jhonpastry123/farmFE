@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="/html/assets/webix/webix.css?v=8.4.0" type="text/css" charset="utf-8">
+	<script src="/html/assets/webix/webix.js?v=8.4.0" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="/html/assets/addition/defintionOfURL.js"></script>
+	<title>Login Page</title>
+	<style type="text/css">
+		body.webix_full_screen {
+			overflow: scroll;
+		}
+		.grey .webix_el_box{
+			color: #bfbfbf;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="loginForm"></div>
+
+	<script type="text/javascript" charset="utf-8">
+
+		const lastPage = sessionStorage.getItem("lastPage");
+		if (lastPage) {
+			location.href = lastPage;
+		}
+
+		const label_title = {
+			view: "label",
+			label: "Register",
+			align: "center",
+		}
+		//head x 닫기
+		const label_x = { 
+			view: "icon",
+			icon: "wxi-close",
+			hotkey: "esc",
+			width: 40,
+			click: function () {
+				// $$("form_view").clear();
+				// $$("form_view").clearValidation();
+				$$("window_regist_user").hide();
+			},
+		}
+		const logo = {
+			template: "<img src='/html/assets/logo/logo_iFrm.png' class='logo_icon' ondragstart='false'/>",
+			type: "header",
+			autoheight: true,
+			css: {
+				"width": "fit-content!important",
+				"margin": "auto!important",
+				"border": "none!important"
+			}
+		};
+
+		const id_input = {
+			view: "text",
+			type: "text",
+			name: "ID",
+			label: "ID",
+			id: "ID",
+			placeholder: "Enter ID",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your ID!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("password").focus();
+						console.log("keypress in ID")
+					}
+					
+				}
+			},
+		};
+
+		const password_input = {
+			view: "text",
+			type: "password",
+			name: "password",
+			label: "Password",
+			id: "password",
+			placeholder: "Enter Password",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your password!",
+			validateEvent: "key",
+			on: {
+				"onBlur": function () {
+					console.log("Validating password");
+					this.validate()
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("loginFormSubmitButton").focus();
+						console.log("keypress in password")
+					}
+				}
+			},
+		};
+
+		const forgot_password = {
+			cols: [
+				{},
+				{
+					template: "<a href='javascript:alert()'>Forgot Password?</a>",
+					width: 130,
+					autoheight: true,
+					css: {
+						"width": "fit-content!important",
+						"border": "none!important"
+					}
+				}
+			],
+		};
+
+		const farm_select_win = webix.ui({
+			view:"window",
+			id:"farm_select_win",
+			modal: true,
+			move: true,
+			position: "center",
+			responsive: "a1",
+			// scroll: true,
+			// borderless	: 	true,
+			// padding		: 	{ right: 10 },
+			elementsConfig: { labelPosition: "left", },
+			head: {
+				view: "toolbar",
+				elements: [
+					{
+						view: "label",
+						label: "Select a Farm",
+						align: "center",
+					},
+					{ 
+						view: "icon",
+						icon: "wxi-close",
+						hotkey: "esc",
+						width: 40,
+						click: function () {
+							// $$("form_view").clear();
+							// $$("form_view").clearValidation();
+							$$("farm_select_win").hide();
+						},
+					},
+				],
+			},
+			body:{
+				view: "form",
+				id: "farm_select_form",
+				elementsConfig: {
+					bottomPadding: 18,
+					labelWidth: 100,
+				},
+				css: {
+					margin: "auto!important",
+				},
+				elements: [
+					{ 
+						view:"select", label:"Farm Name: ", id: "farms", labelAlign:"right" 
+					},
+					{
+						view: "button", value: "Select", css: "webix_primary",
+						click: function() {
+							var farm = $$("farms").getValue();
+							sessionStorage.setItem("user_group_idx", farm);
+							this.getTopParentView().hide();
+
+							const user = JSON.parse(sessionStorage.getItem('ifrm_user'));
+							webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: farm }).then(function(data){
+								if (parseInt(data.text()) > 0) {
+									sessionStorage.setItem("breedID", data.text())
+								} else {
+									window.location.href = "register-breed"
+								}
+							})
+						}
+					}
+				],
+			},
+		});
+		
+
+		const submit_button = {
+			margin: 10,
+			paddingX: 2,
+			borderless: true,
+			cols: [
+				{
+					view: "button", 
+					label: "Login", 
+					type: "form", 
+					id: "loginFormSubmitButton", 
+					click: function () {
+						var form = $$('loginForm');
+						//go to ajax.then(){ //callback}
+						if (form.validate()) {
+							const val = form.getValues();
+							webix.ajax().post(schedulerUrl + 'users/login', { 
+								user_id: val.ID,
+								user_pass: val.password,
+							}).then(function(data){
+								const response = JSON.parse(data.text()); 
+								// response
+								if (response != "") {
+									console.log(response);
+									const user = response.user;
+									const res = response.response;
+									const farms = response.farms;
+									
+									if (res == "popup_window") {
+										var select_farms = [];
+										for (let index = 0; index < farms.length; index++) {
+											const element = farms[index];
+											select_farms.push({
+												id: element.id,
+												value: element.farm_name,
+											})
+										}
+									}
+
+									webix.alert({ 
+										title: "<img src='/html/assets/logo/logo_iFrm.png' class='logo_icon' ondragstart='false'/> \n Welcome " + user.user_id, 
+										type: "alert-success", 
+										text: "Your Email is " + user.user_email })
+									.then(function(result){
+										sessionStorage.setItem("ifrm_user", JSON.stringify(user));
+										sessionStorage.setItem("user_id", user.user_id);
+										sessionStorage.setItem("user_group", "1");
+										switch (res) {
+											case "register_farm":
+												window.location.href = "register-farm"
+												break;
+											case "mainview":
+												sessionStorage.setItem("user_group_idx", farms[0].id)
+												webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: farms[0].id }).then(function(data){
+													if (parseInt(data.text()) > 0) {
+														sessionStorage.setItem("breedID", data.text())
+														window.location.href = "tables1"
+													} else {
+														window.location.href = "register-breed"
+													}
+												})
+												break;
+
+											case "popup_window":
+												$$("farms").define("options", select_farms);
+												$$("farms").refresh();
+												farm_select_win.show();
+												break;
+										}
+									})
+								}
+								else {
+									webix.alert({ title: "ID or Password is not Correct \n Please try again", type: "alert-warning"})
+								}
+							});
+						}
+					}
+				}
+			],
+			css: 'webix_primary'  // this is no need  may be
+			
+		}
+
+		const register_button = {
+			margin: 10,
+			paddingX: 2,
+			borderless: true,
+			cols: [
+				{
+					view: "button", 
+					label: "Register", 
+					type: "form", 
+					id: "registerButton", 
+					click: function () {
+						registration_1st_step.show();
+						// var form = $$('loginForm')
+						// if (form.validate()) {
+						// 	webix.alert({ title: "Login successfull", type: "alert-success", text: "Welcome User" })
+						// }
+					}
+				}
+			],
+		}
+
+		const idRemember ={
+			view:"checkbox",
+			labelRight:"아이디 저장", 
+			id: "idRemember", 
+			labelWidth: 120, 
+			value:0,
+			on: {
+				onChange: function() {
+					// if (this.getValue() == 1){
+					// setCookie("userIdCookie", $$("ID").getValue(), 7);
+					// setCookie("userDeptCookie", $$("dept").getValue(), 7);
+					// } else {
+					// setCookie("userIdCookie", $$("ID").getValue(), 0); 
+					// setCookie("userDeptCookie", $$("dept").getValue(), 0); 
+					// };
+				},
+			},
+		}
+		//--
+		const checkbox_a = {
+			view: "checkbox", 
+			id: "field_a", 
+			labelRight: "I agree with contions.", 
+			value: 0,
+			autoheight: true,
+			width: 550,
+			labelWidth: 0
+		};
+
+		const checkbox_b = {
+			view: "checkbox", 
+			id: "field_b", 
+			labelRight: "I agree with contions.", 
+			value: 0,
+			autoheight: true,
+			width: 550,
+			labelWidth: 0
+		};
+
+		const textarea_a = { 
+			view:"textarea", 
+			width: 550,
+			height:100, 
+			value: "1. I agree…\n2. This content is ..\n3. This…\n4. This…\n5. This…\n",
+			readonly: true
+		};
+
+		const textarea_b = { 
+			view:"textarea", 
+			width: 550,
+			height:100, 
+			value: "1. I agree…\n2. This content is ..\n3. This…\n4. This…\n5. This…\n",
+			readonly: true
+		};
+
+		const submit__agree_button = {
+			margin: 10,
+			paddingX: 2,
+			borderless: true,
+			cols: [
+				{
+					view: "button", 
+					label: "Cancel", 
+					type: "form", 
+					id: "registerButtonCancel", 
+					width: 270,
+					click: function () {
+						// var form = $$('loginForm')
+						// if (form.validate()) {
+						// 	webix.alert({ title: "Login successfull", type: "alert-success", text: "Welcome User" })
+						// }
+					}
+				},
+				{
+					view: "button", 
+					label: "Agree", 
+					type: "form", 
+					id: "registerButtonAgree", 
+					width: 270,
+					click: function () {
+						const checkbox_a_value = $$("field_a").getValue();
+						const checkbox_b_value = $$("field_b").getValue();
+
+						if (checkbox_a_value && checkbox_b_value) {
+							window.location.href = "register"
+						}
+						// var form = $$('loginForm')
+						// if (form.validate()) {
+						// 	if (form.getValues().ID == "admin" && form.getValues().password == "123456")
+						// 		webix.alert({ title: "<img src='assets/logo.png' class='logo_icon' ondragstart='false'/> \n Welcome admin", type: "alert-success", text: "Your ID is when0@google.com" })
+						// 	else
+						// 		webix.alert({ title: "ID or Password is not Correct \n Please try again", type: "alert-warning"})
+						// }
+					},
+					
+					//css: 'webix_primary'
+				}
+			],
+		}
+	
+		webix.ui({
+			view: "form",
+			id: "loginForm",
+			elementsConfig: {
+				bottomPadding: 18,
+				labelWidth: 120,
+				labelPosition:"top"
+			},
+			css: {
+				margin: "auto!important",
+				"padding-top": "40px",
+			},
+			elements: [
+				logo,
+				id_input,
+				password_input,
+				forgot_password,
+				submit_button,
+				register_button
+			],
+			width: 550
+		});
+
+		var registration_1st_step = webix.ui({
+			view: "window",
+			id: "window_regist_user",
+			modal: true,
+			move: true,
+			position: "center",
+			responsive: "a1",
+			// scroll: true,
+			// borderless	: 	true,
+			// padding		: 	{ right: 10 },
+			elementsConfig: { labelPosition: "left", },
+			head: {
+				view: "toolbar",
+				elements: [
+					label_title,
+					label_x,],
+			},
+			body:{
+				view: "form",
+				id: "registerForm",
+				elementsConfig: {
+					bottomPadding: 18,
+					labelWidth: 120,
+				},
+				css: {
+					margin: "auto!important",
+				},
+				elements: [
+					//logo,
+					checkbox_a,
+					textarea_a,
+					checkbox_b,
+					textarea_b,
+					submit__agree_button,
+				],
+			},
+
+		});
+
+	</script>
+</body>
+
+</html>

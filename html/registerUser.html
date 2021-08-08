@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="/html/assets/webix/webix.css?v=8.4.0" type="text/css" charset="utf-8">
+	<script src="/html/assets/webix/webix.js?v=8.4.0" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="/html/assets/addition/defintionOfURL.js"></script>
+
+	<title>Register Page</title>
+	<style type="text/css">
+		body.webix_full_screen {
+			overflow: scroll;
+		}
+		.grey .webix_el_box{
+			color: #bfbfbf;
+		}
+		.webix_uploader .webix_el_box {
+			margin: auto!important;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="loginForm"></div>
+
+	<script type="text/javascript" charset="utf-8">
+		const logo = {
+			template: "<img src='/html/assets/logo/logo_iFrm.png' class='logo_icon' ondragstart='false'/>",
+			type: "header",
+			autoheight: true,
+			css: {
+				"width": "fit-content!important",
+				"margin": "auto!important",
+				"border": "none!important"
+			}
+		};
+
+		const neccessary_label = {
+			cols: [
+				{
+					view: "label",
+					label: "Basic information",
+					id: "label_a"
+				},
+				{},
+				{
+					view: "label",
+					label: "Neccessary",
+					id: "label_b",
+					align: "right"
+				}
+			],
+			css: {
+				color: "grey",
+				"border-bottom": "1px solid!important"
+			}
+		};
+
+		const id_input = {
+			view: "text",
+			type: "text",
+			name: "ID",
+			label: "ID",
+			id: "ID",
+			placeholder: "Enter ID",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your ID!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("password").focus();
+						console.log("keypress in ID")
+					}
+
+				}
+			},
+		};
+
+		const password_input = {
+			view: "text",
+			type: "password",
+			name: "password",
+			label: "Password",
+			id: "password",
+			placeholder: "Enter Password",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your password!",
+			validateEvent: "key",
+			on: {
+				"onBlur": function () {
+					console.log("Validating password");
+					this.validate()
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("password_confirmation").focus();
+						console.log("keypress in password")
+					}
+				}
+			},
+		};
+
+		const password_confirm = {
+			view: "text",
+			type: "password",
+			name: "password_confirmation",
+			label: "Password2",
+			id: "password_confirmation",
+			placeholder: "Re-type Password",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter same password!",
+			validateEvent: "key",
+			on: {
+				"onBlur": function () {
+					console.log("Validating password");
+					this.validate()
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("user_name").focus();
+						console.log("keypress in password")
+					}
+				}
+			},
+		};
+
+		const user_name = {
+			view: "text",
+			type: "text",
+			name: "user_name",
+			label: "User name",
+			id: "user_name",
+			placeholder: "Enter User name",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter user name!",
+			validateEvent: "key",
+			on: {
+				"onBlur": function () {
+					console.log("Validating password");
+					this.validate()
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("user_email").focus();
+						console.log("keypress in password")
+					}
+				}
+			},
+		};
+
+		const user_email = {
+			view: "text",
+			type: "text",
+			name: "user_email",
+			label: "User email",
+			id: "user_email",
+			placeholder: "Enter User email",
+			required: true,
+			validate: webix.rules.isEmail,
+			invalidMessage: "Please enter user email!",
+			on: {
+				"onBlur": function () {
+					console.log("Validating password");
+					this.validate()
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("user_address1").focus();
+						console.log("keypress in password")
+					}
+				}
+			},
+		};
+
+		const user_address_label = {
+			view: "label",
+			label: "User Address1 <span style='color:red;'>*</span>",
+		}
+
+		const user_address1 = {
+			cols: [
+				{
+					view: "text",
+					type: "text",
+					name: "user_address1",
+					id: "user_address1",
+					placeholder: "Enter User Address1",
+					required: true,
+					validate: webix.rules.isNotEmpty,
+					invalidMessage: "Please enter User Address1!",
+					validateEvent: "key",
+					on: {
+						"onBlur": function () {
+							console.log("Validating password");
+							this.validate()
+						},
+						"onKeyPress": function (key, e) {
+							if (key == 13) {
+								$$("user_address2").focus();
+								console.log("keypress in password")
+							}
+						}
+					},
+					width: 450
+				},
+				{
+					rows: [
+						{
+							view: "button",
+							name: "zip",
+							label: "zip",
+							id: "zip",
+							on: {
+								"onClick": function () {
+									console.log("Validating password");
+									this.validate()
+								},
+							},
+							css: "webix_primary",
+						},
+						{}
+					]
+					
+				}
+			],
+		};
+
+		const user_address2 = {
+			view: "text",
+			type: "text",
+			name: "user_address2",
+			label: "User Address2",
+			id: "user_address2",
+			placeholder: "Enter User Address2",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter user address2!",
+			validateEvent: "key",
+			on: {
+				"onBlur": function () {
+					console.log("Validating password");
+					this.validate()
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("mobile_telephone").focus();
+						console.log("keypress in password")
+					}
+				}
+			},
+		};
+
+		const mobile_telephone = {
+			view: "text",
+			type: "text",
+			name: "mobile_telephone",
+			label: "Mobile telephone",
+			id: "mobile_telephone",
+			placeholder: "Enter Mobile telephone",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter mobile telephone in valid!",
+			validateEvent: "key",
+			pattern: { mask: "###-####-####", allow: /[0-9]/g },
+			on: {
+				"onBlur": function () {
+					console.log("Validating password");
+					this.validate()
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("buildings").focus();
+						console.log("keypress in password")
+					}
+				}
+			},
+		};
+
+		const submit_button = {
+			margin: 10,
+			paddingX: 2,
+			borderless: true,
+			cols: [
+				{
+					view: "button",
+					label: "Sign Up",
+					type: "form",
+					id: "loginFormSubmitButton",
+					click: function () {
+						var form = $$('loginForm')
+						if (form.validate()) {
+							$$("avatar").send(function() {
+								const val = form.getValues();
+								webix.ajax().post(schedulerUrl + 'users/register', { 
+									user_id: val.ID,
+									user_pass: val.password,
+									user_name: val.user_name,
+									job_name: "",
+									user_group: "1",
+									user_group_idx: "0",
+									mobile: val.mobile_telephone,
+									passport_no: "",
+									date_birth: new Date(),
+									addr1: val.user_address1,
+									addr2: val.user_address2,
+									user_email: val.user_email ,
+									avatar: val.avatar
+								}).then(function(data){
+									// response
+									if (data.text() != "") {
+										webix.alert({ title: "Register User", type: "alert-success", text: "Register a user successfully!" }).then(function (result){
+											location.href = "login";
+										})
+									}
+									else {
+										webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+									}
+								});
+							})
+						}
+					}
+				}
+			],
+			css: 'webix_primary'
+		}
+
+		const photo = {
+			view:"photo",
+			name:"photo",
+			css:"form_photo",
+			id:"form_photo",
+
+			//borderless:false,
+			width:60,
+			height:200
+		};
+
+		const user_avatar = {
+			rows:[
+				photo,
+				{
+					view:"uploader", id: "avatar", name: "avatar", value:"Avatar", accept:"image/*", autosend:false, autowidth:true, multiple:false, width:200, 
+					upload: schedulerUrl + "users/avatar",
+					on:{        
+						onAfterFileAdd: function(upload){        
+							var file = upload.file;
+							var reader = new FileReader(); 
+
+							reader.onload = function(event) {
+								$$("form_photo").setValue(event.target.result);
+							};           
+							reader.readAsDataURL(file)
+							return false;
+						},
+						onUploadComplete: function(response) {
+							console.log(response);
+						}
+					},
+				},
+			]
+		};
+
+		webix.ui({
+			view: "form",
+			id: "loginForm",
+			elementsConfig: {
+				bottomPadding: 18,
+				labelWidth: 120,
+				labelPosition: "top"
+			},
+			css: {
+				margin: "auto!important",
+				"padding-top": "40px",
+				overflow: "auto"
+			},
+			rules:{
+				password_confirmation:function(value){
+					//passwords must be equal
+					if (value != $$("password").getValue()){
+						return false;
+					}
+					return true;
+				}
+			},
+			elements: [
+				logo,
+				neccessary_label,
+				id_input,
+				password_input,
+				password_confirm,
+				user_name,
+				user_email,
+				user_avatar,
+				user_address_label,
+				user_address1,
+				user_address2,
+				mobile_telephone,
+				submit_button,
+			],
+			width: 550
+
+		});
+
+		webix.html.addCss($$("label_a").getNode(), "grey");
+		webix.html.addCss($$("label_b").getNode(), "grey");
+
+	</script>
+</body>
+
+</html>

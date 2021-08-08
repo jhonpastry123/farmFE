@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Register Farm Page</title>
+	<!-- Webix Library -->
+	<script type="text/javascript" src="/html/assets/webix/webix.js"></script>
+	<script type="text/javascript" src="/html/assets/locales/kr_doc.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/screenfull.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/crypto-js.min.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/functions.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/defintionOfURL.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/sharedComponent.js"></script>
+
+	<!-- Css -->
+	<link rel="stylesheet" type="text/css" href="/html/assets/webix/skins/flat.css" />
+	<link rel="stylesheet" type="text/css" href="/html/assets/css/MaterialDesign/css/materialdesignicons.min.css" />
+	<!-- <link rel="stylesheet" title="contrast" type="text/css" href="/html/assets/docmanager/webix/skins/contrast.css" /> -->
+	<!-- <link rel="stylesheet" title="contrast" type="text/css" href="/html/assets/docmanager/skins/contrast.css"> -->
+
+	<!-- Chat App -->
+	<script type="text/javascript" src="/html/assets/chat/chat.js"></script>
+	<!-- <link rel="stylesheet" type="text/css" href="/html/assets/chat/webix/skins/contrast.css" />
+	<link rel="stylesheet" type="text/css" href="/html/assets/chat/skins/contrast.css" /> -->
+
+	<style>
+		.webix_view.webix_el_label.borderR {
+			border-right: solid 1px grey !important;
+			height: 45px !important;
+		}
+
+		/*카드템플릿의 하단 박스부분*/
+		.webix_fmanager_card_panel {
+			position: relative;
+			padding: 10px 12px;
+			height: 36px;
+			background-color: rgba(0, 0, 0, 0.5);
+
+			/* background-color: #7F7F7F;   */
+		}
+
+		/* 카드템플릿에표시되는 파일명 */
+		.webix_fmanager_card_name {
+			display: inline-block;
+			white-space: nowrap;
+			font-weight: 500;
+			width: 155px;
+			height: 29px;
+			line-height: 30px;
+			color: #f8f8f8;
+		}
+
+		body.webix_full_screen {
+			overflow: scroll;
+		}
+
+		.grey .webix_el_box {
+			color: #bfbfbf;
+		}
+	</style>
+	<style>
+		/*disable text selection if needed (otherwise, ignore this part)*/
+		.webix_tree_item {
+			user-select: none;
+			/* standard syntax */
+			-webkit-user-select: none;
+			/* webkit (safari, chrome) browsers */
+			-moz-user-select: none;
+			/* mozilla browsers */
+			-khtml-user-select: none;
+			/* webkit (konqueror) browsers */
+			-ms-user-select: none;
+			/* IE10+ */
+		}
+
+		.webix_tree_item.webix_selected span {
+			background: #1F884C !important;
+		}
+	</style>
+	<style>
+		/*썸네일안에 이미지넣기*/
+		.webix_fmanager_card_label {
+			position: absolute;
+			padding: 4px;
+			bottom: 3px;
+			left: 3px;
+			height: 15px;
+			line-height: 15px;
+			font-weight: bold;
+			color: #475466;
+			background-color: rgba(255, 200, 200, 0.8);
+			border-radius: 15px;
+		}
+
+		.button {
+			padding: 10px;
+			display: inline;
+			border-radius: 2px;
+			font-family: "Arial";
+			border: 0;
+			margin: 0 10px;
+			background: red;
+			font-size: 15px;
+			line-height: 15px;
+			color: white;
+			width: auto;
+			height: auto;
+			box-sizing: content-box;
+		}
+	</style>
+	<style>
+		.custom_blockarea {
+			position: fixed;
+			border: 2px solid #5210ec;
+			background-color: rgba(230, 120, 17, 0.2);
+		}
+	</style>
+	<style>
+		.overall {
+			height: 100%;
+			line-height: 26px;
+		}
+
+		.name {
+			height: 100%;
+			width: 280px;
+			float: left;
+			overflow: hidden;
+		}
+
+		.size {
+			padding: 0 10px;
+			width: 100px;
+			text-align: right;
+			float: right;
+		}
+
+		.remove_file {
+			float: right;
+			width: 15px;
+			padding-left: 10px;
+		}
+
+		.status {
+			float: right;
+			position: relative;
+			margin-top: 4px;
+			width: 180px;
+			height: 16px;
+			line-height: 16px;
+			border: 1px solid #A4BED4;
+			border-radius: 2px;
+			-moz-border-radius: 2px;
+			-webkit-border-radius: 2px;
+		}
+
+		.progress {
+			height: 100%;
+			position: absolute;
+			background-color: #0899e7;
+			margin: 0px, 0px, 0px, 0px;
+			border: 0px, 0px, 0px, 0px;
+		}
+
+		.message {
+			z-index: 1;
+			width: 100%;
+			text-align: center;
+			position: absolute;
+		}
+
+		.message.error {
+			color: #e83b3b;
+		}
+	</style>
+	<!-- 사용용도 주석달것-->
+	<style>
+		.messages-list .webix_list_item {
+			display: flex;
+			max-width: 80%;
+		}
+
+		.messages-list .webix_list_item.webix_comments_current {
+			margin-left: 20%;
+		}
+
+		.messages-list .webix_list_item:last-child {
+			margin-bottom: 24px;
+		}
+
+		.messages-list .message {
+			flex-grow: 1;
+			/* background: #f4f5f9; */
+			background: #5c5b5b;
+			border-radius: 0px 8px 8px 8px;
+			padding: 10px 20px 20px;
+		}
+
+		.messages-list .webix_comments_message {
+			margin: 0;
+		}
+
+		.messages-list .webix_chat_list_avatar {
+			flex-shrink: 0;
+			margin-right: 15px;
+			margin-left: 15px;
+		}
+
+		.messages-list .webix_comments_name {
+			margin-left: 0;
+		}
+	</style>
+	<!-- info-NEW0201124 prompt modal 의 header 부분 css가 docmanager.css 에서 작동이 않되어 이곳에넣었다 -->
+	<style>
+		.webix_fmanager_prompt .webix_win_head .webix_toolbar {
+			/* background: #ffffff; */
+			background: #3a3939;
+		}
+	</style>
+	<style>
+		html,
+		body {
+			background-color: #ffffff;
+
+		}
+
+		.content {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.image .webix_template {
+			position: relative;
+			background: #aaa;
+			/* padding: 50px 60px; */
+			padding: 0px;
+		}
+
+		.title {
+			position: absolute;
+			left: 10px;
+			bottom: 15px;
+			color: #000;
+			font-size: 16px;
+		}
+	</style>
+	<!-- 카드뷰에서 폭이 줄어들때 우측썸네일 사라지는것(버그성)방지 -->
+	<style>
+		.webix_dataview .webix_scroll_cont {
+			padding: 0px !important;
+		}
+	</style>
+	<style>
+		/* for templates */
+		.draft .webix_template {
+			display: table;
+			width: 100%;
+		}
+
+		.draft .webix_template .title1 {
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+			font-size: 24px;
+		}
+	</style>
+
+	<style>
+		/* dashboard and panels */
+		.panel_drag_view {
+			border-radius: 2px;
+			box-shadow: 0px 0px 10px #b9d4fa;
+		}
+
+		.panel_icon {
+			color: #283655;
+		}
+
+		.panel_target {
+			background: #d0e1f9ab;
+			box-shadow: 0px 0px 20px 5px #d0e1f9ab;
+		}
+
+		.draft .webix_template {
+			display: table;
+			width: 100%;
+		}
+
+		.draft .webix_template .title {
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+			font-size: 24px;
+		}
+
+		.webix_view.webix_flexlayout {
+			height: auto !important;
+		}
+	</style>
+
+	<style>
+		.webix_el_slider .webix_el_box,
+		.webix_el_slider {
+			height: 50px !important;
+		}
+
+		.female-feed .webix_slider_title {
+			color: white;
+			background-color: orange;
+			width: 22px;
+			height: 22px;
+			border-radius: 50% 50%;
+			border-color: transparent;
+			text-align: center;
+			align-items: center;
+			font-size: 12px;
+		}
+
+		.male-feed .webix_slider_title {
+			color: white;
+			background-color: blue;
+			width: 22px;
+			height: 22px;
+			border-radius: 50% 50%;
+			border-color: transparent;
+			text-align: center;
+			align-items: center;
+			font-size: 12px;
+		}
+
+		.female-feed .webix_slider_box .webix_slider_left {
+			background: orange !important;
+		}
+
+		.male-feed .webix_slider_box .webix_slider_left {
+			background: blue !important;
+		}
+	</style>
+</head>
+
+<body class="webix_full_screen" oncontextmenu="return false">
+	<script>
+		const user = JSON.parse(sessionStorage.getItem("ifrm_user"));
+
+		const sidebar = {
+			view: "sidebar",
+			data: menu_data,
+			ready: function () {
+				this.select("register-farm");
+				this.open(this.getParentId("register-farm"));
+			},
+			on: {
+				onAfterSelect: function (id) {
+					if (id == "register-farm")
+						$$("multi").setValue(id)
+				},
+				onItemClick: function(id, e, node){
+					var item = this.getItem(id);
+					if (!item.menu) {
+						window.location.href = id;
+					}
+				}
+			}
+		};
+
+		// ----------- Register Farm page Start ----------------
+
+		const neccessary_label = {
+			view: "label",
+			label: "Farm information",
+			id: "label_a",
+			css: {
+				color: "grey",
+				"border-bottom": "1px solid!important"
+			}
+		};
+
+		const save_farm_button = {
+			view: "button",
+			label: "Save",
+			id: "save_farm_button",
+			gravity: 0.2,
+			click: function () {
+				var form = $$('register-farm')
+				if (form.validate()) {
+					$$("avatar").send(function() {
+						const val = form.getValues();
+						webix.ajax().post(schedulerUrl + 'farms/register', {
+							farm_code: val.farm_code1,
+							vete_code: val.farm_code2,
+							business_code: val.business_code,
+							farm_name: val.farm_name,
+							farm_addr1: val.farm_address,
+							farm_addr2: val.farm_address2,
+							owner_idx: user.id,
+							owned: val.ownership,
+							farm_kind: val.kind_farm,
+							employee_domes: val.employee_domestic,
+							employee_forign: val.employee_foreigner,
+							partner_company: val.partner,
+							farm_breed: "",
+							window_type: val.windows,
+							wast_type: val.carridor,
+							building_num: val.building_num,
+							building_type: val.kind_building,
+							outer_type: val.outer,
+							permission_date: val.permission_date,
+							capacity_breed: val.capacity_breed,
+							is_ict: val.is_ict,
+							avatar: val.avatar
+						}).then(function (data) {
+							// response
+							if (data.text() != "") {
+								webix.alert({ title: "Register Farm", type: "alert-success", text: "Register a farm successfully!" }).then(function() {
+									webix.confirm("Do you want to add more farms?", "confirm-warning")
+									.then(function(result){
+										window.location.href = "register-farm";
+									})
+									.fail(function(){
+										sessionStorage.setItem("user_group_idx", data.text());
+
+										webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: data.text() }).then(function(data){
+											if (parseInt(data.text()) > 0) {
+												sessionStorage.setItem("breedID", data.text())
+											} else {
+												window.location.href = "register-breed"
+											}
+										})
+									});
+								})
+							}
+							else {
+								webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
+							}
+						});
+					});
+				}
+			}
+		}
+
+		const farm_code1_input = {
+			view: "text",
+			type: "text",
+			name: "farm_code1",
+			label: "Farm code1",
+			id: "farm_code1",
+			placeholder: "Enter Farm code1",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your farm code1!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("farm_code2").focus();
+						console.log("keypress in farm code1")
+					}
+
+				}
+			},
+		};
+
+		const farm_code2_input = {
+			view: "text",
+			type: "text",
+			name: "farm_code2",
+			label: "Farm code2",
+			id: "farm_code2",
+			placeholder: "Enter Farm code2",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your farm code2!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("farm_name").focus();
+						console.log("keypress in farm code2")
+					}
+
+				}
+			},
+		};
+
+		const farm_name_input = {
+			view: "text",
+			type: "text",
+			name: "farm_name",
+			label: "Farm name",
+			id: "farm_name",
+			placeholder: "Enter Farm name",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your farm name!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("kind_farm").focus();
+						console.log("keypress in farm name")
+					}
+
+				}
+			},
+		};
+
+		const kind_farm = {
+			view: "richselect",
+			label: "Kind of Farm",
+			name: "kind_farm",
+			id: "kind_farm",
+			required: true,
+			value: 1, options: [
+				{ "id": 1, "value": "farm 1" },
+				{ "id": 2, "value": "farm 2" },
+				{ "id": 3, "value": "farm 3" }
+			],
+		}
+
+		const farm_address_label = {
+			view: "label",
+			label: "Farm Address *",
+			width: 120
+		}
+
+		const farm_address = {
+			cols: [
+				{
+					view: "text",
+					type: "text",
+					name: "farm_address",
+					id: "farm_address",
+					placeholder: "Enter Farm address",
+					required: true,
+					validate: webix.rules.isNotEmpty,
+					invalidMessage: "Please enter farm address!",
+					validateEvent: "key",
+					on: {
+						"onBlur": function () {
+							console.log("Validating password");
+							this.validate()
+						},
+						"onKeyPress": function (key, e) {
+							if (key == 13) {
+								$$("farm_address2").focus();
+								console.log("keypress in password")
+							}
+						}
+					},
+				},
+				{
+					rows: [
+						{
+							view: "button",
+							name: "search",
+							label: "search",
+							id: "search",
+							on: {
+								"onClick": function () {
+									console.log("Validating password");
+									this.validate()
+								},
+							},
+							css: "webix_primary",
+							width: 100,
+						}, {}
+					]
+
+				}
+			],
+		};
+
+		const farm_address2_input = {
+			view: "text",
+			type: "text",
+			name: "farm_address2",
+			label: "Farm Address2",
+			id: "farm_address2",
+			placeholder: "Enter Farm address",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your farm address!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("building_num").focus();
+						console.log("keypress in farmer name")
+					}
+
+				}
+			},
+		};
+
+		const ownership = {
+			view: "radio",
+			name: "ownership",
+			id: "ownership",
+			label: "Onwership",
+			value: 1, options: [
+				{ "id": 1, "value": "own" }, // the initially selected item
+				{ "id": 2, "value": "lease" }
+			]
+		}
+
+		const building_num_input = {
+			view: "text",
+			type: "text",
+			name: "building_num",
+			label: "Building Number",
+			id: "building_num",
+			placeholder: "Enter Building Number",
+			required: true,
+			validate: webix.rules.isNumber,
+			invalidMessage: "Please enter your building number!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("partner").focus();
+						console.log("keypress in farmer name")
+					}
+
+				}
+			},
+		};
+
+		const employees = {
+			cols: [
+				{ view: "label", label: "Employees" },
+				{
+					view: "select",
+					name: "employee_domestic",
+					value: 1, options: [
+						{ "id": 1, "value": "domestic" },
+						{ "id": 2, "value": "5" },
+						{ "id": 3, "value": "10" },
+						{ "id": 4, "value": "20" },
+					],
+					inputAlign: "right"
+				},
+				{
+					view: "select",
+					name: "employee_foreigner",
+					value: 1, options: [
+						{ "id": 1, "value": "foreigner" },
+						{ "id": 2, "value": "5" },
+						{ "id": 3, "value": "10" },
+						{ "id": 4, "value": "20" },
+					],
+					inputAlign: "right"
+				},
+			]
+		}
+
+		const partner_input = {
+			view: "text",
+			type: "text",
+			name: "partner",
+			label: "Partner",
+			id: "partner",
+			placeholder: "Enter partner",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your partner!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("business_code").focus();
+						console.log("keypress in partner")
+					}
+
+				}
+			},
+		};
+
+		const windows = {
+			view: "radio",
+			name: "windows",
+			id: "windows",
+			label: "Windows",
+			value: 1, options: [
+				{ "id": 1, "value": "no" },
+				{ "id": 2, "value": "yes" },
+				{ "id": 3, "value": "both" },
+			],
+		}
+
+		const carridor = {
+			view: "radio",
+			name: "carridor",
+			id: "carridor",
+			label: "Carridor (Roof)",
+			value: 1, options: [
+				{ "id": 1, "value": "yes" },
+				{ "id": 2, "value": "no" },
+				{ "id": 3, "value": "both" },
+			],
+		}
+
+		// const photo = {
+		// 	cols: [
+		// 		{ view: "label", label: "Photo", width: 120 },
+		// 		{
+		// 			id: "photo",
+		// 			template: "<img src='/html/assets/img/avatar.png' style='cursor:pointer; width:100%; height:100%;'>",
+		// 			width: 100,
+		// 			height: 100,
+		// 			css: {
+		// 				"border-radius": "50%"
+		// 			}
+		// 		},
+				// { width: 120 },
+				// {
+				// 	rows: [
+				// 		{
+				// 			view: "label",
+				// 			label: "admin"
+				// 		},
+				// 		{},
+				// 		{
+				// 			cols: [
+				// 				{
+				// 					view: "uploader", value: "upload",
+				// 					name: "files", accept: "image/png, image/gif, image/jpeg",
+				// 					link: "mylist", upload: "localhost:8000/upload",
+				// 				},
+				// 				{ view: "button", label: "delete" },
+				// 			]
+				// 		},
+				// 		{}
+				// 	],
+				// },
+
+		// 	]
+		// }
+		const photo = {
+			view:"photo",
+			name:"photo",
+			css:"form_photo",
+			id:"form_photo",
+			value: "/html/assets/img/avatar.png",
+			//borderless:false,
+			height:150,
+			width:150
+		};
+
+		const user_avatar = {
+			cols:[
+				{ view: "label", label: "Photo", width: 120 },
+				photo,
+				{ width: 120 },
+				{
+					rows: [
+						{
+							view: "label",
+							label: user ? user.user_name: ""
+						},
+						{},
+						{
+							cols: [
+								{
+									view:"uploader", id: "avatar", name: "avatar", value:"Upload", accept:"image/*", autosend:false, autowidth:true, multiple:false, width:200, 
+									upload: schedulerUrl + "farms/avatar",
+									on:{        
+										onAfterFileAdd: function(upload){        
+											var file = upload.file;
+											var reader = new FileReader(); 
+
+											reader.onload = function(event) {
+												$$("form_photo").setValue(event.target.result);
+											};           
+											reader.readAsDataURL(file)
+											return false;
+										},
+										onUploadComplete: function(response) {
+											console.log(response);
+										}
+									},
+								}, 
+								{ view: "button", label: "delete" , click: function() {
+									webix.confirm("Do you really want to delete it?", "confirm-warning")
+									.then(function(result){
+										$$("form_photo").setValue("/html/assets/img/avatar.png");
+									})
+									.fail(function(){
+									});
+								}},
+							]
+						},
+						{}
+					],
+				},
+			]
+		};
+
+		function showForm(winId, node) {
+			$$(winId).getBody().clear();
+			$$(winId).show(node);
+			$$(winId).getBody().focus();
+		}
+
+		const password = {
+			cols: [
+				{
+					view: "label",
+					label: "Password *",
+					gravity: 0.4
+				},
+				{
+					view: "button",
+					label: "Change Password",
+					click: function (id, event) {
+						showForm("change_password")
+					}
+				},
+				{}
+			]
+
+		};
+
+		const business_code_input = {
+			view: "text",
+			type: "text",
+			name: "business_code",
+			label: "Business code",
+			id: "business_code",
+			placeholder: "Enter Business Code",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your Business Code!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("kind_hen").focus();
+						console.log("keypress in Business Code")
+					}
+
+				}
+			},
+		};
+
+		const kind_hen = {
+			view: "richselect",
+			label: "Kind of hen",
+			name: "kind_hen",
+			id: "kind_hen",
+			required: true,
+			value: 1, options: [
+				{ "id": 1, "value": "kind 1" },
+				{ "id": 2, "value": "kind 2" },
+				{ "id": 3, "value": "kind 3" }
+			],
+		}
+
+		const kind_building = {
+			view: "radio",
+			name: "kind_building",
+			id: "kind_building",
+			label: "Kind of building",
+			value: 1, options: [
+				{ "id": 1, "value": "normal" },
+				{ "id": 2, "value": "pannel" },
+				{ "id": 3, "value": "textile" },
+			],
+		}
+
+		const outer = {
+			view: "radio",
+			name: "outer",
+			id: "ourter",
+			label: "Outer (Roof)",
+			value: 1, options: [
+				{ "id": 1, "value": "yes" },
+				{ "id": 2, "value": "no" },
+				{ "id": 3, "value": "both" },
+			],
+		}
+		
+		const permission_date = {
+			view:"datepicker", 
+			name: "permission_date",
+			value: new Date(2012, 6, 8), 
+			label: "Permission Date", 
+			timepicker: false,
+		};
+
+		const capacity_breed = {
+			view: "text",
+			type: "text",
+			name: "capacity_breed",
+			label: "Capacity Breed",
+			id: "capacity_breed",
+			placeholder: "Enter Capacity Breed",
+			required: true,
+			validate: webix.rules.isNotEmpty,
+			invalidMessage: "Please enter your Capacity Breed!",
+			on: {
+				"onBlur": function () {
+					var result = this.validate()    // validate only this field and show warning message under field if invalid
+				},
+				"onKeyPress": function (key, e) {
+					if (key == 13) {
+						$$("is_ict").focus();
+						console.log("keypress in Business Code")
+					}
+
+				}
+			},
+		};
+
+		const is_ict = {
+			view: "switch", 
+			name: "is_ict",
+			value: 1, 
+			label:"ICT",
+		};
+
+
+		const change_password_form = {
+			view: "form",
+			borderless: true,
+			elements: [
+				{ view: "text", type: "password", label: 'Using Password', name: "current_password", id: "current_password", invalidMessage: "please input current password!" },
+				{ view: "text", type: "password", label: 'New Password', name: "new_password", id: "new_password", invalidMessage: "please input new password!"},
+				{ view: "text", type: "password", label: 'Confirm Password', name: "confirm_password", id: "confirm_password", invalidMessage: "please input new password correct!"},
+				{
+					cols: [
+						{
+							view: "button", value: "Save", id: "submit_btn", click: function () {
+								if (this.getParentView().getParentView().validate()) { //validate form
+									const form_value = this.getParentView().getParentView().getValues();
+
+									webix.ajax().post(schedulerUrl + 'users/' + user.user_id + '/changePassword', {
+										current_password: form_value.current_password,
+										new_password: form_value.new_password
+									}).then(function(res) {
+										switch (res.text()) {
+											case "error":
+												webix.alert("Your current password is incorrect! please try again!","alert-error");
+												break;
+											case "success":
+												webix.alert("Your current password is changed!","alert-success").then(function(result){
+													$$("submit_btn").getTopParentView().hide();
+												});
+												
+												break;
+										}
+									})
+								}
+							}
+						},
+						{
+							view: "button", value: "Cancel", click: function () {
+								this.getTopParentView().hide(); //hide window
+							}
+						}
+					]
+				}
+			],
+			rules: {
+				current_password: webix.rules.isNotEmpty,
+				new_password: webix.rules.isNotEmpty,
+				confirm_password:function(value){
+					//passwords must be equal
+					if ( value == "" || value != $$("new_password").getValue()){
+						return false;
+					}
+					return true;
+				}
+			},
+			elementsConfig: {
+				labelPosition: "top",
+			}
+		};
+
+		webix.ui({
+			view: "window",
+			id: "change_password",
+			position: "center",
+			modal: true,
+			close: true,
+			head: "Change Password",
+			body: webix.copy(change_password_form)
+		});
+
+		const register_farm_page = {
+			view: "form",
+			id: "register-farm",
+			elementsConfig: {
+				bottomPadding: 18,
+				labelWidth: 130,
+				padding: 10
+			},
+			elements: [
+
+				{
+					cols: [
+						neccessary_label,
+						save_farm_button
+					]
+				},
+				{
+					cols: [
+						{
+							rows: [
+								farm_code1_input,
+								farm_code2_input,
+								farm_name_input,
+								kind_farm,
+								{
+									cols: [
+										farm_address_label,
+										farm_address
+									]
+								},
+								farm_address2_input,
+								ownership,
+								building_num_input,
+								employees,
+								partner_input,
+								windows,
+								carridor
+							],
+						},
+						{
+							rows: [
+								user_avatar,
+								password,
+								business_code_input,
+								kind_hen,
+								kind_building,
+								outer,
+								permission_date,
+								capacity_breed,
+								is_ict
+							],
+						},
+					]
+				},
+				{}
+			]
+		};
+
+		webix.ready(function () {
+
+			if (!user) {
+				window.location.href = "login";
+			} else {
+				sessionStorage.setItem("lastPage", "register-farm");
+			}
+			webix.ui({
+				rows: [
+					{
+						view: "toolbar", padding: 3, elements: [
+							{
+								view: "icon", icon: "mdi mdi-menu", click: function () {
+									$$("$sidebar1").toggle();
+								}
+							},
+							{ view: "label", label: "DonilFarm" },
+							{},
+							{ view: "button", label: "CCTV", gravity: 0.3 },
+							{ view: "button", label: "scheduler", gravity: 0.3 },
+							{
+								view: "icon",
+								icon: "mdi mdi-calendar-clock",
+								tooltip: "스케줄보기",
+								//hidden:true,
+								//hidden: Orgnbtn,                                
+
+								click: function () {
+									location.href = "/scheduler";
+								}
+							},
+							{ view: "button", label: "myInfo", gravity: 0.3 },
+							{ view: "icon", icon: "mdi mdi-comment", badge: 4 },
+							{ view: "icon", icon: "mdi mdi-bell", badge: 10 }
+						]
+					},
+					{
+						cols: [
+							sidebar,
+							{
+								id: "multi",
+								animate: false,
+								cells: [
+									{
+										id: "dashboard1",
+										template: "dashboard"
+									},
+									register_farm_page,
+								]
+							}
+
+						]
+					},
+
+				]
+			});
+		});
+	</script>
+</body>
+
+</html>

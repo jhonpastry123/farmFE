@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>아카이브 스튜디오</title>
+		<link rel="icon" href ="/html/assets/logo/clas클라스 심볼.png">
+		<!-- Webix Library -->
+		 <script type="text/javascript" src="/html/assets/webix/webix.js"></script>
+		 <!-- <link rel="stylesheet" type="text/css" href="/html/assets/webix/webix.css" /> -->
+
+		 <script type="text/javascript" src="/html/assets/usermanager/usermanager.js"></script> 
+		 <!-- <link rel="stylesheet" type="text/css" href="/html/assets/usermanager/usermanager.css" /> -->
+
+		 <script type="text/javascript" src="/html/assets/chat/chat.js"></script>
+		 <script type="text/javascript" src="/html/assets/locales/kr_user.js"></script>
+		 <script type="text/javascript" src="/html/assets/addition/functions.js"></script>
+		 <script type="text/javascript" src="/html/assets/addition/defintionOfURL.js"></script>
+
+
+		<!-- Css -->
+		 <link rel="stylesheet" type="text/css" href="/html/assets/css/MaterialDesign/css/materialdesignicons.min.css"/>
+ 		 <link rel="stylesheet" title="theme" type="text/css" href="/html/assets/chat/webix/skins/flat.css"/>
+		 <link rel="stylesheet" title="theme" type="text/css" href="/html/assets/chat/skins/flat.css"/>
+		 <link rel="stylesheet" title="theme" type="text/css" href="/html/assets/usermanager/webix/skins/flat.css"/>
+		 <link rel="stylesheet" title="theme" type="text/css" href="/html/assets/usermanager/skins/flat.css"/>
+
+		 
+		<!-- App -->
+		 
+		 <!-- <link rel="stylesheet" title="theme" type="text/css" href="/html/assets/chat/webix/skins/flat.css"/>
+		 <link rel="stylesheet" title="theme" type="text/css" href="/html/assets/chat/skins/flat.css"/> -->
+		 <style>
+			 .webix_fmanager_user_list .webix_fmanager_user_email {
+				display: inline-block;
+				position: absolute;
+				right: 12px;
+				color: #94a1b3;
+			}
+		 </style>
+		 
+	</head>
+	<body>
+		<script>
+			if (sessionStorage.length == 0) {
+				location.href = "/";
+			}
+			//브라우저 뒤로가기 버튼 불능화
+			history.pushState(null, document.title, location.href); 
+			window.addEventListener('popstate', function (event) { 
+					//console.log(location.href);
+				history.pushState(null, document.title, location.href); 
+			});
+			//키보드의 백스페이스로 뒤로가기 불능화
+			//크롬은 백스페이스 막혀 있음
+			//백스페이스 정의 함수
+			var killBackSpace = function (e) {
+				e = e ? e : window.event;
+				var t = e.target ? e.target : e.srcElement ? e.srcElement : null;
+				if (t && t.tagName && (t.type && /(password)|(text)|(file)/.test(t.type.toLowerCase())) || t.tagName.toLowerCase() == 'textarea') {
+					return true;
+				}
+				var k = e.keyCode ? e.keyCode : e.which ? e.which : null;
+				if (k == 8) {
+					if (e.preventDefault) {
+						e.preventDefault();
+					}
+					return false;
+				} return true;
+			};
+
+				//실제 백스페이스 적용
+				//keydown, onkeydown 발생되도록함
+			if(typeof document.addEventListener != 'undefined') {
+				document.addEventListener('keydown', killBackSpace, false);
+			}else if(typeof document.attachEvent != 'undefined') {
+				document.attachEvent('onkeydown', killBackSpace);
+			}else{
+				if(document.onkeydown != null) {
+					var oldOnkeydown = document.onkeydown;
+					document.onkeydown = function (e) {
+						oldOnkeydown(e); killBackSpace(e);
+					};
+				}else{
+					document.onkeydown = killBackSpace;
+				}
+			};
+				
+			webix.ready(function() {
+
+				if (webix.env.mobile) webix.ui.fullScreen();
+				if (!webix.env.touch && webix.env.scrollSize) webix.CustomScroll.init();
+
+				//사용자 추가 권한 임시
+				if (sessionStorage.getItem("AuthOrgn") == "1" ){
+					Orgnbtn =  false;
+				};
+
+				themeSetting(getCookie("themeCookie"))
+								//테마변경 함수
+				function themeSetting(id)  {
+					var links = document.getElementsByTagName("link");
+					for(var i=0; i<links.length; i++){
+						var link = links[i];
+						if (link.title == "theme") {
+							if(/material/.test(link.href)){
+								link.href = link.href.replace("material", id);
+							}else if(/mini/.test(link.href)){
+								link.href = link.href.replace("mini", id);								
+							}else if(/flat/.test(link.href)){
+								link.href = link.href.replace("flat", id);
+							} else if(/compact/.test(link.href)){
+								link.href = link.href.replace("compact", id);
+							}else if(/contrast/.test(link.href)){
+								link.href = link.href.replace("contrast", id);
+							}
+						}
+					}
+					setCookie("themeCookie", id, 365);
+					webix.skin.set(id);
+				}
+
+				//add-leejs 20201203 Chat 관련 함수
+				function CustomBarChat() {
+					Chatlogin().then(ChatStart);
+				}
+				function Chatlogin() {
+					return new Promise(function(res) {
+							var token = sessionStorage.getItem("login-token");
+							var userid = sessionStorage.getItem("userid"); 
+							var orgnid = sessionStorage.getItem("orgn"); 
+	
+							if (token) {
+								//console.log("token true");
+								res(token);
+								return;
+							}
+							webix.ajax(chatloginAjaxURL + "?id=" + userid + "&orgn=" + orgnid).then(raw => {
+								var token = raw.text();
+								//console.log("token false");
+								sessionStorage.setItem("login-token", token);
+								res(token);
+							});
+						});
+				}
+				function ChatStart(token) {
+					webix.ui({
+							//modal: true,
+							view: "window",
+							width: 400,
+							height: 800,
+							move: true,
+							id: "usermanager_messenger",
+							head: {
+								view: "toolbar",
+								elements: [
+									{ //template: "Messenger" 
+									  //template :  "<div style='font-size:20px;color:white;text-align:center'><span >Messenger</span></div>", type:"header"   
+										view: "label",
+										label: "Messenger", 
+									},
+									{
+										view: "icon", icon: "wxi-close", click: function () {
+											$$("usermanager_messenger").hide();
+										}
+									}
+								]
+							},
+							body: {
+								rows: [
+									{
+										type: "wide",
+										cols: [
+											{
+												view: "chat",
+												width: 400,
+												compact: true,
+												token,
+												url: chatStartAjaxURL,
+											},
+											{ view: "resizer" },
+											{},
+										],
+									},
+								],
+							},
+						}).show();
+				}
+
+				var icon_refresh = {
+					//view: "label",
+					//label: "icon",
+					view	: "icon", 
+					label   : "",
+					icon	: "mdi mdi-reload ",
+					click: function () {
+						$$("form_view").clear();
+						$$("form_view").clearValidation();
+					},//click
+				}//var
+				//화면전환(개인/기업) 배치선택 라디오
+				var radio_batch = {
+					view: "radio",
+					id: "sel_form",
+					label: "",
+					click: change_batch,
+					value: "기업",
+					options: ["개인", "기업"]
+				}//var
+				//화면전환(개인/기업) 선택함수
+				function change_batch() {
+					var mode = $$("sel_form").getValue()
+					if (mode) {
+						$$("form_view").clear();
+						$$("form_view").clearValidation();
+						$$("form_view").showBatch(mode);
+						//$$("search").setValue("");
+						// if (mode == "개인") {
+						// 	$$("search").define("placeholder", "이메일....");
+						// 	$$("search").refresh();
+						// } else {
+						// 	$$("search").define("placeholder", "사업자번호....");
+						// 	$$("search").refresh();
+						// };
+					}
+				};
+				//기존사용자 찿기 comp
+				var search_box = {
+					view: "search",
+					id: "search",
+					align: "center",
+					placeholder: "사업자번호...",
+					on: {
+						onSearchIconClick: function () {
+							var searchTarget = this.getValue();
+							var mode = $$("sel_form").getValue()
+							//webix.message("search icon clicked go to ajax with " + searchTarget + mode);
+							if (searchTarget != "") {
+								if (mode == "개인") {
+									if (webix.rules.isEmail(searchTarget)) {
+										webix.ajax(usrSaveUrl + "?email=" + searchTarget).then(function (res) {
+											var result = res.json();
+											if (result[0] == null){
+												webix.alert("검색내용이 없습니다.");
+											} else {
+												console.log("검색내용", result[0])
+												$$("form_view").setValues(result[0]);
+											};
+										});
+									};
+								} else {
+									if (searchTarget.length == 10) {
+										webix.ajax(orgnGetUrl + "?no=" + searchTarget).then(function (res) {
+											var result = res.json();
+											if (result[0] == null) {
+												webix.alert("검색내용이 없습니다.");
+											} else {
+												console.log("검색내용", result[0])
+												$$("form_view").setValues(result[0]);
+											}
+										});
+									};
+								};
+
+							}
+						},//onSearchIconClick
+					}//on
+				}
+				//head title
+				var label_title = {
+					view: "label",
+					label: "사용자 등록",
+					align: "center",
+				}
+				//head x 닫기
+				var label_x = {
+					view: "icon",
+					icon: "wxi-close",
+					hotkey: "esc",
+					width: 40,
+					click: function () {
+						$$("form_view").clear();
+						$$("form_view").clearValidation();
+						$$("window_regist_user").hide();
+					},
+				}
+				//기업명입력
+				var in_company_name = {
+					view: "text",
+					label: "기업명",
+					id: "companyName",
+					name: "companyName",
+					required: true,
+					invalidMessage: "*필수 항목입니다",
+					batch: "기업",
+					on: {
+						onKeyPress: function (code, e) {
+							if (code == 13) {
+								if (!this.validate()) {
+									this.focus();
+									return false;
+								}
+								webix.UIManager.setFocus("registDate"); //to set focus
+							}
+						},
+					},//on
+				}
+				//개인회원명 입력
+				var in_person_name = {
+					view: "text",
+					label: "이름",
+					id: "personName",
+					name: "personName",
+					required: true,
+					hidden: true,	//batchShow 가 기업으로 되었어도 최초화면에선 이게 보이므로 최초에는 히든처리한다
+					invalidMessage: "*필수 항목입니다",
+					batch: "개인",
+					on: {
+						onKeyPress: function (code, e) {
+							if (code == 13) {
+								if (!this.validate()) {
+									this.focus();
+									return false;
+								}
+								webix.UIManager.setFocus("registDate"); //to set focus
+							}
+						},
+					},//on
+				}
+				//사업자 번호 입력
+				var in_business_code = {
+					view: "text",
+					label: "등록번호",
+					placeholder: "사업자번호",
+					id: "businessCode",
+					name: "businessCode",
+					required: true,
+					batch: "기업",
+					pattern: { mask: "###-##-#####", allow: /[0-9]/g },
+					invalidMessage: "10자리 숫자이어야 합니다",
+					bottomPadding: 15,
+					bottomLabel: "*10자리 숫자로만 구성됩니다",
+					on: {
+						onKeyPress: function (code, e) {
+							if (code == 13) {
+								if (!this.validate()) {
+									this.setValue("");
+									this.focus();
+									return false;
+								} else {
+									webix.UIManager.setFocus("userName"); //to set focus
+								}//if validate               
+							}//if code==13
+						},//onKeyPress
+						onChange: function (newValue, oldValue) {
+							var BusinessCode = $$("businessCode").getValue();
+							if (BusinessCode != "") {
+								if (!this.validate()) {   	//데이터 검증실패 -*이 밸리데이트는 이곳 위에서 정의된것만 실행된다.
+									webix.alert({ type: "alert-error", title: "등록불가", text: "다시 입력해 주세요" })
+										.then(function () {
+											$$("businessCode").setValue("");
+											$$("businessCode").focus();
+											return false;
+										});
+								} else {					//데이터검증성공
+									//webix.message("go to ajax with  "); 
+									webix.alert("사업자번호의 유효성검사를 합니다")
+										.then(function () {
+											// webix.message("call ajax");
+											show_progress_icon(2000);
+											webix.ajax(orgnNoChk + "?id=" + newValue)		//orgNoChk 를 이렇게 바꿈 -> url 이므로
+												.then(function (res) {
+													var result = res.json();
+													if (result.Value == "0") {		//사용가능 사업자번호
+														webix.alert("검증된 정상 사업자 번호 입니다")
+															.then(function () {
+																webix.UIManager.setFocus("userName"); //다음 항목으로 포커스 이동
+																return true;
+															});//검증된사업자번호
+													} else {						//사용불능 사업자번호
+														webix.alert({ type: "alert-error", title: "등록불가", text: "이미등록되었거나 정상 사업자번호가 아닙니다" })
+															.then(function () {
+																$$("businessCode").setValue(""); //반드시 값을 지워줘야 악용방지됨
+																$$("businessCode").focus();
+																return false;
+															});//검증불합격번호                         	 
+													}//if 검증결과검토
+												});//then ajax검증                    
+										});//then 유효성검사
+								}//if 검증    
+							};  	  
+						}//onChange
+					},//on
+				}
+				//등록 일자 입력
+				var in_regist_date = {
+					view: "datepicker",
+					label: "등록일",
+					id: "registDate",
+					name: "registDate",
+					value: new Date(),
+					required: true,
+					invalidMessage: "*필수 항목입니다",
+					stringResult: true,
+					format: "%Y년 %M %d일",
+					on: {
+						onChange: function (nValue, oValue) { },
+						onKeyPress: function (code, e) {
+							if (code == 13) {
+								webix.UIManager.setFocus("businessCode"); //to set focus
+							}
+						},//onKeyPress
+					},//on
+				}
+				//관리자명 등록
+				var in_user_name = {
+					view: "text",
+					label: "관리자",
+					labelAlign: "right",
+					placeholder: "이름",
+					bottomPadding: 15,
+					bottomLabel: "",
+					gravity: 0.8,
+					id: "userName",
+					name: "userName",
+					required: true,
+					invalidMessage: "*필수 항목입니다",
+					batch: "기업",
+					on: {
+						onKeyPress: function (code, e) {
+							if (code == 13) {
+								webix.UIManager.setFocus("userEmail"); //to set focus
+							}
+						},//onKeyPress
+					},//on
+				}
+				//이메일 입력
+				var in_regist_email = {
+					view: "text",
+					//type: "email",
+					label: "Email",
+					id: "userEmail",
+					name: "userEmail",
+					required: true,
+					validate: webix.rules.isEmail,
+					bottomPadding: 15,
+					//bottomLabel: "* 해당메일로 인증번호가 전송됩니다",
+					invalidMessage: "잘못된 입력입니다",
+					on: {
+						onKeyPress: function (code, e) {
+							if (code == 13) {
+								if (!this.validate()) {
+									this.setValue("");
+									this.focus();
+									return false;
+								}
+								webix.UIManager.setFocus("password"); //to set focus
+							};
+						},//onKeyPress
+						onChange: function () {
+							var email = $$("userEmail").getValue();
+							if (email != "") {
+								if (!webix.rules.isEmail(email)) {	//또는 this.validate()
+									webix.alert({ type: "alert-error", title: "등록불가", text: "mail 형식이 아닙니다" })
+										.then(function () {
+											$$("userEmail").setValue("");
+											$$("userEmail").focus();
+											return false;
+										});
+								} else {
+									app.getService("local").emailChecking(email).then(function (a) {
+										if (a.Value == "0") {
+											//단순히 포커스만 이동시켜줌
+											webix.alert("사용할수 있는 이메일 입니다").then(function () {
+												webix.UIManager.setFocus("password"); //to set focus
+											});
+										} else {
+											webix.alert({ type: "alert-error", title: "등록불가", text: "이미 등록된 이메일이거나 사용할수 없는 이메일 입니다" })
+												.then(function () {
+													$$("userEmail").setValue("");
+													$$("userEmail").focus();
+													return false;
+												});//alert
+										}
+									});
+								};
+															
+								//webix.message("go to ajax with  => " + email);
+							// 	webix.alert("해당메일로 인증코드를 보냅니다")
+							// 		.then(function () {
+							// 			show_progress_icon(2000);		//대기프로그레스
+							// 			//webix.message(" call ajax");	//ajax 호출
+							// 			webix.ajax(usrSaveUrl + "?email=" + email)
+							// 				.then(function (res) {
+							// 					var result = res.json();
+							// 					if (result[0] == null) {  	//등록된 이메일없음
+							// 						//단순히 포커스만 이동시켜줌
+							// 						webix.UIManager.setFocus("verifyCode"); //to set focus
+							// 					} else {						//이미 등록된 이메일 있음 ->신규등록불가
+							// 						//거부 메세지 출력
+							// 						webix.alert({ type: "alert-error", title: "등록불가", text: "이미 등록된 이메일이거나 사용할수 없는 이메일 입니다" })
+							// 							.then(function () {
+							// 								$$("userEmail").setValue("");
+							// 								$$("userEmail").focus();
+							// 								return false;
+							// 							});//alert
+							// 					}
+							// 				});//ajax 호출
+							// 		});
+							// 	//서버로부터 이메일 중복없으면 이메일로 인증코드전송하고 이를 콜백 반환해준다
+							// 	//이값을 보관하고 있다가 아래의 인증코드에서입력받는 값과 비교한다. 
+							} else {
+								$$("userEmail").focus();
+								return false;
+							};
+						},//onChange
+					},//on
+				}//var
+				//인증코드 입력
+				var verify_email_code = {
+					view: "text",
+					label: "인증번호",
+					id: "verifyCode",
+					name: "verifyCode",
+					required: true,
+					pattern: { mask: "####", allow: /[0-9]/g },
+					bottomPadding: 15,
+					bottomLabel: "* 메일로 전송받은 4자리 번호를 입력하세요",
+					on: {
+						onKeyPress: function (code, e) {
+							if (code == 13) {
+								//확인버튼과 같은기능처리
+							}
+						},//onKeyPress
+						onChange: function (nValue, oValue) {
+							webix.message("nValue => " + nValue + "oValue -> " + oValue);
+							if (nValue.toString().length != 4) {
+								webix.alert("정확한 인증번호를 입력하세요")
+									.then(function () {
+										$$("verifyCode").focus();
+										return false;
+									});
+							}//if              
+						},//onChange
+					},//on
+				}//var
+				var in_password_1 = {
+					view: "text",
+					type: "password",
+					label: "비밀번호",
+					labelAlign: "right",
+					id: "password",
+					name: "password",
+					required: true,
+					bottomPadding: 15,
+					bottomLabel: "* 비밀번호는6~16자로 숫자와특수문자를 포함해야합니다",
+					invalidMessage: "잘못된 입력입니다",
+					on: {
+						onChange: function (nValue, oValue) {
+							//if(!fnCheckPassword(nValue)){
+							//  	webix.alert("비밀번호형식이 안맞습니다")
+							//   	.then(function(){
+							//      	 $$("password").focus();
+							//   		  return false; 
+							//    });
+							// }//if                                                      
+						},//onChange
+					},//on
+				}
+				var in_password_2 = {
+					view: "text",
+					type: "password",
+					label: "비밀번호2",
+					id: "password_2",
+					name: "password_2",
+					invalidMessage: "잘못된 입력입니다",
+					on: {
+						onChange: function (nValue, oValue) {
+							// if(nValue!=$$("password").getValue()){
+							//		webix.alert("비밀번호가 일치하지 않습니다")
+							//  	.then(function(){
+							//         $$("password_1").focus();
+							//      	return false; 
+							//    });
+							//}
+
+						},//onChange
+					},//on
+				}
+				var in_quata_slider = {
+					view: "slider",
+					label: "계약용량",
+					id: "contractS3",
+					name: "contractS3",
+					title: webix.template("#value#" + "Tb"),
+					type: "alt",
+					min: 0,
+					max: 10,	//10Tera byte
+					step: 0.25,
+					bottomPadding: 15,
+					bottomLabel: "* 최소단위 250Gb (0.25Tb) 로 설정 되었습니다",
+					on: {
+						onChange: function (nValue, oValue) {
+							// this.define();  //위의 title 를 재정의하여 동적으로 표시되는값을 애니시킨다
+							// this.refresh();
+
+
+						}
+					}
+				}
+				var btn_verify = {
+					view: "button",
+					height: 10,
+					gravity: 0.1,
+					//id		:	"btnChk",
+					//name	:	"btnChk",
+					value: "확인",
+					click: function () {
+						//서버로 전달할 object 를 정리하여 ajax call 하고 callback 받는다. 
+					}
+				}
+				var btn_save = {
+					view: "button",
+					//id	:	"btnSave",
+					//name	:	"btnSave",
+					value: "등록완료",
+					click: function () {
+						var form_data = $$("form_view").getValues();
+						//console.log("등록완료", form_data);
+						if (this.getParentView().validate()) { // on success
+							webix.alert("저장하시겠습니까?")
+								.then(function () {
+									console.log(form_data);
+									show_progress_icon(2000);		//progressBar
+									webix.ajax().post(orgnSaveUrl, form_data)
+										.then(function (res) {
+											if (res != 0) {			//저장성공
+												webix.alert("저장되었습니다")
+													.then(function () {
+														$$("window_regist_user").hide();
+														return true;
+													});//then 성공
+											} else {				//저장실패
+												webix.alert("실패했습니다 다시시도하세요")
+													.then(function () {
+														$$("form_view").focus();
+														return false;
+													});//then 실패
+											}//if
+										});//then 저장
+								});//then 검증성공
+
+						} else {	//검증실패
+							return false;
+						}//if   
+					},//click
+				}//var
+
+				var user_register_form = webix.ui({
+					view: "window",
+					id: "window_regist_user",
+					modal: true,
+					move: true,
+					position: "center",
+					visibleBatch: "기업",
+					scroll: true,
+					//borderless	: 	true,
+					//padding		: 	{ right: 10 },
+					elementsConfig: { labelPosition: "left", },
+					width: 500,
+					head: {
+						view: "toolbar",
+						elements: [
+							label_title,
+							label_x,],
+					},
+					body: {
+						view: "form",
+						id: "form_view",
+						margin: 0,
+						rows: [
+							{ cols: [icon_refresh, radio_batch, /*search_box,*/], margin: -10 },	//1st 아이콘 + 라이오버튼 + 검색박스				           			 					
+							{ template: "등록 정보", type: "section" },						//2nd row 실선표시
+							in_company_name,											//3rd 기업명
+							in_person_name, in_regist_date,								//3rd 개인인경우 개인이름, 4th 등록일자
+							{ cols: [in_business_code, in_user_name], batch: "기업", },	  	  //5th 사업자번호 , 관리자이름    		
+							in_regist_email,											//6th 이메일등록
+							//{ cols: [verify_email_code, btn_verify,] },						//7th 검증코드 + 확인번튼
+							in_password_1, in_password_2,								//8th 비밀번호, 9th 비밀번호2
+							in_quata_slider,											//10th 계약용량선택
+							{ template: "-", type: "section" },								//11th 실선표시
+							btn_save,],													//12th 저장버튼 
+						on: {
+							onChange: function (nValue, oValue) {
+								//var change = $$("form_view").getDirtyValues();
+								//result[name] // name 는 form 의 각 항목의 이름이다. isDirty()
+								//if (isDirty) webix.message(result[companyName]);
+								// webix.message("form==> "+v);
+
+							},
+						},//on
+						rules: {
+							$obj: function (data) {
+								//if(data.contractS3 == 0){
+								//  return false;
+								//};
+								if (data.password != data.password_2) {
+									webix.alert("비밀번호가 일치하지 않습니다")
+										.then(function () {
+											return false;
+										})
+								} else { return true; }
+							},
+							$all: webix.rules.isNotEmpty,
+							userEmail: webix.rules.isEmail,
+							//"password"		:webix.rules.isNotEmpty,
+							//"password_1"	:webix.rules.isNotEmpty,
+							"contractS3": function (v) {
+								var s3 = $$("contractS3").getValue();
+								if (s3 == 0) {
+									webix.alert("계약용량을 설정하지 않아 최소단위 250Gb 로 설정합니다")
+										.then(function () {
+											$$("contractS3").setValue(0.25);
+											$$("contractS3").focus();
+											return false;
+										});
+								}//if
+								return true;
+							},//function
+						}//rules
+					},//body
+
+				});
+			
+
+				//폼의 모든정의가 끝난후 기능에대한정의는 아래쪽에 해야한다.
+				//프로그레스바 적용
+				webix.extend(this.$$("form_view"), webix.ProgressBar);	//정의
+				function show_progress_icon(delay) {						//적용위치
+					//$$("form_view").clearAll();
+					$$("form_view").showProgress({
+						type: "top", // "icon" 이면 화면위 회전하는 아이콘 형태로나옴
+						delay: delay,
+						hide: true
+					});
+					// setTimeout(function () {
+					// 	$$("form_view").parse();
+					// }, delay);
+				}
+
+                //add 20210601  leejs  
+				//이메일 suggest 리스트 템플릿
+				//상단에 style webix_fmanager_user_email 추가 함
+				function InputListTemplate(obj) {
+                        return (obj.name +
+                                "&nbsp;" +
+                                ("<span class=\"webix_fmanager_user_email\">" + obj.email + "</span>"));
+                    };
+                function FilterCommissionRate() {
+                        Input = $$("commissionRateRow_1_search").getValue().trim().toLowerCase();
+                        $$("commissionRateRow2").filter(function (t) { 
+							return t.name.toLowerCase().indexOf(Input) !== -1; 
+						});
+                    };
+				function CommissionTemplate(obj) {
+                       return (obj.name +
+                               "&nbsp;" +
+                               ("<span class=\"webix_fmanager_user_email\">" + obj.rate + "</span>"));
+                };
+				function retailer_email_suggest(){
+					webix.ajax(usermanagerUrl + "retailersearch" , {owner : sessionStorage.getItem("userid")}).then(function (items)  {
+						var suggest_id = $$("retailer_email").config.suggest;
+						var list = $$(suggest_id).getList(); 
+							list.clearAll();
+                            list.parse(items)
+				  });
+				}
+				//add 20210601 lee 추가	
+				//수수료율 추가 삭제
+				var commissionRateRow_1 = {margin: 4,
+					                       cols : [{view: "search",id: "commissionRateRow_1_search", placeholder: "항목 검색하기", on: {onTimedKeyPress: function () {return FilterCommissionRate();}, onChange: function (v) {return !v && FilterCommissionRate()},},},
+                                				   {view: "button",value: "추가",css: "webix_primary",width: 90,
+												   click: function () {
+													   var data = { id : "0", name : "New", rate : "0.0", owner :  sessionStorage.getItem("userid")};
+														webix.ajax().post(usermanagerUrl + "commissionrate", data).then(function (res) { 
+															var list = $$("commissionRateRow2");
+															list.clearAll();
+															list.parse(res);
+															$$("commissionRateRow_1_search").setValue("");
+														    var data = list.getLastId();
+                            								list.editCell(data, "name", false, true);
+														});
+													},
+												},
+											]};
+				var commissionRateRow_2 = {
+							id: "commissionRateRow2",
+                            view: "datatable",
+                            editable: true,
+                            header: false,
+                            yCount:  4,
+                            columns: [
+                                {
+                                    id: "name",
+                                    editor: "text",
+                                    fillspace: true,
+                                    
+								},
+								{
+                                    id: "rate",
+                                    editor: "text",
+									numberFormat:"1'111.0",
+                                    fillspace: true,
+                                },
+                                {
+									width: 50,
+                                    template: "<span class='webix_fmanager_remove_tag webix_icon wxi-trash'></span>"
+                                },
+                            ],
+                            on: {
+                                onBeforeEditStop: function (values, editor) {
+                                     if (values.value !== values.old) {
+										var data = $$("commissionRateRow2").getItem(editor.row);
+											data[editor.column] = values.value;
+											//console.log(data);
+										 var param = { id : data.id, name : data.name, rate : data.rate, owner :  sessionStorage.getItem("userid")};
+										 
+										 webix.ajax().post(usermanagerUrl + "commissionrate", param).then(function (res) { 
+										 	var list = $$("commissionRateRow2");
+										 	list.clearAll();
+										 	list.parse(res);
+										 });
+                                     }
+                                },
+                                "data->onSyncApply": function () {
+                                   FilterCommissionRate();
+                                },
+                            },
+							onClick: {
+								webix_fmanager_remove_tag: function (e, id) {
+									console.log(id.row)
+
+									//var param = { id : id.row, owner :  sessionStorage.getItem("userid")};
+								 	webix.ajax().del(usermanagerUrl + "commissionrate" +"?id=" + id.row + "&owner="+ sessionStorage.getItem("userid")).then(function (res) { 
+										 	var list = $$("commissionRateRow2");
+										 	list.clearAll();
+										 	list.parse(res);
+								 		 });
+								 },
+							},
+				};
+				var commissionRateRow_3 = {margin: 4,
+					                       view: "button",
+										   value: "닫기",
+										   click: function () {$$("commissionRateForm").hide();},
+										};
+				//add 20210501 수수료표 팝업창
+				var commissionRate = webix.ui({
+					id: "commissionRateForm",
+					view: "window",
+					modal: true,
+					move: true,
+					position: "center",
+					head: {
+						view: "toolbar",
+						elements: [
+							{
+								width:40
+							},
+							{
+								view: "label",
+								label: "수수료표",
+								align: "center"
+							},
+							{
+								view: "icon",
+								icon: "wxi-close",
+								hotkey: "esc",
+								width: 40,
+								click: function () {
+									$$("commissionRateRow_1_search").setValue("");
+									$$("commissionRateForm").hide();
+								},
+							},
+						]
+					},
+					body: {
+						borderless: true,
+						padding: 12,
+                    	margin: 0,
+						type: "clean",
+						rows: [
+								commissionRateRow_1,
+								commissionRateRow_2,
+								//commissionRateRow_3,
+						]
+					},
+				});
+
+
+				//리테일러 등록
+				 //add 20210531  leejs  
+                var el_row1 = {
+					view: "fieldset",
+					label: "기본정보",
+					body: {
+						rows: [
+							{
+								view: "text",
+								label: "성명",
+								id: "retailer_name",
+								name: "retailername",
+								validate: webix.rules.isNotEmpty,
+								required: true,
+							},
+							{
+								view: "datepicker",
+								value: new Date(),
+								label: "생년월일",
+								stringResult: true,
+								timepicker: false,
+								format: "%Y년 %M %d일",
+								id: "retailer_birthday",
+							},
+							{
+								view: "text",
+								//value: '1234567890',
+								id: "retailer_phonenumber",
+								label: "전화번호",
+								pattern: { mask: "###-###-#####", allow: /[0-9]/g },
+								on: {
+									onKeyPress: function (code, e) {
+										var phone = this.getValue();
+										if (phone.length == 11) {
+											this.define("pattern", "###-####-####")
+											this.refresh();
+										}
+									},
+								},
+							},
+							{
+								view: "text",
+								label: "주소",
+								id: "retailer_address",
+								hidden: true,
+							},
+						]
+					}
+				};
+                var el_row2 = {
+					view: "fieldset",
+					label: "사용정보",
+					body: {
+						rows: [
+							{
+								cols: [
+									{
+										view: "text",
+										label: "Email",
+										id: "retailer_email",
+										name: "retaileremail",
+										required: true,
+										suggest: {
+											view:"gridsuggest",
+											template: "#email#", // data 중에 email 을 출력헤주고 입력값으로 취한다
+											body: {
+												// scroll:"y",
+                                    			// autoheight: true,
+												// yCount: 6,
+												// css: "webix_fmanager_user_list",
+												// data: [],
+												// template: function (obj) { return  InputListTemplate(obj); },
+												scroll:"y",
+                                    			autoheight: true,
+												yCount: 6,
+												//autoConfig:true,
+        										header:false, 
+        										borderless:true,
+												columns:[{ id:"name", width:150  }, { id:"email", width:150}],
+												data: [],
+											},
+											filter: function (item, value) {
+												//name 과 email 칼럼에서 검색하여 찾음
+												if ((item.name.toString().toLowerCase().indexOf(value.toLowerCase()) === 0) || (item.email.toString().toLowerCase().indexOf(value.toLowerCase()) === 0) )return true;
+												return false;
+											}
+										},
+										on: {
+											onAfterRender: function() {
+												retailer_email_suggest();
+											},
+											onKeyPress: function(){
+												var email = $$("retailer_email").getValue();
+                                                if (email == ""){
+													$$("retailer_emailchkvalue").setValue("");
+													$$("retailer_emailchk_value").setValue("");
+												};
+											},
+											onEnter: function () {
+												retailer_email_suggest();
+                                       			var email = $$("retailer_email").getValue();
+                                                if (email == ""){
+													$$("retailer_emailchkvalue").setValue("");
+													$$("retailer_emailchk_value").setValue("");
+												} else {
+													
+													if ($$("retailer_editmode").getValue() == "1") {
+														getRetailer();
+													} else {
+														if (webix.rules.isEmail(email)) {
+															app.getService("local").emailChecking(email).then(function (a) {
+																if (a.Value == "0") {
+																	$$("retailer_emailchkvalue").setValue("사용할수 있는 이메일 입니다..");
+																	$$("retailer_emailchk_value").setValue("1");
+																	if ($$("retailer_emailchk_value").getValue() == "1" && $$("retailer_passwordchk_value").getValue() == "1") {
+																		$$("retailer_save").enable();
+																	};
+																} else {
+																	$$("retailer_emailchkvalue").setValue("이미 등록된 이메일 입니다..");
+																	$$("retailer_emailchk_value").setValue("0");
+																}
+															});
+														} else {
+															webix.alert("email형식이 아닙니다");
+														};
+													};
+												};
+											},
+										    onChange: function(){
+												var email = $$("retailer_email").getValue();
+                                                if (email == ""){
+													$$("retailer_emailchkvalue").setValue("");
+													$$("retailer_emailchk_value").setValue("");
+												}else{
+													if ($$("retailer_editmode").getValue() == "1") {
+														getRetailer();
+													} else {
+														if (webix.rules.isEmail(email)) {
+															app.getService("local").emailChecking(email).then(function (a) {
+																if (a.Value == "0") {
+																	$$("retailer_emailchkvalue").setValue("사용할수 있는 이메일 입니다..");
+																	$$("retailer_emailchk_value").setValue("1");
+																	if ($$("retailer_emailchk_value").getValue() == "1" && $$("retailer_passwordchk_value").getValue() == "1") {
+																		$$("retailer_save").enable();
+																	};
+																} else {
+																	$$("retailer_emailchkvalue").setValue("이미 등록된 이메일 입니다..");
+																	$$("retailer_emailchk_value").setValue("0");
+																}
+															});
+														} else {
+															webix.alert("email형식이 아닙니다");
+														};
+													};
+												}
+											}										
+										}
+									},
+									{
+										view: "button",
+										label: "확인",
+										width: 50,
+										id: "retailer_email_btn",
+										click: function () {
+											var email = $$("retailer_email").getValue();
+											if (email == "") {
+												webix.alert("이메일이 없습니다. 등록해주세요");
+											} else {
+												if ($$("retailer_editmode").getValue() == "1") {
+													getRetailer();
+												} else {
+													if (webix.rules.isEmail(email)) {
+														app.getService("local").emailChecking(email).then(function (a) {
+															if (a.Value == "0") {
+																$$("retailer_emailchkvalue").setValue("사용할수 있는 이메일 입니다..");
+																$$("retailer_emailchk_value").setValue("1");
+																if ($$("retailer_emailchk_value").getValue() == "1" && $$("retailer_passwordchk_value").getValue() == "1") {
+																	$$("retailer_save").enable();
+																};
+															} else {
+																$$("retailer_emailchkvalue").setValue("이미 등록된 이메일 입니다..");
+																$$("retailer_emailchk_value").setValue("0");
+															}
+														});
+													} else {
+														webix.alert("email형식이 아닙니다");
+													};
+												};
+											};
+										},
+									},
+
+								]
+							},
+							{
+								height: 15,
+								cols: [
+									{ width: 120, },
+									{
+										view: "label",
+										id: "retailer_emailchkvalue",
+									},
+									{
+										view: "text",
+										id: "retailer_emailchk_value",
+										hidden: true,
+									},
+								]
+							},
+							{
+								view: "text",
+								label: "임시비밀번호",
+								type: "password",
+								id: "retailer_password",
+								required: true,
+								on: {
+									onEnter: function () {
+										var newPassword = $$("retailer_password").getValue();
+										var CheckPassword = fnCheckPasswordMessage(newPassword);
+										if (CheckPassword[0] == true) {
+											$$("retailer_repassword").focus();
+										} else {
+											webix.alert(CheckPassword[1]).then(function (a) {
+												$$("retailer_repassword").focus();
+											});
+										};
+									},
+								}
+							},
+							{
+								view: "text",
+								label: "임시비밀번호",
+								type: "password",
+								id: "retailer_repassword",
+								required: true,
+								on: {
+									onFocus: function () {
+										var newPassword = $$("retailer_password").getValue();
+										var CheckPassword = fnCheckPasswordMessage(newPassword);
+
+										if (CheckPassword[0] == true) {
+											$$("retailer_repassword").focus();
+										} else {
+											webix.alert(CheckPassword[1]).then(function (a) {
+												$$("retailer_password").focus();
+											});
+										};
+									},
+									onKeyPress: function () {
+										var credential = $$("retailer_password").getValue();
+										webix.delay(function () {
+											if (credential == this.getValue()) {
+												$$("retailer_passwordchkvalue").setValue("비밀번호가 일치합니다.");
+												$$("retailer_passwordchk_value").setValue("1");
+												if ($$("retailer_emailchk_value").getValue() == "1" && $$("retailer_passwordchk_value").getValue() == "1") {
+													$$("retailer_save").enable();
+												};
+											} else {
+												$$("retailer_passwordchkvalue").setValue("비밀번호가 일치 하지 않습니다.");
+												$$("retailer_passwordchk_value").setValue("0");
+											};
+										}, this);
+									}
+								}
+							},
+							{
+								height: 15,
+								cols: [
+									{ width: 120, },
+									{
+										view: "label",
+										id: "retailer_passwordchkvalue",
+									},
+									{
+										view: "text",
+										id: "retailer_passwordchk_value",
+										hidden: true,
+									},
+								]
+							}
+						]
+					},
+				};
+				var el_row3 = {
+					view: "fieldset",
+					label: "권한정보",
+					body: {
+						rows: [
+							{
+								cols: [
+									{
+										view: "checkbox",
+										label: "등록권한",
+										id: "retailer_cansell",
+										value: "0",
+									},
+									{
+										view: "text",
+										label: "수수료율",
+										id: "retailer_commission",
+										inputAlign: "right",
+										labelWidth: 80,
+										value: 0.0,
+										width: 220,
+										format:"1'111.0",
+										suggest: {
+											fitMaster: false,
+											width: 200,
+											css: "webix_fmanager_user_list",
+											template: "#rate#", // data 중에 email 을 출력헤주고 입력값으로 취한다
+											body: {
+												
+												data: [],
+												template: function (obj) { return  CommissionTemplate(obj)},
+											},
+											filter: function (item, value) {
+												//name 과 email 칼럼에서 검색하여 찾음
+												if (item.name.toString().toLowerCase().indexOf(value.toLowerCase()) === 0) return true;
+												return false;
+											}
+										},
+										on:{
+											onEnter: function(){
+												webix.ajax( usermanagerUrl + "commissionrate" , {owner : sessionStorage.getItem("userid")}, function(items)  {
+													var suggest_id = $$("retailer_commission").config.suggest;
+													var list = $$(suggest_id).getList(); 
+													list.clearAll(); 
+													list.parse(items)
+												});
+											}
+										},										
+									},
+									{
+										view: "label",
+										label: "%",
+										width: 20,
+									},
+									{
+										view: "icon",
+										icon: "mdi  mdi-calculator-variant ",
+										width: 40,
+										click: function (){
+
+											
+											webix.ajax( usermanagerUrl + "commissionrate" , {owner : sessionStorage.getItem("userid")}, function(items)  {
+													var list = $$("commissionRateRow2");
+													list.parse(items)
+												});
+
+											commissionRate.show();
+										},
+									},
+								]
+							},
+						]
+					}
+				};
+				var el_row4 = {
+					gravity: 2,
+					value: "저장",
+					view: "button",
+					css: "webix_primary",
+					id: "retailer_save",
+					click: function () {
+						//saveRetailer();
+						if ($$("retailerform").validate()) {
+							saveRetailer();
+						};
+
+					},
+				};
+                 var retailer_row1 = {cols:[{view: "icon", icon: "mdi mdi-reload ", click: function (){ reSetRetailer();},},
+											{gravity: 2,},
+											{view: "icon", icon: "wxi-pencil",click: function () { 
+													if ($$("retailer_editmode").getValue() == "0"){
+														var searchEmail = "";
+														if ($$("retailer_emailchk_value").getValue() == "0"){
+															searchEmail = $$("retailer_email").getValue();
+														};
+														reSetRetailer();
+														$$("retailer_editmode").setValue("1");
+														$$("retailer_name").disable();
+														$$("retailer_birthday").disable();
+														$$("retailer_email").enable();
+														$$("retailer_emailchk_value").disable();
+														$$("retailer_phonenumber").disable();
+														$$("retailer_address").disable();
+														$$("retailer_password").disable();
+														$$("retailer_repassword").disable();
+														$$("retailer_passwordchk_value").disable();
+														$$("retailer_cansell").disable();
+														$$("retailer_commission").disable();
+														$$("retailer_save").disable();
+														$$("retailer_email").focus();
+
+														$$("retailer_email_btn").define("label", "검색")
+														$$("retailer_email_btn").refresh();
+
+														if (searchEmail == "") {
+														}else{
+															$$("retailer_email").setValue(searchEmail);
+															getRetailer();
+														};
+														
+													} else {
+														reSetRetailer();
+														$$("retailer_editmode").setValue("0");
+														$$("retailer_name").enable();
+														$$("retailer_birthday").enable();
+														$$("retailer_email").enable();
+														$$("retailer_emailchk_value").enable();
+														$$("retailer_phonenumber").enable();
+														$$("retailer_address").enable();
+														$$("retailer_password").enable();
+														$$("retailer_repassword").enable();
+														$$("retailer_passwordchk_value").enable();
+														$$("retailer_cansell").enable();
+														$$("retailer_commission").enable();
+														$$("retailer_save").disable();
+
+														$$("retailer_email_btn").define("label", "확인")
+														$$("retailer_email_btn").refresh();
+													}
+												}
+											},
+											{view: "text", id:"retailer_editmode",hidden:true, value:"0"},
+										]}
+                 var retailer_row2 = {
+					 					view:"form",
+										id:"retailerform",
+										elementsConfig: {labelAlign: "right",labelWidth: 110,},
+					 					// rules:{
+						 				// 	"retailername":webix.rules.isNotEmpty,
+						 				// 	"retaileremail":webix.rules.isEmail,
+						 				// },
+										 margin: 10,
+										elements: [el_row1,el_row2,el_row3,el_row4,{}],
+				 					};
+				function CreateRetailer(){
+					webix.ui({
+						view:"window", 
+						id:"createRetailer",
+						modal:true,
+						move:true,
+						position:"center",
+						width:480,
+						head: {
+								view: "toolbar",
+								elements: [
+									{
+										width:40
+									},
+									{ 
+										view: "label",
+										label: "판매자등록", 
+										align:"center"
+									},
+									{
+										view: "icon",
+										icon: "wxi-close",
+										hotkey: "esc",
+										width: 40,
+										click: function () {
+											$$("createRetailer").hide();
+											reSetRetailer();
+
+										},
+									},
+								]
+							},
+                        body:{
+							  rows:[retailer_row1,retailer_row2]
+							}//body
+				   }).show();
+				   reSetRetailer();
+				}
+
+				//리테일러 폼 초기화
+				function reSetRetailer(){
+					$$("retailerform").clear();
+					$$("retailerform").clearValidation();
+
+					$$("retailer_editmode").setValue("0");	
+					$$("retailer_name").setValue("");
+					$$("retailer_birthday").setValue("");
+					$$("retailer_phonenumber").setValue("");
+					$$("retailer_address").setValue("");
+					$$("retailer_email").setValue("");
+					$$("retailer_emailchkvalue").setValue("");
+					$$("retailer_emailchk_value").setValue("");
+
+					$$("retailer_password").setValue("");
+					$$("retailer_repassword").setValue("");
+					$$("retailer_passwordchkvalue").setValue("");
+					$$("retailer_passwordchk_value").setValue("");
+					$$("retailer_cansell").setValue("0");
+					$$("retailer_commission").setValue(0);
+					
+
+					$$("retailer_phonenumber").define("pattern", "###-###-#####")
+					$$("retailer_phonenumber").refresh();
+
+					$$("retailer_email_btn").define("label", "확인")
+					$$("retailer_email_btn").refresh();
+
+					$$("retailer_name").enable();
+					$$("retailer_birthday").enable();
+					$$("retailer_phonenumber").enable();
+					$$("retailer_address").enable();
+					$$("retailer_email").enable();
+					$$("retailer_emailchkvalue").enable();
+					$$("retailer_emailchk_value").enable();
+
+
+					$$("retailer_password").enable();
+					$$("retailer_repassword").enable();
+					$$("retailer_passwordchkvalue").enable();
+					$$("retailer_passwordchk_value").enable();
+
+					$$("retailer_cansell").enable();
+					$$("retailer_commission").enable();
+
+					$$("retailer_save").disable();
+				}
+
+				//리테일러 저장
+				function saveRetailer(){
+					//json 정렬
+
+					// var form = $$("retailerform");
+					// console.log(form);
+
+					var fstatus = $$("retailer_editmode").getValue();
+					var fname = $$("retailer_name").getValue().trim();
+					var fbirthday = $$("retailer_birthday").getValue();
+					var femail = $$("retailer_email").getValue();
+					var femailchk_value = $$("retailer_emailchk_value").getValue();
+					var fphonenumber = $$("retailer_phonenumber").getValue();
+					var faddress = $$("retailer_address").getValue();
+					var fpassword = $$("retailer_repassword").getValue();
+					var fpasswordchk_value = $$("retailer_passwordchk_value").getValue();
+					var fcansell = $$("retailer_cansell").getValue();
+					var fcommission = $$("retailer_commission").getValue();
+					var params = { status: fstatus, name: fname, birthday: fbirthday, email: femail, phonenumber: fphonenumber, address: faddress, password: fpassword, cansell : fcansell, commission : fcommission, owner : sessionStorage.getItem("userid") };
+
+					if ($$("retailer_editmode").getValue() == "0" ) {
+						if ($$("retailer_emailchkvalue").getValue() == ""){
+							webix.alert("이메일 중복체크를 확인해주세요");
+							return false;
+						} else {
+							if (femailchk_value == "1" && fpasswordchk_value == "1"){
+								webix.ajax().post(retailerSaveUrl, params).then(function (a) {
+									var result = a.json();
+									if (result == 0) {
+										webix.alert("저장에 실패 했습니다. 항목을 확인해주세요");
+									} else {
+										webix.alert("저장되었습니다.");
+										reSetRetailer();
+										return res.json();
+									}
+								});
+							} else {
+								webix.alert("입력항목을 다시 확인해주세요");
+							};
+						};
+					} else {
+						webix.ajax().post(retailerSaveUrl, params).then(function (a) {
+							var result = a.json();
+							if (result == 0) {
+								webix.alert("저장에 실패 했습니다. 항목을 확인해주세요");
+							} else {
+								webix.alert("저장되었습니다.");
+								reSetRetailer();
+								return res.json();
+							}
+						});
+					};
+				};
+
+				//리테일러 불러오기
+				function getRetailer() {
+					var femail = $$("retailer_email").getValue();
+					if (webix.rules.isEmail(femail)) {
+						webix.ajax(retailerSaveUrl + "?email=" + femail).then(function (a) {
+							var result = a.json();
+							//console.log(result[0]);
+							if (result[0] == null) {
+								webix.alert("검색내용이 없습니다.");
+							} else {
+								$$("retailer_name").enable();
+								$$("retailer_birthday").enable();
+								$$("retailer_phonenumber").enable();
+								$$("retailer_address").enable();
+								$$("retailer_cansell").enable();
+
+								$$("retailer_name").setValue(result[0].name);
+								$$("retailer_birthday").setValue(result[0].birthday);
+								$$("retailer_phonenumber").setValue(result[0].phonenumber);
+								$$("retailer_address").setValue(result[0].address);
+
+								$$("retailer_password").disable();
+								$$("retailer_repassword").disable();
+								$$("retailer_email").disable();
+
+								if (result[0].cansell == "1") {
+									$$("retailer_cansell").setValue("1");
+								} else {
+									$$("retailer_cansell").setValue("0");
+								}
+								$$("retailer_commission").setValue(result[0].commission);
+								$$("retailer_commission").enable();
+								$$("retailer_save").enable();
+							};
+						});
+					};
+				};
+
+				//사이드 메뉴 추가시 사용
+				class SideBar extends userManager.views.sidebar {
+					init() {
+						super.init();
+						this.$$("menu").add({
+							id: "matrices",
+							value: "펼쳐보기",
+							icon: "umi-matrix",
+						});
+						// this.$$("menu").add({
+						// 	id: "userquota",
+						// 	value: "할당량관리",
+						// 	icon: "mdi mdi-battery-60 ",
+						// });
+					}
+				};
+				class MatrixManager extends userManager.views.JetView {
+					config() {
+						const tabbar = {
+							view: "tabbar",
+							localId: "tabs",
+							options: [
+								//{ id: "users.matrix", value: "Users/Roles" },
+								//{ id: "roles.matrix", value: "Rules/Roles" },
+								{ id: "users.matrix", value: "사용자그룹" },
+								{ id: "roles.matrix", value: "그룹별권한" },
+							],
+							on: {
+								onChange: id => this.ShowPage(id),
+							},
+						};
+						return {
+							padding: 10,
+							css: "webix_um_tableview",
+							rows: [tabbar, { $subview: true }],
+						};
+					}
+
+					urlChange() {
+						const url = this.getUrl();
+						const tabbar = this.$$("tabs");
+						if (url.length > 1) {
+							this.$$("tabs").setValue(url[1].page);
+						} else {
+							this.ShowPage(tabbar.getValue());
+						}
+					}
+
+					ShowPage(id) {
+						this.show("./" + id);
+					}
+				};
+				class CustomTopBar extends userManager.views.topbar {
+      				config(){
+        				const ui = super.config();
+							ui.cols.splice(6,0,{
+								localId: "ArchiveMoveBtn",
+								//view: "button",
+								view: "icon",
+								type: "icon",
+								icon: "mdi  mdi-dropbox",
+								tooltip:"아카이브로 이동",
+								width: 60,
+								click: function () {
+										location.href = "file"
+								}
+							});      
+							ui.cols.splice(7,0,{
+								localId: "CreateOrgnBtn",
+								//view: "button",
+								view: "icon",
+								type: "icon",
+								icon: "mdi mdi-bank-plus",
+								tooltip:"사용자등록",
+								hidden: Orgnbtn,
+								width: 60,
+								click: function () {
+									// InputUserOrgn.show()
+									// UserCreateForm();
+									// $$("editmodechk").setValue("0");
+									// $$("myradio").setValue("rb1");
+									//화면출력
+									user_register_form.show()
+								}
+							}); 
+							ui.cols.splice(8,0,{
+								localId: "CreateRetailer",
+								//view: "button",
+								view: "icon",
+								type: "icon",
+								icon: "mdi mdi-store-plus",
+								tooltip:"리테일러등록",
+								//hidden: Orgnbtn,
+								width: 60,
+								click: function () {
+									if ($$("createRetailer")){
+										reSetRetailer();
+										$$("createRetailer").show();
+									} else {
+										CreateRetailer();
+										reSetRetailer();
+									}
+									
+								}
+							}); 							
+ 							ui.cols.splice(9,0,{
+								localId: "ChatIngBtn",
+								//view: "button",
+								view: "icon",
+								type: "icon",
+								icon: "mdi mdi-comment-multiple-outline",
+								tooltip:"메신저",
+								width: 60,
+								click: function () {
+									if (sessionStorage.getItem("AuthChat") == "1") {
+										if (!$$("usermanager_messenger")) {
+											CustomBarChat();
+										} else {
+											$$("usermanager_messenger").show();
+										}
+									}else{
+                                       webix.message("권한이 없습니다. 관리자에게 문의하세요");
+									};
+								}
+							});    			   
+							ui.cols.splice(10,0,{
+ 								localId: "LogOutBtn",
+								view: "icon",
+								//view: "button",
+								tooltip:"로그아웃",
+								type: "icon",
+								icon: "mdi mdi-logout",
+								//width: 40,
+								width: 60,
+								click: function () {
+									webix.confirm({
+										title: "로그아웃",
+										ok: "로그아웃",
+										cancel: "취소",
+										text: "로그아웃 하시겠습니까?",
+									}).then(function () {
+										//로그인 페이지로 이동
+										location.href = "/";
+										//썸네일 폴더 삭제
+										webix.ajax().headers({ "Content-type": "application/json" }).del(logoutThumbDelete + "/" + sessionStorage.getItem("userid") + "/" + sessionStorage.getItem("orgn"))
+										.then(function (a) {  
+											var result = a.json();
+											sessionStorage.clear();
+											return a.json(); 
+										});
+									});
+								}
+							});  
+          				return ui;
+		  			}
+  	     			init() {
+       					super.init();
+      					// this.$$("CustomBar").attachEvent("onAfterTabClick", function(id, e){
+      					//	 CustomBarButton(id);
+      					// });
+      				} 
+    			};  
+
+                //add-leejs 20210111 한글화  locales -> kr_user.js (docmanager) 한글화
+				webix.i18n.setLocale("ko-KR");
+				userManager.locales.kr = koLocale;
+				var app = new userManager.App({
+					url: usermanagerUrl,
+					start: "top/matrices",
+					view: "usermanager",
+					//views: [{ matrices: MatrixManager},{ retailer: RetailerManager}],
+					views: { matrices: MatrixManager},
+					locale: { lang: "kr" },
+					override: new Map([
+						[userManager.views.sidebar, SideBar],
+						[userManager.views.topbar,CustomTopBar],
+						//[userManager.views.sidebar, BackSideBar]
+					]),
+				});
+
+				app.render(document.body);
+			});
+		</script>
+	</body>
+</html>

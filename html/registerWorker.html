@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Register Farm Page</title>
+	<!-- Webix Library -->
+	<script type="text/javascript" src="/html/assets/webix/webix.js"></script>
+	<script type="text/javascript" src="/html/assets/locales/kr_doc.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/screenfull.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/crypto-js.min.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/functions.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/defintionOfURL.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/sharedComponent.js"></script>
+
+	<!-- Css -->
+	<link rel="stylesheet" type="text/css" href="/html/assets/webix/skins/flat.css" />
+	<link rel="stylesheet" type="text/css" href="/html/assets/css/MaterialDesign/css/materialdesignicons.min.css" />
+	<!-- <link rel="stylesheet" title="contrast" type="text/css" href="/html/assets/docmanager/webix/skins/contrast.css" /> -->
+	<!-- <link rel="stylesheet" title="contrast" type="text/css" href="/html/assets/docmanager/skins/contrast.css"> -->
+
+	<!-- Chat App -->
+	<script type="text/javascript" src="/html/assets/chat/chat.js"></script>
+	<!-- <link rel="stylesheet" type="text/css" href="/html/assets/chat/webix/skins/contrast.css" />
+	<link rel="stylesheet" type="text/css" href="/html/assets/chat/skins/contrast.css" /> -->
+
+	<style>
+		.webix_view.webix_el_label.borderR {
+			border-right: solid 1px grey !important;
+			height: 45px !important;
+		}
+
+		/*카드템플릿의 하단 박스부분*/
+		.webix_fmanager_card_panel {
+			position: relative;
+			padding: 10px 12px;
+			height: 36px;
+			background-color: rgba(0, 0, 0, 0.5);
+
+			/* background-color: #7F7F7F;   */
+		}
+
+		/* 카드템플릿에표시되는 파일명 */
+		.webix_fmanager_card_name {
+			display: inline-block;
+			white-space: nowrap;
+			font-weight: 500;
+			width: 155px;
+			height: 29px;
+			line-height: 30px;
+			color: #f8f8f8;
+		}
+
+		body.webix_full_screen {
+			overflow: scroll;
+		}
+
+		.grey .webix_el_box {
+			color: #bfbfbf;
+		}
+	</style>
+	<style>
+		/*disable text selection if needed (otherwise, ignore this part)*/
+		.webix_tree_item {
+			user-select: none;
+			/* standard syntax */
+			-webkit-user-select: none;
+			/* webkit (safari, chrome) browsers */
+			-moz-user-select: none;
+			/* mozilla browsers */
+			-khtml-user-select: none;
+			/* webkit (konqueror) browsers */
+			-ms-user-select: none;
+			/* IE10+ */
+		}
+
+		.webix_tree_item.webix_selected span {
+			background: #1F884C !important;
+		}
+	</style>
+	<style>
+		/*썸네일안에 이미지넣기*/
+		.webix_fmanager_card_label {
+			position: absolute;
+			padding: 4px;
+			bottom: 3px;
+			left: 3px;
+			height: 15px;
+			line-height: 15px;
+			font-weight: bold;
+			color: #475466;
+			background-color: rgba(255, 200, 200, 0.8);
+			border-radius: 15px;
+		}
+
+		.button {
+			padding: 10px;
+			display: inline;
+			border-radius: 2px;
+			font-family: "Arial";
+			border: 0;
+			margin: 0 10px;
+			background: red;
+			font-size: 15px;
+			line-height: 15px;
+			color: white;
+			width: auto;
+			height: auto;
+			box-sizing: content-box;
+		}
+	</style>
+	<style>
+		.custom_blockarea {
+			position: fixed;
+			border: 2px solid #5210ec;
+			background-color: rgba(230, 120, 17, 0.2);
+		}
+	</style>
+	<style>
+		.overall {
+			height: 100%;
+			line-height: 26px;
+		}
+
+		.name {
+			height: 100%;
+			width: 280px;
+			float: left;
+			overflow: hidden;
+		}
+
+		.size {
+			padding: 0 10px;
+			width: 100px;
+			text-align: right;
+			float: right;
+		}
+
+		.remove_file {
+			float: right;
+			width: 15px;
+			padding-left: 10px;
+		}
+
+		.status {
+			float: right;
+			position: relative;
+			margin-top: 4px;
+			width: 180px;
+			height: 16px;
+			line-height: 16px;
+			border: 1px solid #A4BED4;
+			border-radius: 2px;
+			-moz-border-radius: 2px;
+			-webkit-border-radius: 2px;
+		}
+
+		.progress {
+			height: 100%;
+			position: absolute;
+			background-color: #0899e7;
+			margin: 0px, 0px, 0px, 0px;
+			border: 0px, 0px, 0px, 0px;
+		}
+
+		.message {
+			z-index: 1;
+			width: 100%;
+			text-align: center;
+			position: absolute;
+		}
+
+		.message.error {
+			color: #e83b3b;
+		}
+	</style>
+	<!-- 사용용도 주석달것-->
+	<style>
+		.messages-list .webix_list_item {
+			display: flex;
+			max-width: 80%;
+		}
+
+		.messages-list .webix_list_item.webix_comments_current {
+			margin-left: 20%;
+		}
+
+		.messages-list .webix_list_item:last-child {
+			margin-bottom: 24px;
+		}
+
+		.messages-list .message {
+			flex-grow: 1;
+			/* background: #f4f5f9; */
+			background: #5c5b5b;
+			border-radius: 0px 8px 8px 8px;
+			padding: 10px 20px 20px;
+		}
+
+		.messages-list .webix_comments_message {
+			margin: 0;
+		}
+
+		.messages-list .webix_chat_list_avatar {
+			flex-shrink: 0;
+			margin-right: 15px;
+			margin-left: 15px;
+		}
+
+		.messages-list .webix_comments_name {
+			margin-left: 0;
+		}
+	</style>
+	<!-- info-NEW0201124 prompt modal 의 header 부분 css가 docmanager.css 에서 작동이 않되어 이곳에넣었다 -->
+	<style>
+		.webix_fmanager_prompt .webix_win_head .webix_toolbar {
+			/* background: #ffffff; */
+			background: #3a3939;
+		}
+	</style>
+	<style>
+		html,
+		body {
+			background-color: #ffffff;
+
+		}
+
+		.content {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.image .webix_template {
+			position: relative;
+			background: #aaa;
+			/* padding: 50px 60px; */
+			padding: 0px;
+		}
+
+		.title {
+			position: absolute;
+			left: 10px;
+			bottom: 15px;
+			color: #000;
+			font-size: 16px;
+		}
+	</style>
+	<!-- 카드뷰에서 폭이 줄어들때 우측썸네일 사라지는것(버그성)방지 -->
+	<style>
+		.webix_dataview .webix_scroll_cont {
+			padding: 0px !important;
+		}
+	</style>
+	<style>
+		/* for templates */
+		.draft .webix_template {
+			display: table;
+			width: 100%;
+		}
+
+		.draft .webix_template .title1 {
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+			font-size: 24px;
+		}
+	</style>
+
+	<style>
+		/* dashboard and panels */
+		.panel_drag_view {
+			border-radius: 2px;
+			box-shadow: 0px 0px 10px #b9d4fa;
+		}
+
+		.panel_icon {
+			color: #283655;
+		}
+
+		.panel_target {
+			background: #d0e1f9ab;
+			box-shadow: 0px 0px 20px 5px #d0e1f9ab;
+		}
+
+		.draft .webix_template {
+			display: table;
+			width: 100%;
+		}
+
+		.draft .webix_template .title {
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+			font-size: 24px;
+		}
+
+		.webix_view.webix_flexlayout {
+			height: auto !important;
+		}
+	</style>
+
+	<style>
+		.webix_el_slider .webix_el_box,
+		.webix_el_slider {
+			height: 50px !important;
+		}
+
+		.female-feed .webix_slider_title {
+			color: white;
+			background-color: orange;
+			width: 22px;
+			height: 22px;
+			border-radius: 50% 50%;
+			border-color: transparent;
+			text-align: center;
+			align-items: center;
+			font-size: 12px;
+		}
+
+		.male-feed .webix_slider_title {
+			color: white;
+			background-color: blue;
+			width: 22px;
+			height: 22px;
+			border-radius: 50% 50%;
+			border-color: transparent;
+			text-align: center;
+			align-items: center;
+			font-size: 12px;
+		}
+
+		.female-feed .webix_slider_box .webix_slider_left {
+			background: orange !important;
+		}
+
+		.male-feed .webix_slider_box .webix_slider_left {
+			background: blue !important;
+		}
+	</style>
+</head>
+
+<body class="webix_full_screen" oncontextmenu="return false">
+	<script>
+		const user = JSON.parse(sessionStorage.getItem("ifrm_user"));
+		const farm = sessionStorage.getItem("user_group_idx");
+
+		const sidebar = {
+			view: "sidebar",
+			data: menu_data,
+			ready: function () {
+				this.select("register-worker");
+				this.open(this.getParentId("register-worker"));
+			},
+			on: {
+				onAfterSelect: function (id) {
+					if (id == "register-worker")
+						$$("multi").setValue(id)
+				},
+				onItemClick: function(id, e, node){
+					var item = this.getItem(id);
+					if (!item.menu) {
+						window.location.href = id;
+					}
+				}
+			}
+		};
+
+		
+		// ----------- Register Farm page Start ----------------
+
+		const register_breed_page = {
+			view: "form",
+			id: "register-worker",
+			elementsConfig: {
+				bottomPadding: 18,
+				labelWidth: 130,
+				padding: 10
+			},
+			elements: [
+				{
+					type: "section",
+					borderless: false,
+					rows: [
+						{
+							view: "label",
+							template: "Farm Information",
+							css: {
+								"font-size": "24px"
+							}
+						},
+						{
+							cols : [
+								{
+									view: "label",
+									label: "Register"
+								},
+								{},
+								{ 
+									type: "section",
+									borderless: true,
+									cols:[
+										{}, { view:"icon", icon:"mdi mdi-printer"},{ view:"icon", icon:"mdi mdi-folder-upload"},{ view:"icon", icon:"mdi mdi-folder-download"}
+									]
+								},
+							]
+							
+						},
+						{
+							type: "section",
+							cols: [
+								{ view: "label", label: "farm name", gravity: 0.1 },
+								{ view: "label", label: "province", gravity: 0.1 },
+								{ view: "label", label: "city", gravity: 0.1 },
+								{ view: "label", label: "parter", gravity: 0.1 },
+								{ view: "label", label: "start_date", gravity: 0.1 },
+								{ view: "label", label: "biotype", gravity: 0.1 },
+								{ view: "label", label: "female_head", gravity: 0.1 },
+								{ view: "label", label: "male_head", gravity: 0.1 },
+								{ view: "label", label: "start_weekage", gravity: 0.1 },
+								{ gravity: 0.1}
+							],
+							css: {
+								"background": "lightgrey!important"
+							}
+						},
+						{
+							view: "form",
+							id: "register_form",
+							margin: 10,
+							borderless: true,
+							cols: [
+								{ view: "text", placeholder: "farm name", id: "farm_name", name: "farm_name", gravity: 0.1 },
+								{ view: "text", placeholder: "province", id: "province", name: "province", gravity: 0.1 },
+								{ view: "text", placeholder: "city", id: "city", name: "city", gravity: 0.1 },
+								{ view: "text", placeholder: "parter", id: "parter", name: "parter", gravity: 0.1 },
+								{ view: "datepicker", placeholder: "start_date", id: "start_date", name: "start_date", gravity: 0.1 },
+								{ view: "richselect", placeholder: "biotype", id: "biotype", name: "biotype", gravity: 0.1, options: ["AA", "BB", "AB"]},
+								{ view: "text", placeholder: "female_head", id: "female_head", name: "female_head", gravity: 0.1, attributes:{type:"number"} },
+								{ view: "text", placeholder: "male_head", id: "male_head", name: "male_head", gravity: 0.1, attributes:{type:"number"} },
+								{ view: "text", placeholder: "start_weekage", id: "start_weekage", name: "start_weekage", gravity: 0.1, attributes:{type:"number"} },
+								{ 
+									rows: [
+										{
+											view: "button", value: "register", css: "webix-primary",
+											click: function(){
+												if ($$("register_form").validate()) {
+													const val = $$("register_form").getValues();
+													webix.ajax().post(schedulerUrl + "breeds/register", {
+														user_idx: user.id,
+														farm_idx: sessionStorage.getItem("user_group_idx"),
+														building_no: "0",
+														farm_name: val.farm_name,
+														province: val.province,
+														city: val.city,
+														parter: val.parter,
+														start_date: val.start_date,
+														biotype: val.biotype,
+														female_head: val.female_head,
+														male_head: val.male_head,
+														start_weekage: val.start_weekage,
+														end_weekage: "0"
+													}).then(function(data) {
+														if (data.text() != "") {
+															webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
+																sessionStorage.setItem("breed_idx", data.text())
+																window.location.href="register-breed";
+															})
+														}
+														else {
+															webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
+														}
+													})
+												}
+											}
+										},
+										{}
+									],
+									gravity: 0.1,
+									css: {
+										"margin": "auto!important"
+									}
+								},
+							],
+							rules: {
+								$all:webix.rules.isNotEmpty,
+							}
+						},
+						{
+							view: "label",
+							label: "List of breed"
+						},
+						{
+							view:"datatable",
+							id: "grid",
+							autoConfig:true,
+							url:function(params){
+								// sync requests - parse only!
+								var data = webix.ajax().sync().get(schedulerUrl + "breeds/all", {
+									uID: user.id,
+									fID: farm
+								}).responseText;
+								this.parse(data);
+								
+							},
+							onClick:{
+								"wxi-trash":function(event, id, node){
+									webix.ajax().del(schedulerUrl + "breeds/remove?id=" + id.row).then(function(result) {
+										if (result.text() != "") {
+											window.location.href = "register-breed"
+										}
+									})
+								},
+								"wxi-pencil":function(event, id, node){
+									console.log(id);
+									webix.ajax().get(schedulerUrl + "breeds/select", {id: id.row}).then(function(result) {
+										console.log(result.text());
+										const breed = JSON.parse(result.text());
+										breed_details.show();
+
+									})
+								}
+							}
+						},
+					]
+				}
+			],
+		};
+
+		webix.ready(function () {
+			if (!user) {
+				window.location.href = "login";
+			} else {
+				sessionStorage.setItem("lastPage", "register-breed");
+			}
+			webix.ui({
+				rows: [
+					{
+						view: "toolbar", padding: 3, elements: [
+							{
+								view: "icon", icon: "mdi mdi-menu", click: function () {
+									$$("$sidebar1").toggle();
+								}
+							},
+							{ view: "label", label: "DonilFarm" },
+							{},
+							{ view: "button", label: "CCTV", gravity: 0.3 },
+							{ view: "button", label: "scheduler", gravity: 0.3 },
+							{
+								view: "icon",
+								icon: "mdi mdi-calendar-clock",
+								tooltip: "스케줄보기",
+								//hidden:true,
+								//hidden: Orgnbtn,                                
+
+								click: function () {
+									location.href = "/scheduler";
+								}
+							},
+							{ view: "button", label: "myInfo", gravity: 0.3 },
+							{ view: "icon", icon: "mdi mdi-comment", badge: 4 },
+							{ view: "icon", icon: "mdi mdi-bell", badge: 10 }
+						]
+					},
+					{
+						cols: [
+							sidebar,
+							{
+								id: "multi",
+								animate: false,
+								cells: [
+									{
+										id: "dashboard1",
+										template: "dashboard"
+									},
+									register_breed_page,
+								]
+							}
+
+						]
+					},
+
+				]
+			});
+			
+			var columns = $$("grid").config.columns;
+			if (columns.length > 3) {
+				columns.splice(columns.length, 0,{
+					id:"trash",
+					header:"Delete",
+					template: "{common.trashIcon()}"
+				});
+				$$("grid").refreshColumns();
+
+				columns.splice(columns.length-1, 0,{
+					id:"edit",
+					header:"Edit",
+					template: "{common.editIcon()}"
+				});
+				$$("grid").refreshColumns();
+			}
+		});
+	</script>
+</body>
+
+</html>

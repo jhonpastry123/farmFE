@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>아카이브 스튜디오</title>
+	<link rel="icon" href ="/html/assets/logo/clas클라스 심볼.png">
+
+	<!-- Webix Library 스케쥴러 전용 webix.js 를 사용했다-->
+	<script type="text/javascript" src="/html/assets/scheduler/webix/webix.js"></script>
+	<script type="text/javascript" src="/html/assets/locales/kr_scheduler.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/screenfull.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/crypto-js.min.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/functions.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/defintionOfURL.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/uploadFunction.js"></script>
+
+	<!-- Scheduler -->
+	<script type="text/javascript" src="/html/assets/scheduler/scheduler.js"></script>
+
+	<!-- Css -->
+	<link rel="stylesheet" type="text/css" href="/html/assets/css/MaterialDesign/css/materialdesignicons.min.css" />
+	<link rel="stylesheet" title="theme" type="text/css" href="/html/assets/scheduler/webix/skins/flat.css" /> 
+	<link rel="stylesheet" title="theme" type="text/css" href="/html/assets/scheduler/skins/flat.css"> 
+	<style>
+		.webix_scheduler_cal_title {
+			overflow: hidden;
+			/* 원본 width: calc(100% - 24px - 29px - 4px); */
+			width: calc(100%   - 25px - 24px - 29px - 4px);  /*add2021-06-03*/
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			}
+
+		.webix_scheduler_cal_edit {
+			color: transparent;
+			font-size: 18px;
+			width: 26px;			/* add20210-06-03 원본 29 */
+			line-height: 26px;		/* add20210-06-03 원본 29 */
+			border-radius: 50%;
+		}
+		.webix_fmanager_user_list .webix_fmanager_user_email {
+			display: inline-block;
+			position: absolute;
+			right: 12px;
+			color: #a4b4bf;
+		}
+		.webix_fmanager_shared_list .webix_fmanager_remove_user {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			}
+		.webix_fmanager_shared_list .webix_list_item {
+			cursor: default;
+			border-color: #ccd7e6;
+			position: relative;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			padding: 4px 50px 4px 50px;
+		}
+		.webix_fmanager_shared_list .default_avatar,
+		.webix_fmanager_shared_list .avatar_img {
+			width: 28px;
+			height: 28px;
+			line-height: 28px;
+			font-size: 18px;
+			border-radius: 50%;
+			left: 12px;
+			top: 3px;
+			position: absolute;
+			text-align: center;
+			float: left;
+		}
+		.webix_fmanager_shared_list .webix_fmanager_remove_user {
+			cursor: pointer;
+			position: absolute;
+			display: inline-block;
+			height: 20px;
+			line-height: 20px;
+			right: 12px;
+			top: 7px;
+		}
+		.webix_fmanager_shared_list .webix_fmanager_remove_user:hover, .webix_fmanager_shared_list .webix_fmanager_remove_user:hover .webix_icon {
+			color: #28b263;
+		}
+		.webix_fmanager_shared_list .webix_fmanager_remove_user .webix_icon {
+			color: #475466;
+			vertical-align: middle;
+		}
+		.webix_fmanager_shared_list .webix_overlay {
+			display: table;
+			width: 100%;
+		}
+		.webix_fmanager_shared_list .webix_overlay .webix_fmanager_overlay {
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+		}
+		.webix_fmanager_shared_list .webix_list_item {
+			padding: 4px 42px 4px 42px;
+		}
+		.webix_fmanager_shared_list .avatar_img {
+			width: 22px;
+			height: 22px;
+			line-height: 22px;
+		}
+		.webix_fmanager_shared_list .webix_fmanager_remove_user {
+			top: 4px;
+			font-size: 17px;
+		}
+	</style>
+</head>
+<body class="webix_full_screen" oncontextmenu="return false">
+	<script>
+		if (sessionStorage.length == 0) {
+			location.href = "/";
+		};
+		//브라우저 뒤로가기 버튼 불능화
+		history.pushState(null, document.title, location.href); 
+		window.addEventListener('popstate', function (event) { 
+			//console.log(location.href);
+			history.pushState(null, document.title, location.href); 
+		});
+		/**
+		 * 키보드의 백스페이스로 뒤로가기 불능화
+		 *크롬은 백스페이스 막혀 있음
+		 *백스페이스 정의 함수
+		*/
+		var killBackSpace = function (e) {
+			e = e ? e : window.event;
+			var t = e.target ? e.target : e.srcElement ? e.srcElement : null;
+			if (t && t.tagName && (t.type && /(password)|(text)|(file)/.test(t.type.toLowerCase())) || t.tagName.toLowerCase() == 'textarea') {
+				return true;
+			}
+			var k = e.keyCode ? e.keyCode : e.which ? e.which : null;
+			if (k == 8) {
+				if (e.preventDefault) {
+					e.preventDefault();
+				}
+				return false;
+			} return true;
+		};
+		/**
+		 *실제 백스페이스 적용
+		 *keydown, onkeydown 발생되도록함
+		*/
+		if(typeof document.addEventListener != 'undefined') {
+			document.addEventListener('keydown', killBackSpace, false);
+		}else if(typeof document.attachEvent != 'undefined') {
+			document.attachEvent('onkeydown', killBackSpace);
+		}else{
+			if(document.onkeydown != null) {
+				var oldOnkeydown = document.onkeydown;
+				document.onkeydown = function (e) {
+					oldOnkeydown(e); killBackSpace(e);
+				};
+			}else{
+				document.onkeydown = killBackSpace;
+			}
+		}
+
+		webix.ready(function() {
+			if ( webix.env.touch ){         // if touch device is detected
+				webix.ui.fullScreen();
+				webix.Touch.limit(true);
+			};
+			if (!webix.env.touch && webix.env.scrollSize) webix.CustomScroll.init();
+			themeSetting(getCookie("themeCookie"))
+			function themeSetting(id)  {
+				var links = document.getElementsByTagName("link");
+				for(var i=0; i<links.length; i++){
+					var link = links[i];
+					if (link.title == "theme") {
+						console.log(link);
+						if(/material/.test(link.href)){
+							link.href = link.href.replace("material", id);
+						}else if(/mini/.test(link.href)){
+							link.href = link.href.replace("mini", id);								
+						}else if(/flat/.test(link.href)){
+							link.href = link.href.replace("flat", id);
+						} else if(/compact/.test(link.href)){
+							link.href = link.href.replace("compact", id);
+						}else if(/contrast/.test(link.href)){
+							link.href = link.href.replace("contrast", id);
+						}
+					}
+				}
+				setCookie("themeCookie", id, 365);
+				webix.skin.set(id);
+			}
+
+			//TopBar 에 있는 메뉴의 Overwriting
+			class CustomTopBar extends scheduler.views.bars {
+				config(){
+					const ui = super.config();
+						//  var hh = ui.height
+						//  ui.height = hh + 50;
+						var compact = this.getParam("compact");
+						var skin = webix.skin.$active;
+						var _ = this.app.getService("locale")._;
+
+
+						ui.cols.splice(8,0,{
+							width: 10,
+						});  
+
+						ui.cols.splice(9,0,{
+							localId: "ArchiveMoveBtn",
+							//view: "button",
+							view: "icon",
+							type: "icon",
+							icon: "mdi  mdi-dropbox",
+							tooltip:"아카이브로 이동",
+							width: 60,
+							click: function () {
+									location.href = "file"
+							}
+						});   
+
+						ui.cols.splice(10,0,{
+							view: "icon",
+							tooltip:"로그아웃",
+							//type: "icon",
+							icon: "mdi mdi-logout",
+							width: 60,
+							click: function () {
+								webix.confirm({
+									title: "로그아웃",
+									ok: "로그아웃",
+									cancel: "취소",
+									text: "로그아웃 하시겠습니까?",
+								}).then(function () {
+									//로그인 페이지로 이동
+									location.href = "/";
+									//썸네일 폴더 삭제
+									webix.ajax().headers({ "Content-type": "application/json" }).del(logoutThumbDelete + "/" + sessionStorage.getItem("userid") + "/" + sessionStorage.getItem("orgn"))
+									.then(function (a) {  
+										var result = a.json();
+										sessionStorage.clear();
+										return a.json(); 
+									});
+								});
+							}
+						});  
+					return ui;
+				}//config()
+				init() {
+					super.init();
+				}
+			}  
+
+			
+			webix.i18n.setLocale("ko-KR");
+			scheduler.locales.kr = kr;
+
+		//   var app = new scheduler.App({
+		// 		locale	: { lang: "kr"},
+		// 		view: "scheduler",
+		// 		//date: new Date(2020, 9, 7, 0, 0, 0),
+		// 		date: new Date(),
+		// 		units: true,     //상단 메뉴에 units 활성화
+		// 		timeline: true,  //상단 메뉴에 타임라인 활성화
+		// 		//url: "https://docs.webix.com/calendar-backend/",
+		// 		url:schedulerUrl,
+		// 		override	: new Map([
+		//     		[scheduler.views.bars,CustomTopBar],
+		//       	]), 
+		//   });
+		//   app.render(document.body); 
+		// 20210520 화면 최상단에 Excel, CSV, PDF 버튼 추가
+		webix.ui({
+				rows: [
+					// {
+					// 	padding: 6,
+					// 	cols: [
+					// 		{ view: "label", width: 150, label: "Export events data to: " },
+					// 		{
+					// 			view: "button",
+					// 			width: 100,
+					// 			value: "Excel",
+					// 			click: function() {
+					// 				webix.toExcel("scheduler1");
+					// 			},
+					// 		},
+					// 		{
+					// 			view: "button",
+					// 			width: 100,
+					// 			value: "CSV",
+					// 			click: function() {
+					// 				webix.toCSV("scheduler1");
+					// 			},
+					// 		},
+					// 		{
+					// 			view: "button",
+					// 			width: 100,
+					// 			value: "PDF",
+					// 			click: function() {
+					// 				webix.toPDF("scheduler1", { autowidth: true });
+					// 			},
+					// 		},
+					// 		{},
+					// 	],
+					// },
+					{
+						locale	: { lang: "kr"},
+						view: "scheduler",
+						id: "scheduler1",
+						units: false,         //topbar Units 버튼 활성화
+						timeline: false,      //topbar 타임라인 버튼 활성화
+						//date: new Date(2020, 9, 7, 0, 0, 0),
+						date: new Date(),
+						//url: "https://docs.webix.com/calendar-backend/",
+						url:schedulerUrl,
+						override	: new Map([
+							[scheduler.views.bars,CustomTopBar],
+						]),
+					},
+				],
+			});
+		});
+	</script>
+</body>
+</html>
