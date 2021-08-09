@@ -5,6 +5,7 @@
 	<link rel="stylesheet" href="/html/assets/webix/webix.css?v=8.4.0" type="text/css" charset="utf-8">
 	<script src="/html/assets/webix/webix.js?v=8.4.0" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="/html/assets/addition/defintionOfURL.js"></script>
+	<script type="text/javascript" src="/html/assets/addition/sharedComponent.js"></script>
 
 	<title>Register Page</title>
 	<style type="text/css">
@@ -15,6 +16,12 @@
 			color: #bfbfbf;
 		}
 		.webix_uploader .webix_el_box {
+			margin: auto!important;
+		}
+
+		.webix_view .form_photo {
+			width: 200px!important;
+			height: 200px!important;
 			margin: auto!important;
 		}
 	</style>
@@ -69,12 +76,11 @@
 			invalidMessage: "Please enter your ID!",
 			on: {
 				"onBlur": function () {
-					var result = this.validate()    // validate only this field and show warning message under field if invalid
+					var result = this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("password").focus();
-						console.log("keypress in ID")
 					}
 
 				}
@@ -94,13 +100,11 @@
 			validateEvent: "key",
 			on: {
 				"onBlur": function () {
-					console.log("Validating password");
 					this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("password_confirmation").focus();
-						console.log("keypress in password")
 					}
 				}
 			},
@@ -119,13 +123,11 @@
 			validateEvent: "key",
 			on: {
 				"onBlur": function () {
-					console.log("Validating password");
 					this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("user_name").focus();
-						console.log("keypress in password")
 					}
 				}
 			},
@@ -144,13 +146,11 @@
 			validateEvent: "key",
 			on: {
 				"onBlur": function () {
-					console.log("Validating password");
 					this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("user_email").focus();
-						console.log("keypress in password")
 					}
 				}
 			},
@@ -168,13 +168,11 @@
 			invalidMessage: "Please enter user email!",
 			on: {
 				"onBlur": function () {
-					console.log("Validating password");
 					this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("user_address1").focus();
-						console.log("keypress in password")
 					}
 				}
 			},
@@ -199,13 +197,11 @@
 					validateEvent: "key",
 					on: {
 						"onBlur": function () {
-							console.log("Validating password");
 							this.validate()
 						},
 						"onKeyPress": function (key, e) {
 							if (key == 13) {
 								$$("user_address2").focus();
-								console.log("keypress in password")
 							}
 						}
 					},
@@ -220,7 +216,6 @@
 							id: "zip",
 							on: {
 								"onClick": function () {
-									console.log("Validating password");
 									this.validate()
 								},
 							},
@@ -246,13 +241,11 @@
 			validateEvent: "key",
 			on: {
 				"onBlur": function () {
-					console.log("Validating password");
 					this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("mobile_telephone").focus();
-						console.log("keypress in password")
 					}
 				}
 			},
@@ -272,13 +265,11 @@
 			pattern: { mask: "###-####-####", allow: /[0-9]/g },
 			on: {
 				"onBlur": function () {
-					console.log("Validating password");
 					this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("buildings").focus();
-						console.log("keypress in password")
 					}
 				}
 			},
@@ -337,10 +328,6 @@
 			name:"photo",
 			css:"form_photo",
 			id:"form_photo",
-
-			//borderless:false,
-			width:60,
-			height:200
 		};
 
 		const user_avatar = {
@@ -361,7 +348,6 @@
 							return false;
 						},
 						onUploadComplete: function(response) {
-							console.log(response);
 						}
 					},
 				},
