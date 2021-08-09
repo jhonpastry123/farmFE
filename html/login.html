@@ -19,7 +19,7 @@
 	<script type="text/javascript" charset="utf-8">
 		const lastPage = sessionStorage.getItem("lastPage");
 		if (lastPage) {
-			location.href = lastPage;
+			location.href = "mainview";
 		}
 		const label_title = {
 			view: "label",
@@ -135,9 +135,9 @@
 										type: "alert-success", 
 										text: "Your Email is " + user.user_email })
 									.then(function(result){
-										sessionStorage.setItem("user", user);
-										sessionStorage.setItem("farms", farms);
-										sessionStorage.setItem("message", res);
+										sessionStorage.setItem("user", JSON.stringify(user));
+										sessionStorage.setItem("farms", JSON.stringify(farms));
+										sessionStorage.setItem("message", JSON.stringify(res));
 										window.location.href = "mainview";
 									})
 								}

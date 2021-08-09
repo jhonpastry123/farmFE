@@ -10,9 +10,5 @@ func registerRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/chat", chatindex)
 	mux.HandleFunc("/scheduler", schedulerindex)
 	mux.HandleFunc("/mainview", mainview)
-	mux.HandleFunc("/register-farm", registerFarm)
-	mux.HandleFunc("/tables1", manageFeed)
-	mux.HandleFunc("/register-breed", registerBreed)
-	mux.HandleFunc("/register-worker", registerWorker)
 	mux.HandleFunc("/*", login)
 }

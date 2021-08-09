@@ -72,50 +72,6 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func registerFarm(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("html/registerFarm.html")
-	if err != nil {
-		fmt.Print(err)
-	}
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		fmt.Print(err)
-	}
-}
-
-func manageFeed(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("html/manage_feed.html")
-	if err != nil {
-		fmt.Print(err)
-	}
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		fmt.Print(err)
-	}
-}
-
-func registerBreed(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("html/registerBreed.html")
-	if err != nil {
-		fmt.Print(err)
-	}
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		fmt.Print(err)
-	}
-}
-
-func registerWorker(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("html/registerWorker.html")
-	if err != nil {
-		fmt.Print(err)
-	}
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		fmt.Print(err)
-	}
-}
-
 func mainview(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("html/mainview.html")
 	if err != nil {
