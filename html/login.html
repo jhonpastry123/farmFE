@@ -130,18 +130,6 @@
 									const user = response.user;
 									const res = response.response;
 									const farms = response.farms;
-									
-									// if (res == "popup_window") {
-									// 	var select_farms = [];
-									// 	for (let index = 0; index < farms.length; index++) {
-									// 		const element = farms[index];
-									// 		select_farms.push({
-									// 			id: element.id,
-									// 			value: element.farm_name,
-									// 		})
-									// 	}
-									// }
-
 									webix.alert({ 
 										title: "<img src='/html/assets/logo/logo_iFrm.png' class='logo_icon' ondragstart='false'/> \n Welcome " + user.user_id, 
 										type: "alert-success", 
@@ -149,29 +137,8 @@
 									.then(function(result){
 										sessionStorage.setItem("user", user);
 										sessionStorage.setItem("farms", farms);
-										sessionStorage.setItem("res", res);
-										// switch (res) {
-										// 	case "register_farm":
-										// 		window.location.href = "register-farm"
-										// 		break;
-										// 	case "mainview":
-										// 		sessionStorage.setItem("user_group_idx", farms[0].id)
-										// 		webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: farms[0].id }).then(function(data){
-										// 			if (parseInt(data.text()) > 0) {
-										// 				sessionStorage.setItem("breedID", data.text())
-										// 				window.location.href = "tables1"
-										// 			} else {
-										// 				window.location.href = "register-breed"
-										// 			}
-										// 		})
-										// 		break;
-
-										// 	case "popup_window":
-										// 		$$("farms").define("options", select_farms);
-										// 		$$("farms").refresh();
-										// 		farm_select_win.show();
-										// 		break;
-										// }
+										sessionStorage.setItem("message", res);
+										window.location.href = "mainview";
 									})
 								}
 								else {

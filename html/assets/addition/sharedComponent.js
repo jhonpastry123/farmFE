@@ -1,5 +1,3 @@
-
-
 webix.protoUI({
 	name:"photo",
 	$allowsClear:true,
