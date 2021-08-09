@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<link rel="stylesheet" href="/html/assets/webix/webix.css?v=8.4.0" type="text/css" charset="utf-8">
 	<script src="/html/assets/webix/webix.js?v=8.4.0" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="/html/assets/addition/defintionOfURL.js"></script>
 	<script type="text/javascript" src="/html/assets/addition/sharedComponent.js"></script>
-
 	<title>Register Page</title>
 	<style type="text/css">
 		body.webix_full_screen {
@@ -18,7 +16,6 @@
 		.webix_uploader .webix_el_box {
 			margin: auto!important;
 		}
-
 		.webix_view .form_photo {
 			width: 200px!important;
 			height: 200px!important;
@@ -26,11 +23,8 @@
 		}
 	</style>
 </head>
-
 <body>
-
-	<div id="loginForm"></div>
-
+	<div id="registerForm"></div>
 	<script type="text/javascript" charset="utf-8">
 		const logo = {
 			template: "<img src='/html/assets/logo/logo_iFrm.png' class='logo_icon' ondragstart='false'/>",
@@ -42,7 +36,6 @@
 				"border": "none!important"
 			}
 		};
-
 		const neccessary_label = {
 			cols: [
 				{
@@ -63,7 +56,6 @@
 				"border-bottom": "1px solid!important"
 			}
 		};
-
 		const id_input = {
 			view: "text",
 			type: "text",
@@ -86,7 +78,6 @@
 				}
 			},
 		};
-
 		const password_input = {
 			view: "text",
 			type: "password",
@@ -109,7 +100,6 @@
 				}
 			},
 		};
-
 		const password_confirm = {
 			view: "text",
 			type: "password",
@@ -132,7 +122,6 @@
 				}
 			},
 		};
-
 		const user_name = {
 			view: "text",
 			type: "text",
@@ -155,7 +144,6 @@
 				}
 			},
 		};
-
 		const user_email = {
 			view: "text",
 			type: "text",
@@ -177,12 +165,10 @@
 				}
 			},
 		};
-
 		const user_address_label = {
 			view: "label",
 			label: "User Address1 <span style='color:red;'>*</span>",
 		}
-
 		const user_address1 = {
 			cols: [
 				{
@@ -227,7 +213,6 @@
 				}
 			],
 		};
-
 		const user_address2 = {
 			view: "text",
 			type: "text",
@@ -250,7 +235,6 @@
 				}
 			},
 		};
-
 		const mobile_telephone = {
 			view: "text",
 			type: "text",
@@ -274,7 +258,6 @@
 				}
 			},
 		};
-
 		const submit_button = {
 			margin: 10,
 			paddingX: 2,
@@ -284,9 +267,9 @@
 					view: "button",
 					label: "Sign Up",
 					type: "form",
-					id: "loginFormSubmitButton",
+					id: "registerFormSubmitButton",
 					click: function () {
-						var form = $$('loginForm')
+						var form = $$('registerForm')
 						if (form.validate()) {
 							$$("avatar").send(function() {
 								const val = form.getValues();
@@ -322,14 +305,12 @@
 			],
 			css: 'webix_primary'
 		}
-
 		const photo = {
 			view:"photo",
 			name:"photo",
 			css:"form_photo",
 			id:"form_photo",
 		};
-
 		const user_avatar = {
 			rows:[
 				photo,
@@ -353,10 +334,9 @@
 				},
 			]
 		};
-
 		webix.ui({
 			view: "form",
-			id: "loginForm",
+			id: "registerForm",
 			elementsConfig: {
 				bottomPadding: 18,
 				labelWidth: 120,
@@ -394,11 +374,8 @@
 			width: 550
 
 		});
-
 		webix.html.addCss($$("label_a").getNode(), "grey");
 		webix.html.addCss($$("label_b").getNode(), "grey");
-
 	</script>
 </body>
-
 </html>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<link rel="stylesheet" href="/html/assets/webix/webix.css?v=8.4.0" type="text/css" charset="utf-8">
 	<script src="/html/assets/webix/webix.js?v=8.4.0" type="text/javascript" charset="utf-8"></script>
@@ -15,18 +14,13 @@
 		}
 	</style>
 </head>
-
 <body>
-
 	<div id="loginForm"></div>
-
 	<script type="text/javascript" charset="utf-8">
-
 		const lastPage = sessionStorage.getItem("lastPage");
 		if (lastPage) {
 			location.href = lastPage;
 		}
-
 		const label_title = {
 			view: "label",
 			label: "Register",
@@ -51,7 +45,6 @@
 				"border": "none!important"
 			}
 		};
-
 		const id_input = {
 			view: "text",
 			type: "text",
@@ -75,7 +68,6 @@
 				}
 			},
 		};
-
 		const password_input = {
 			view: "text",
 			type: "password",
@@ -100,7 +92,6 @@
 				}
 			},
 		};
-
 		const forgot_password = {
 			cols: [
 				{},
@@ -115,69 +106,6 @@
 				}
 			],
 		};
-
-		const farm_select_win = webix.ui({
-			view:"window",
-			id:"farm_select_win",
-			modal: true,
-			move: true,
-			position: "center",
-			responsive: "a1",
-			elementsConfig: { labelPosition: "left", },
-			head: {
-				view: "toolbar",
-				elements: [
-					{
-						view: "label",
-						label: "Select a Farm",
-						align: "center",
-					},
-					{ 
-						view: "icon",
-						icon: "wxi-close",
-						hotkey: "esc",
-						width: 40,
-						click: function () {
-							$$("farm_select_win").hide();
-						},
-					},
-				],
-			},
-			body:{
-				view: "form",
-				id: "farm_select_form",
-				elementsConfig: {
-					bottomPadding: 18,
-					labelWidth: 100,
-				},
-				css: {
-					margin: "auto!important",
-				},
-				elements: [
-					{ 
-						view:"select", label:"Farm Name: ", id: "farms", labelAlign:"right" 
-					},
-					{
-						view: "button", value: "Select", css: "webix_primary",
-						click: function() {
-							var farm = $$("farms").getValue();
-							sessionStorage.setItem("user_group_idx", farm);
-							this.getTopParentView().hide();
-
-							const user = JSON.parse(sessionStorage.getItem('ifrm_user'));
-							webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: farm }).then(function(data){
-								if (parseInt(data.text()) > 0) {
-									sessionStorage.setItem("breedID", data.text())
-								} else {
-									window.location.href = "register-breed"
-								}
-							})
-						}
-					}
-				],
-			},
-		});
-		
 		const submit_button = {
 			margin: 10,
 			paddingX: 2,
@@ -203,47 +131,47 @@
 									const res = response.response;
 									const farms = response.farms;
 									
-									if (res == "popup_window") {
-										var select_farms = [];
-										for (let index = 0; index < farms.length; index++) {
-											const element = farms[index];
-											select_farms.push({
-												id: element.id,
-												value: element.farm_name,
-											})
-										}
-									}
+									// if (res == "popup_window") {
+									// 	var select_farms = [];
+									// 	for (let index = 0; index < farms.length; index++) {
+									// 		const element = farms[index];
+									// 		select_farms.push({
+									// 			id: element.id,
+									// 			value: element.farm_name,
+									// 		})
+									// 	}
+									// }
 
 									webix.alert({ 
 										title: "<img src='/html/assets/logo/logo_iFrm.png' class='logo_icon' ondragstart='false'/> \n Welcome " + user.user_id, 
 										type: "alert-success", 
 										text: "Your Email is " + user.user_email })
 									.then(function(result){
-										sessionStorage.setItem("ifrm_user", JSON.stringify(user));
-										sessionStorage.setItem("user_id", user.user_id);
-										sessionStorage.setItem("user_group", "1");
-										switch (res) {
-											case "register_farm":
-												window.location.href = "register-farm"
-												break;
-											case "mainview":
-												sessionStorage.setItem("user_group_idx", farms[0].id)
-												webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: farms[0].id }).then(function(data){
-													if (parseInt(data.text()) > 0) {
-														sessionStorage.setItem("breedID", data.text())
-														window.location.href = "tables1"
-													} else {
-														window.location.href = "register-breed"
-													}
-												})
-												break;
+										sessionStorage.setItem("user", user);
+										sessionStorage.setItem("farms", farms);
+										sessionStorage.setItem("res", res);
+										// switch (res) {
+										// 	case "register_farm":
+										// 		window.location.href = "register-farm"
+										// 		break;
+										// 	case "mainview":
+										// 		sessionStorage.setItem("user_group_idx", farms[0].id)
+										// 		webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: farms[0].id }).then(function(data){
+										// 			if (parseInt(data.text()) > 0) {
+										// 				sessionStorage.setItem("breedID", data.text())
+										// 				window.location.href = "tables1"
+										// 			} else {
+										// 				window.location.href = "register-breed"
+										// 			}
+										// 		})
+										// 		break;
 
-											case "popup_window":
-												$$("farms").define("options", select_farms);
-												$$("farms").refresh();
-												farm_select_win.show();
-												break;
-										}
+										// 	case "popup_window":
+										// 		$$("farms").define("options", select_farms);
+										// 		$$("farms").refresh();
+										// 		farm_select_win.show();
+										// 		break;
+										// }
 									})
 								}
 								else {
@@ -257,7 +185,6 @@
 			css: 'webix_primary'  
 			
 		}
-
 		const register_button = {
 			margin: 10,
 			paddingX: 2,
@@ -274,7 +201,6 @@
 				}
 			],
 		}
-
 		const idRemember ={
 			view:"checkbox",
 			labelRight:"아이디 저장", 
@@ -286,7 +212,6 @@
 				},
 			},
 		}
-
 		const checkbox_a = {
 			view: "checkbox", 
 			id: "field_a", 
@@ -296,7 +221,6 @@
 			width: 550,
 			labelWidth: 0
 		};
-
 		const checkbox_b = {
 			view: "checkbox", 
 			id: "field_b", 
@@ -306,7 +230,6 @@
 			width: 550,
 			labelWidth: 0
 		};
-
 		const textarea_a = { 
 			view:"textarea", 
 			width: 550,
@@ -314,7 +237,6 @@
 			value: "1. I agree…\n2. This content is ..\n3. This…\n4. This…\n5. This…\n",
 			readonly: true
 		};
-
 		const textarea_b = { 
 			view:"textarea", 
 			width: 550,
@@ -322,7 +244,6 @@
 			value: "1. I agree…\n2. This content is ..\n3. This…\n4. This…\n5. This…\n",
 			readonly: true
 		};
-
 		const submit__agree_button = {
 			margin: 10,
 			paddingX: 2,
@@ -355,7 +276,6 @@
 				}
 			],
 		}
-	
 		webix.ui({
 			view: "form",
 			id: "loginForm",
@@ -378,7 +298,6 @@
 			],
 			width: 550
 		});
-
 		var registration_1st_step = webix.ui({
 			view: "window",
 			id: "window_regist_user",
@@ -414,8 +333,6 @@
 			},
 
 		});
-
 	</script>
 </body>
-
 </html>
