@@ -32,15 +32,12 @@
 			label: "Register",
 			align: "center",
 		}
-		//head x 닫기
 		const label_x = { 
 			view: "icon",
 			icon: "wxi-close",
 			hotkey: "esc",
 			width: 40,
 			click: function () {
-				// $$("form_view").clear();
-				// $$("form_view").clearValidation();
 				$$("window_regist_user").hide();
 			},
 		}
@@ -67,7 +64,7 @@
 			invalidMessage: "Please enter your ID!",
 			on: {
 				"onBlur": function () {
-					var result = this.validate()    // validate only this field and show warning message under field if invalid
+					var result = this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
@@ -126,9 +123,6 @@
 			move: true,
 			position: "center",
 			responsive: "a1",
-			// scroll: true,
-			// borderless	: 	true,
-			// padding		: 	{ right: 10 },
 			elementsConfig: { labelPosition: "left", },
 			head: {
 				view: "toolbar",
@@ -144,8 +138,6 @@
 						hotkey: "esc",
 						width: 40,
 						click: function () {
-							// $$("form_view").clear();
-							// $$("form_view").clearValidation();
 							$$("farm_select_win").hide();
 						},
 					},
@@ -199,7 +191,6 @@
 					id: "loginFormSubmitButton", 
 					click: function () {
 						var form = $$('loginForm');
-						//go to ajax.then(){ //callback}
 						if (form.validate()) {
 							const val = form.getValues();
 							webix.ajax().post(schedulerUrl + 'users/login', { 
@@ -207,7 +198,6 @@
 								user_pass: val.password,
 							}).then(function(data){
 								const response = JSON.parse(data.text()); 
-								// response
 								if (response != "") {
 									console.log(response);
 									const user = response.user;
@@ -265,7 +255,7 @@
 					}
 				}
 			],
-			css: 'webix_primary'  // this is no need  may be
+			css: 'webix_primary'  
 			
 		}
 
@@ -281,10 +271,6 @@
 					id: "registerButton", 
 					click: function () {
 						registration_1st_step.show();
-						// var form = $$('loginForm')
-						// if (form.validate()) {
-						// 	webix.alert({ title: "Login successfull", type: "alert-success", text: "Welcome User" })
-						// }
 					}
 				}
 			],
@@ -298,17 +284,10 @@
 			value:0,
 			on: {
 				onChange: function() {
-					// if (this.getValue() == 1){
-					// setCookie("userIdCookie", $$("ID").getValue(), 7);
-					// setCookie("userDeptCookie", $$("dept").getValue(), 7);
-					// } else {
-					// setCookie("userIdCookie", $$("ID").getValue(), 0); 
-					// setCookie("userDeptCookie", $$("dept").getValue(), 0); 
-					// };
 				},
 			},
 		}
-		//--
+
 		const checkbox_a = {
 			view: "checkbox", 
 			id: "field_a", 
@@ -357,10 +336,7 @@
 					id: "registerButtonCancel", 
 					width: 270,
 					click: function () {
-						// var form = $$('loginForm')
-						// if (form.validate()) {
-						// 	webix.alert({ title: "Login successfull", type: "alert-success", text: "Welcome User" })
-						// }
+						
 					}
 				},
 				{
@@ -376,16 +352,7 @@
 						if (checkbox_a_value && checkbox_b_value) {
 							window.location.href = "register"
 						}
-						// var form = $$('loginForm')
-						// if (form.validate()) {
-						// 	if (form.getValues().ID == "admin" && form.getValues().password == "123456")
-						// 		webix.alert({ title: "<img src='assets/logo.png' class='logo_icon' ondragstart='false'/> \n Welcome admin", type: "alert-success", text: "Your ID is when0@google.com" })
-						// 	else
-						// 		webix.alert({ title: "ID or Password is not Correct \n Please try again", type: "alert-warning"})
-						// }
 					},
-					
-					//css: 'webix_primary'
 				}
 			],
 		}
@@ -420,9 +387,6 @@
 			move: true,
 			position: "center",
 			responsive: "a1",
-			// scroll: true,
-			// borderless	: 	true,
-			// padding		: 	{ right: 10 },
 			elementsConfig: { labelPosition: "left", },
 			head: {
 				view: "toolbar",
@@ -441,7 +405,6 @@
 					margin: "auto!important",
 				},
 				elements: [
-					//logo,
 					checkbox_a,
 					textarea_a,
 					checkbox_b,
