@@ -62,7 +62,6 @@
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("password").focus();
-						console.log("keypress in ID")
 					}
 					
 				}
@@ -81,13 +80,11 @@
 			validateEvent: "key",
 			on: {
 				"onBlur": function () {
-					console.log("Validating password");
 					this.validate()
 				},
 				"onKeyPress": function (key, e) {
 					if (key == 13) {
 						$$("loginFormSubmitButton").focus();
-						console.log("keypress in password")
 					}
 				}
 			},
@@ -126,7 +123,6 @@
 							}).then(function(data){
 								const response = JSON.parse(data.text()); 
 								if (response != "") {
-									console.log(response);
 									const user = response.user;
 									const res = response.response;
 									const farms = response.farms;

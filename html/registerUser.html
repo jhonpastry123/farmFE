@@ -289,13 +289,25 @@
 									avatar: val.avatar
 								}).then(function(data){
 									// response
-									if (data.text() != "") {
-										webix.alert({ title: "Register User", type: "alert-success", text: "Register a user successfully!" }).then(function (result){
-											location.href = "login";
-										})
-									}
-									else {
-										webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+									const response = JSON.parse(data.text());
+									switch (response) {
+										case "number":
+											webix.alert({ title: "You can't use number end of user id \n Please try again", type: "alert-warning"})
+											break;
+
+										case "exist":
+											webix.alert({ title: "Your user id already exist! \n Please try again", type: "alert-warning"})
+											break;
+
+										case "success":
+											webix.alert({ title: "Register User", type: "alert-success", text: "Register a user successfully!" }).then(function (result){
+												location.href = "login";
+											})
+											break;
+										
+										default:
+											webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+											break;
 									}
 								});
 							})

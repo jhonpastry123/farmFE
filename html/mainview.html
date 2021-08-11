@@ -45,6 +45,10 @@
 		.grey .webix_el_box {
 			color: #bfbfbf;
 		}
+
+        .webix_el_checkbox {
+            margin: 0!important;
+        }
 	</style>
 	<style>
 		/*disable text selection if needed (otherwise, ignore this part)*/
@@ -324,7 +328,6 @@
 <body class="webix_full_screen" oncontextmenu="return false"></body>
 <script>
 	const user = JSON.parse(sessionStorage.getItem("user"));
-    const farm = 1;
     const menu_data = [
         {
             id: "dashboard", icon: "mdi mdi-view-dashboard", value: "main", data: [
@@ -346,229 +349,128 @@
         },
         {
             id: "uis", icon: "mdi mdi-puzzle", value: "managingFarm", data: [
-                { id: "dataview", value: "DataView" },
-                { id: "list", value: "farm1" },
-                { id: "menu", value: "farm2" },
-                { id: "tree", value: "farm3" },
-                { id: "register-farm", value: "register"},
+                { id: "register-farm", value: "register farm"},
                 { id: "register-breed", value: "register breed"},
-                { id: "register-worker", value: "register worker"}
+                { id: "register-worker", value: "register worker"},
+                { id: "manage-feed", value: "manage feed"},
+                { id: "supply-water", value: "Supply water"},
+                { id: "register-food", value: "register food"},
+                { id: "register-nutri", value: "register nutri"},
             ]
         },
     ];
 	const sidebar = {
 		view: "sidebar",
+        id: "menu_list",
 		data: menu_data,
+        scroll: "auto",
 		ready: function () {
-			this.select("tables1");
-			this.open(this.getParentId("tables1"));
+			this.select("dashboard1");
+			this.open(this.getParentId("dashboard1"));
 		},
 		on: {
 			onAfterSelect: function (id) {
+                $$("multi").setValue(id)
+                sessionStorage.setItem("lastPage", id);
+
+                const farms = JSON.parse(sessionStorage.getItem("farms"));
+
 				$$("multi").setValue(id)
                 sessionStorage.setItem("lastPage", id);
+                
+                switch (id) {
+                    case "register-breed":
+                        if (farms && farms.length > 0) {
+                            const user_group_idx = sessionStorage.getItem("user_group_idx");
+                            if (farms.length > 1) {
+                                var farms_value = [];
+                                farms.forEach(farm => {
+                                    farms_value.push({
+                                        id: farm.id,
+                                        title: farm.farm_name
+                                    })
+                                });
+                                $$("farms").define("data", farms_value);
+                                if (!user_group_idx) {
+                                    farm_select_win.show();
+                                }
+                            } else {
+                                sessionStorage.setItem("user_group_idx", farms[0].id);
+                            }
+                        } else {
+                            webix.alert({
+                                title:"Warning!",
+                                text:"You don't have any farms. please register farm first!",
+                                type:"alert-warning"
+                            })
+                            .then(function(result){
+                                $$("menu_list").select("register-farm");
+			                    $$("menu_list").open($$("menu_list").getParentId("register-farm"));
+                            })
+                        }
+                        break;
+                
+                    default:
+                        break;
+                }
+
 			}
 		}
 	};
     const farm_select_win = webix.ui({
-			view:"window",
-			id:"farm_select_win",
-			modal: true,
-			move: true,
-			position: "center",
-			responsive: "a1",
-			elementsConfig: { labelPosition: "left", },
-			head: {
-				view: "toolbar",
-				elements: [
-					{
-						view: "label",
-						label: "Select a Farm",
-						align: "center",
-					},
-					{ 
-						view: "icon",
-						icon: "wxi-close",
-						hotkey: "esc",
-						width: 40,
-						click: function () {
-							$$("farm_select_win").hide();
-						},
-					},
-				],
-			},
-			body:{
-				view: "form",
-				id: "farm_select_form",
-				elementsConfig: {
-					bottomPadding: 18,
-					labelWidth: 100,
-				},
-				css: {
-					margin: "auto!important",
-				},
-				elements: [
-					{ 
-						view:"select", label:"Farm Name: ", id: "farms", labelAlign:"right" 
-					},
-					{
-						view: "button", value: "Select", css: "webix_primary",
-						click: function() {
-							var farm = $$("farms").getValue();
-							sessionStorage.setItem("user_group_idx", farm);
-							this.getTopParentView().hide();
-
-							const user = JSON.parse(sessionStorage.getItem('ifrm_user'));
-							webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: farm }).then(function(data){
-								if (parseInt(data.text()) > 0) {
-									sessionStorage.setItem("breedID", data.text())
-								} else {
-									window.location.href = "register-breed"
-								}
-							})
-						}
-					}
-				],
-			},
-		});
-    // ----------- Manage feed first page Start ----------------
-    const feed_label = {
-        view: "label",
-        label: "Feeding each building",
-        css: {
-            "font-size": "20px",
-            "font-weight": "bold"
-        }
-    }
-    const datepicker = {
-        view: "datepicker",
-		id: "date",
-        value: new Date(2012, 6, 8),
-        format: "%Y, %m-%d %l",
-        timepicker: true,
-        width: 300
-    };
-    const save_button = {
-        view: "button",
-        label: "Save",
-        id: "save_button"
-    }
-    const panel = {
-        view: "panel",
-        body: {
-            padding: 20,
-            rows: [
-                {
-                    cols: [
-                        {
-                            view: "template",
-                            name: "$value",
-                            template: "<span style='border-radius: 50%; padding: 5px; background: lightgrey;'>#month#</span>",
-                            css: {
-                                "border": "none!important;"
-                            }
-                        },
-                        {
-                            view: "switch", value: 1,
-                            gravity: 0.25,
-                            on: {
-                                onChange: function (newValue, oldValue, config) {
-									const male_feed = this.getParentView().getParentView().getChildViews()[7];
-									const female_feed = this.getParentView().getParentView().getChildViews()[5];
-									if (newValue == 0) {
-										male_feed.disable();
-										female_feed.disable();
-									} else {
-										male_feed.enable();
-										female_feed.enable();
-									}	
-								}
-                            }
-                        }
-                    ]
-                },
-                { height: 20 },
-                {
-                    cols: [
-                        {
-                            view: "label",
-                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>male feed</div>",
-                            align: "center",
-                            css: "borderR"
-                        },
-                        {
-                            view: "label",
-                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>female feed</div>",
-                            align: "center",
-                            css: "borderR"
-                        },
-                        {
-                            view: "label",
-                            template: "<div style='color: blue'>200</div><div>total feed</div>",
-                            align: "center",
-                        },
-                    ],
-                    css: {
-                        "padding": "10px",
-                        "background": "lightgrey",
-                        "width": "auto!important",
-                        "margin-right": "20px"
-                    }
-                },
-                { height: 80 },
+        view:"window",
+        id:"farm_select_win",
+        modal: true,
+        move: true,
+        position: "center",
+        responsive: "a1",
+        elementsConfig: { labelPosition: "left", },
+        head: {
+            view: "toolbar",
+            elements: [
                 {
                     view: "label",
-                    label: "female-feed-graph",
+                    label: "Select a group",
+                    align: "center",
                 },
-                { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "female-feed" },
-                {
-                    view: "label",
-                    label: "male-feed-graph",
+                { 
+                    view: "icon",
+                    icon: "wxi-close",
+                    hotkey: "esc",
+                    width: 40,
+                    click: function () {
+                        $$("farm_select_win").hide();
+                    },
                 },
-                { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "male-feed" }
             ],
-            height: 400
         },
-        minWidth: 330,
-        minHeight: 400
-    }
-    const panels = {
-        margin: 10, padding: 0,
-        view: "flexdatalayout",
-        cols: [panel],
-        url: "https://docs.webix.com/samples/60_pro/13_layout/data/year.js"
-    }
-	const manage_feed1 = {
-			view: "form",
-			id: "tables1",
-			elements: [
-				{
-					cols: [
-						feed_label,
-						{},
-						{ view:"icon", icon:"wxi-angle-left", id:"prev", click: function(){ 
-							changeRange(-1);
-						}},
-						datepicker,
-						{ view:"icon", icon:"wxi-angle-right", id:"next", click: function(){
-							changeRange(1);
-						}},
-						{},
-						save_button
-					]
-				},
-				{
-					view: "label",
-					label: "Info feeding"
-				},
-				{
-					view: "scrollview",
-					body: webix.copy(panels)
-				}
-			]
-		};
-	// ----------- Manage feed first page End ----------------
-
+        body:{
+            view: "form",
+            id: "farm_select_form",
+            elementsConfig: {
+                bottomPadding: 18,
+                labelWidth: 100,
+            },
+            css: {
+                margin: "auto!important",
+            },
+            elements: [
+                { 
+                    view:"list", template:"#title#", id: "farms", width: 250, height: 200, select: true
+                },
+                {
+                    view: "button", value: "Select", css: "webix_primary",
+                    click: function() {
+                        var farm = $$("farms").getSelectedId();
+                        sessionStorage.setItem("user_group_idx", farm);
+                        this.getTopParentView().hide();
+                        refresh_grid();
+                    }
+                }
+            ],
+        },
+    });
+    
     // ----------- Register Farm page Start ----------------
     const neccessary_label = {
         view: "label",
@@ -1255,7 +1157,7 @@
                     cols: [
                         {
                             rows: [
-                                {view: "text", label: "Parter", id: "breed_parter", name: "breed_parter", readonly:true},
+                                {view: "text", label: "partner", id: "breed_partner", name: "breed_partner", readonly:true},
                                 {view: "text", label: "Female Head", id: "breed_female_head", name: "breed_female_head", readonly:true},
                             ]
                         },
@@ -1326,15 +1228,640 @@
             }
         },
     });
-
+    const breed_label = {
+        view: "label",
+        template: "Breed Information",
+        css: {
+            "font-size": "24px"
+        }
+    };
+    const breed_register_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register breed"
+            },
+            {},
+            { 
+                type: "section",
+                borderless: true,
+                cols:[
+                    {}, { view:"icon", icon:"mdi mdi-printer"},{ view:"icon", icon:"mdi mdi-folder-upload"},{ view:"icon", icon:"mdi mdi-folder-download"}
+                ]
+            },
+        ]
+    };
+    const breed_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "biotype", gravity: 0.1 },
+            { view: "label", label: "breedtype", gravity: 0.1 },
+            { view: "label", label: "partner", gravity: 0.1 },
+            { view: "label", label: "start_date", gravity: 0.1 },
+            { view: "label", label: "biocode", gravity: 0.1 },
+            { view: "label", label: "female_head", gravity: 0.1 },
+            { view: "label", label: "male_head", gravity: 0.1 },
+            { view: "label", label: "start_weekage", gravity: 0.1 },
+            { gravity: 0.1}
+        ],
+        css: {
+            "background": "lightgrey!important"
+        }
+    };
+    const breed_register_form = {
+        view: "form",
+        id: "breed_register_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "richselect", placeholder: "biotype", id: "biotype", name: "biotype", gravity: 0.1, options: ["egg", "meet"]},
+            { view: "richselect", placeholder: "breedtype", id: "breedtype", name: "breedtype", gravity: 0.1, options: ["order", "own"]},
+            { view: "text", placeholder: "partner", id: "partner1", name: "partner", gravity: 0.1 },
+            { view: "datepicker", placeholder: "start_date", id: "start_date", name: "start_date", gravity: 0.1 },
+            { view: "richselect", placeholder: "biocode", id: "biocode", name: "biocode", gravity: 0.1, options: ["AA", "BB", "AB"]},
+            { view: "text", placeholder: "female_head", id: "female_head", name: "female_head", gravity: 0.1, attributes:{type:"number"} },
+            { view: "text", placeholder: "male_head", id: "male_head", name: "male_head", gravity: 0.1, attributes:{type:"number"} },
+            { view: "text", placeholder: "start_weekage", id: "start_weekage", name: "start_weekage", gravity: 0.1, attributes:{type:"number"} },
+            { 
+                rows: [
+                    {
+                        view: "button", value: "register", css: "webix-primary",
+                        click: function(){
+                            if ($$("breed_register_form").validate()) {
+                                const val = $$("breed_register_form").getValues();
+                                webix.ajax().post(schedulerUrl + "breeds/register", {
+                                    user_idx: user.id,
+                                    farm_idx: sessionStorage.getItem("user_group_idx"),
+                                    biotype: val.biotype,
+                                    breedtype: val.breedtype,
+                                    partner: val.partner,
+                                    date: val.start_date,
+                                    biocode: val.biocode,
+                                    female_head: val.female_head,
+                                    male_head: val.male_head,
+                                    start_weekage: val.start_weekage,
+                                    end_weekage: "0"
+                                }).then(function(data) {
+                                    if (data.text() != "") {
+                                        webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
+                                            refresh_grid();
+                                            $$("breed_register_form").clear();
+                                        })
+                                    }
+                                    else {
+                                        webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
+                                    }
+                                })
+                            }
+                        }
+                    },
+                    {}
+                ],
+                gravity: 0.1,
+                css: {
+                    "margin": "auto!important",
+                    "padding": "20px"
+                }
+            },
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        }
+    };
+    const breed_list_label = {
+        view: "label",
+        label: "List of breed"
+    };
+    const breed_datatable = {
+        view:"datatable",
+        id: "grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"uuid",	header:"Breed Code", fillspace:true },
+            { id:"biotype",	header:"Bio Type", fillspace:true  },
+            { id:"breedtype",	header:"Breed Type", fillspace:true  },
+            { id:"partner",	header:"Partner", fillspace:true  },
+            { id:"date",	header:"Date", fillspace:true  },
+            { id:"biocode",	header:"Bio Code", fillspace:true  },
+            { id:"female_head",	header:"Female Head", fillspace:true  },
+            { id:"male_head",	header:"Male Head", fillspace:true  },
+            { id:"start_weekage",	header:"Start Weekage", fillspace:true  },
+        ],
+        url:function(params){
+            var user_id = sessionStorage.getItem("user_id");
+            var user_group_idx = sessionStorage.getItem("user_group_idx");
+            var data = webix.ajax().sync().get(schedulerUrl + "breeds/all", {
+                uID: user.id,
+                fID: user_group_idx
+            }).responseText;
+            if (data != "0") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "breeds/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_grid();
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "breeds/select", {id: id.row}).then(function(result) {
+                    const breed = JSON.parse(result.text());
+                    breed_details.show();
+                })
+            }
+        }
+    };
     const register_breed_page = {
         view: "form",
         id: "register-breed",
-        elementsConfig: {
-            bottomPadding: 18,
-            labelWidth: 130,
-            padding: 10
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    breed_label,
+                    breed_register_header,
+                    breed_label_list,
+                    breed_register_form,
+                    breed_list_label,
+                    breed_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Register Breed page End ----------------
+    // ----------- Register Worker page Start ----------------
+    const register_worker_label = {
+        view: "label",
+        template: "Register worker authority",
+        css: {
+            "font-size": "24px"
+        }
+    }
+    const register_worker_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register"
+            },
+            {}
+        ]
+        
+    }
+    const register_worker_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "user name", gravity: 0.1 },
+            { view: "label", label: "job name", gravity: 0.1 },
+            { view: "label", label: "user id", gravity: 0.1 },
+            { view: "label", label: "user pass", gravity: 0.1 },
+            { view: "label", label: "mobile", gravity: 0.1 },
+            { view: "label", label: "rule_idx", gravity: 0.4 },
+            { gravity: 0.1 },
+        ],
+        css: {
+            "background": "lightgrey!important",
+        }
+    }
+    const register_worker_form = {
+        view: "form",
+        id: "register_worker_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { rows: [{ view: "text", placeholder: "user name", id: "user_name1", name: "user_name" }, {}], gravity: 0.1},
+            { rows: [{ view: "text", placeholder: "job name", id: "job_name", name: "job_name" }, {}], gravity: 0.1 },
+            { rows: [{ 
+                cols: [
+                    {
+                        view: "text", placeholder: "user id", id: "user_id1", name: "user_id" , gravity: 0.8, readonly: true,
+                    },
+                    {
+                        view: "button", value: "cb", gravity: 0.2,
+                        click: function() {
+                            $$("user_id1").setValue("aaaa");
+                        }
+                    }
+                ]
+                
+            }, {}], gravity: 0.1 },
+            { rows: [{ view: "text", placeholder: "user pass", id: "user_pass1", name: "user_pass" }, {}], gravity: 0.1 },
+            { rows: [{ view: "text", placeholder: "mobile", id: "mobile1", name: "mobile" }, {}], gravity: 0.1 },
+            {
+                type: "section",
+                scroll: "y",
+                rows: [
+                    {
+                        view:"flexlayout",
+                        cols: [
+                            { 
+                                view: "checkbox", id: "all_check", labelRight: "all", labelWidth: 0, minWidth: 60 , value: 0,
+                                on: {
+                                    onChange: function(newValue, oldValue, config) {
+                                        for (let index = 1; index < 13; index++) {
+                                            if (newValue == 1) {
+                                                $$("check"+index).disable();
+                                                $$("check"+index).setValue(oldValue);
+                                            }
+                                            else 
+                                                $$("check"+index).enable();
+                                        }
+                                    }
+                                }
+                            },
+                            { view: "checkbox", id: "check1", labelRight: "bd1", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check2", labelRight: "bd2", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check3", labelRight: "bd3", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check4", labelRight: "bd4", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check5", labelRight: "bd5", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check6", labelRight: "bd6", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check7", labelRight: "bd7", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check8", labelRight: "bd8", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check9", labelRight: "bd9", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check10", labelRight: "bd10", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check11", labelRight: "bd11", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check12", labelRight: "bd12", labelWidth: 0, minWidth: 60, value: 0 },
+                        ],
+                        
+                        autoHeight: true,
+                    },
+                ],
+                gravity: 0.4,
+            },
+            { 
+                rows: [
+                    {
+                        view: "button", value: "register", css: "webix-primary",
+                        click: function(){
+                            if ($$("register_worker_form").validate()) {
+                                const val = $$("register_worker_form").getValues();
+                                webix.ajax().post(schedulerUrl + "workers/register", {
+                                    data: val
+                                }).then(function(data) {
+                                    // if (data.text() != "") {
+                                    //     webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
+                                    //         sessionStorage.setItem("breed_idx", data.text())
+                                    //         window.location.href="register-breed";
+                                    //     })
+                                    // }
+                                    // else {
+                                    //     webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
+                                    // }
+                                })
+                            }
+                        }
+                    },
+                    {}
+                ],
+                gravity: 0.1,
+                css: {
+                    "margin": "auto!important",
+                    "padding": "20px"
+                }
+            },
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
         },
+        gravity: 0.2
+    }
+    const register_worker_list_label = {
+        view: "label",
+        label: "List of workers"
+    }
+    const register_worker_datatable = {
+        view:"datatable",
+        id: "worker_grid",
+        autoConfig:true,
+        url:function(params){
+            // var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
+            //     uID: user.id,
+            //     fID: farm
+            // }).responseText;
+            // this.parse(data);
+        },
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "workers/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        // window.location.href = "register-breed"
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "workers/select", {id: id.row}).then(function(result) {
+                    // console.log(result.text());
+                    // const breed = JSON.parse(result.text());
+                    // breed_details.show();
+
+                })
+            }
+        },
+    }
+
+
+    const register_worker_page = {
+        view: "form",
+        id: "register-worker",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_worker_label,
+                    register_worker_header,
+                    register_worker_label_list,
+                    register_worker_form,
+                    register_worker_list_label,
+                    register_worker_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Register Worker page End ----------------
+    // ----------- Manage feed first page Start ----------------
+    const feed_label = {
+        view: "label",
+        label: "Feeding each building",
+        css: {
+            "font-size": "20px",
+            "font-weight": "bold"
+        }
+    }
+    const datepicker = {
+        view: "datepicker",
+		id: "date",
+        value: new Date(2012, 6, 8),
+        format: "%Y, %m-%d %l",
+        timepicker: true,
+        width: 300
+    };
+    const save_button = {
+        view: "button",
+        label: "Save",
+        id: "save_button"
+    }
+    const panel = {
+        view: "panel",
+        body: {
+            padding: 20,
+            rows: [
+                {
+                    cols: [
+                        {
+                            view: "template",
+                            name: "$value",
+                            template: "<span style='border-radius: 50%; padding: 5px; background: lightgrey;'>#month#</span>",
+                            css: {
+                                "border": "none!important;"
+                            }
+                        },
+                        {
+                            view: "switch", value: 1,
+                            gravity: 0.25,
+                            on: {
+                                onChange: function (newValue, oldValue, config) {
+									const male_feed = this.getParentView().getParentView().getChildViews()[7];
+									const female_feed = this.getParentView().getParentView().getChildViews()[5];
+									if (newValue == 0) {
+										male_feed.disable();
+										female_feed.disable();
+									} else {
+										male_feed.enable();
+										female_feed.enable();
+									}	
+								}
+                            }
+                        }
+                    ]
+                },
+                { height: 20 },
+                {
+                    cols: [
+                        {
+                            view: "label",
+                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>male feed</div>",
+                            align: "center",
+                            css: "borderR"
+                        },
+                        {
+                            view: "label",
+                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>female feed</div>",
+                            align: "center",
+                            css: "borderR"
+                        },
+                        {
+                            view: "label",
+                            template: "<div style='color: blue'>200</div><div>total feed</div>",
+                            align: "center",
+                        },
+                    ],
+                    css: {
+                        "padding": "10px",
+                        "background": "lightgrey",
+                        "width": "auto!important",
+                        "margin-right": "20px"
+                    }
+                },
+                { height: 80 },
+                {
+                    view: "label",
+                    label: "female-feed-graph",
+                },
+                { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "female-feed" },
+                {
+                    view: "label",
+                    label: "male-feed-graph",
+                },
+                { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "male-feed" }
+            ],
+            height: 400
+        },
+        minWidth: 330,
+        minHeight: 400
+    }
+    const panels = {
+        margin: 10, padding: 0,
+        view: "flexdatalayout",
+        cols: [panel],
+        url: "https://docs.webix.com/samples/60_pro/13_layout/data/year.js"
+    }
+	const manage_feed1 = {
+			view: "form",
+			id: "manage-feed",
+			elements: [
+				{
+					cols: [
+						feed_label,
+						{},
+						{ view:"icon", icon:"wxi-angle-left", id:"prev", click: function(){ 
+							changeRange(-1);
+						}},
+						datepicker,
+						{ view:"icon", icon:"wxi-angle-right", id:"next", click: function(){
+							changeRange(1);
+						}},
+						{},
+						save_button
+					]
+				},
+				{
+					view: "label",
+					label: "Info feeding"
+				},
+				{
+					view: "scrollview",
+					body: webix.copy(panels)
+				}
+			]
+		};
+	// ----------- Manage feed first page End ----------------
+    // ----------- Supply water page Start ----------------
+    const water_label = {
+        view: "label",
+        label: "Supply water each building",
+        css: {
+            "font-size": "20px",
+            "font-weight": "bold"
+        }
+    }
+    const datepicker1 = {
+        view: "datepicker",
+		id: "date1",
+        value: new Date(2012, 6, 8),
+        format: "%Y, %m-%d %l",
+        timepicker: true,
+        width: 300
+    };
+    const save_button1 = {
+        view: "button",
+        label: "Save",
+        id: "save_button1"
+    }
+    const water_panel = {
+        view: "panel",
+        body: {
+            padding: 20,
+            rows: [
+                {
+                    cols: [
+                        {
+                            view: "template",
+                            name: "$value",
+                            template: "<span style='border-radius: 50%; padding: 5px; background: lightgrey;'>#month#</span>",
+                            css: {
+                                "border": "none!important;"
+                            }
+                        },
+                        {
+                            view: "switch", value: 1,
+                            gravity: 0.25,
+                            on: {
+                                onChange: function (newValue, oldValue, config) {
+									const male_feed = this.getParentView().getParentView().getChildViews()[7];
+									const female_feed = this.getParentView().getParentView().getChildViews()[5];
+									if (newValue == 0) {
+										male_feed.disable();
+										female_feed.disable();
+									} else {
+										male_feed.enable();
+										female_feed.enable();
+									}	
+								}
+                            }
+                        }
+                    ]
+                },
+                { height: 20 },
+                {
+                    cols: [
+                        {
+                            view: "label",
+                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>male feed</div>",
+                            align: "center",
+                            css: "borderR"
+                        },
+                        {
+                            view: "label",
+                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>female feed</div>",
+                            align: "center",
+                            css: "borderR"
+                        },
+                        {
+                            view: "label",
+                            template: "<div style='color: blue'>200</div><div>total feed</div>",
+                            align: "center",
+                        },
+                    ],
+                    css: {
+                        "padding": "10px",
+                        "background": "lightgrey",
+                        "width": "auto!important",
+                        "margin-right": "20px"
+                    }
+                },
+                { height: 80 },
+                {
+                    view: "label",
+                    label: "female-feed-graph",
+                },
+                { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "female-feed" },
+                {
+                    view: "label",
+                    label: "male-feed-graph",
+                },
+                { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "male-feed" }
+            ],
+            height: 400
+        },
+        minWidth: 330,
+        minHeight: 400
+    }
+    const water_panels = {
+        margin: 10, padding: 0,
+        view: "flexdatalayout",
+        cols: [water_panel],
+        url: "https://docs.webix.com/samples/60_pro/13_layout/data/year.js"
+    }
+	const supply_water = {
+			view: "form",
+			id: "supply-water",
+			elements: [
+				{
+					cols: [
+                        water_label,
+						{},
+						{ view:"icon", icon:"wxi-angle-left", id:"prev1", click: function(){ 
+							changeRange1(-1);
+						}},
+						datepicker1,
+						{ view:"icon", icon:"wxi-angle-right", id:"next1", click: function(){
+							changeRange1(1);
+						}},
+						{},
+						save_button1
+					]
+				},
+				{
+					view: "label",
+					label: "Info water"
+				},
+				{
+					view: "scrollview",
+					body: webix.copy(water_panels)
+				}
+			]
+		};
+	// ----------- Supply water page End ----------------
+    // ----------- Register Food page Start ----------------
+    const register_food_page = {
+        view: "form",
+        id: "register-food",
         elements: [
             {
                 type: "section",
@@ -1342,7 +1869,7 @@
                 rows: [
                     {
                         view: "label",
-                        template: "Farm Information",
+                        template: "Register food authority",
                         css: {
                             "font-size": "24px"
                         }
@@ -1353,81 +1880,54 @@
                                 view: "label",
                                 label: "Register"
                             },
-                            {},
-                            { 
-                                type: "section",
-                                borderless: true,
-                                cols:[
-                                    {}, { view:"icon", icon:"mdi mdi-printer"},{ view:"icon", icon:"mdi mdi-folder-upload"},{ view:"icon", icon:"mdi mdi-folder-download"}
-                                ]
-                            },
+                            {}
                         ]
                         
                     },
                     {
                         type: "section",
                         cols: [
-                            { view: "label", label: "farm name", gravity: 0.1 },
-                            { view: "label", label: "province", gravity: 0.1 },
-                            { view: "label", label: "city", gravity: 0.1 },
-                            { view: "label", label: "parter", gravity: 0.1 },
-                            { view: "label", label: "start_date", gravity: 0.1 },
-                            { view: "label", label: "biotype", gravity: 0.1 },
-                            { view: "label", label: "female_head", gravity: 0.1 },
-                            { view: "label", label: "male_head", gravity: 0.1 },
-                            { view: "label", label: "start_weekage", gravity: 0.1 },
-                            { gravity: 0.1}
+                            { view: "label", label: "user name", gravity: 0.1 },
+                            { view: "label", label: "job name", gravity: 0.1 },
+                            { view: "label", label: "user id", gravity: 0.1 },
+                            { view: "label", label: "user pass", gravity: 0.1 },
+                            { view: "label", label: "mobile", gravity: 0.1 },
+                            { gravity: 0.1 },
                         ],
                         css: {
-                            "background": "lightgrey!important"
+                            "background": "lightgrey!important",
                         }
                     },
                     {
                         view: "form",
-                        id: "register_form",
+                        id: "register_food_form",
                         margin: 10,
                         borderless: true,
                         cols: [
-                            { view: "text", placeholder: "farm name", id: "farm_name1", name: "farm_name", gravity: 0.1 },
-                            { view: "text", placeholder: "province", id: "province", name: "province", gravity: 0.1 },
-                            { view: "text", placeholder: "city", id: "city", name: "city", gravity: 0.1 },
-                            { view: "text", placeholder: "parter", id: "parter", name: "parter", gravity: 0.1 },
-                            { view: "datepicker", placeholder: "start_date", id: "start_date", name: "start_date", gravity: 0.1 },
-                            { view: "richselect", placeholder: "biotype", id: "biotype", name: "biotype", gravity: 0.1, options: ["AA", "BB", "AB"]},
-                            { view: "text", placeholder: "female_head", id: "female_head", name: "female_head", gravity: 0.1, attributes:{type:"number"} },
-                            { view: "text", placeholder: "male_head", id: "male_head", name: "male_head", gravity: 0.1, attributes:{type:"number"} },
-                            { view: "text", placeholder: "start_weekage", id: "start_weekage", name: "start_weekage", gravity: 0.1, attributes:{type:"number"} },
+                            { rows: [{ view: "text", placeholder: "user name", id: "user_name2", name: "user_name" }, {}], gravity: 0.1},
+                            { rows: [{ view: "text", placeholder: "job name", id: "job_name2", name: "job_name" }, {}], gravity: 0.1 },
+                            { rows: [{ view: "text", placeholder: "user id", id: "user_id2", name: "user_id" }, {}], gravity: 0.1 },
+                            { rows: [{ view: "text", placeholder: "user pass", id: "user_pass2", name: "user_pass" }, {}], gravity: 0.1 },
+                            { rows: [{ view: "text", placeholder: "mobile", id: "mobile2", name: "mobile" }, {}], gravity: 0.1 },
                             { 
                                 rows: [
                                     {
                                         view: "button", value: "register", css: "webix-primary",
                                         click: function(){
-                                            if ($$("register_form").validate()) {
-                                                const val = $$("register_form").getValues();
-                                                webix.ajax().post(schedulerUrl + "breeds/register", {
-                                                    user_idx: user.id,
-                                                    farm_idx: sessionStorage.getItem("user_group_idx"),
-                                                    building_no: "0",
-                                                    farm_name: val.farm_name,
-                                                    province: val.province,
-                                                    city: val.city,
-                                                    parter: val.parter,
-                                                    start_date: val.start_date,
-                                                    biotype: val.biotype,
-                                                    female_head: val.female_head,
-                                                    male_head: val.male_head,
-                                                    start_weekage: val.start_weekage,
-                                                    end_weekage: "0"
+                                            if ($$("register_food_form").validate()) {
+                                                const val = $$("register_food_form").getValues();
+                                                webix.ajax().post(schedulerUrl + "food/register", {
+                                                    data: val
                                                 }).then(function(data) {
-                                                    if (data.text() != "") {
-                                                        webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
-                                                            sessionStorage.setItem("breed_idx", data.text())
-                                                            window.location.href="register-breed";
-                                                        })
-                                                    }
-                                                    else {
-                                                        webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
-                                                    }
+                                                    // if (data.text() != "") {
+                                                    //     webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
+                                                    //         sessionStorage.setItem("breed_idx", data.text())
+                                                    //         window.location.href="register-breed";
+                                                    //     })
+                                                    // }
+                                                    // else {
+                                                    //     webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
+                                                    // }
                                                 })
                                             }
                                         }
@@ -1436,7 +1936,8 @@
                                 ],
                                 gravity: 0.1,
                                 css: {
-                                    "margin": "auto!important"
+                                    "margin": "auto!important",
+                                    "padding": "20px"
                                 }
                             },
                         ],
@@ -1446,32 +1947,32 @@
                     },
                     {
                         view: "label",
-                        label: "List of breed"
+                        label: "List of foods"
                     },
                     {
                         view:"datatable",
-                        id: "grid",
+                        id: "food_grid",
                         autoConfig:true,
                         url:function(params){
-                            var data = webix.ajax().sync().get(schedulerUrl + "breeds/all", {
-                                uID: user.id,
-                                fID: farm
-                            }).responseText;
-                            this.parse(data);
+                            // var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
+                            //     uID: user.id,
+                            //     fID: farm
+                            // }).responseText;
+                            // this.parse(data);
                         },
                         onClick:{
                             "wxi-trash":function(event, id, node){
-                                webix.ajax().del(schedulerUrl + "breeds/remove?id=" + id.row).then(function(result) {
+                                webix.ajax().del(schedulerUrl + "food/remove?id=" + id.row).then(function(result) {
                                     if (result.text() != "") {
-                                        window.location.href = "register-breed"
+                                        // window.location.href = "register-breed"
                                     }
                                 })
                             },
                             "wxi-pencil":function(event, id, node){
-                                webix.ajax().get(schedulerUrl + "breeds/select", {id: id.row}).then(function(result) {
-                                    console.log(result.text());
-                                    const breed = JSON.parse(result.text());
-                                    breed_details.show();
+                                webix.ajax().get(schedulerUrl + "food/select", {id: id.row}).then(function(result) {
+                                    // console.log(result.text());
+                                    // const breed = JSON.parse(result.text());
+                                    // breed_details.show();
 
                                 })
                             }
@@ -1481,12 +1982,140 @@
             }
         ],
     };
-    // ----------- Register Breed page End ----------------
+    // ----------- Register Food page End ----------------
+    // ----------- Register Nutri page Start ----------------
+    const register_nutri_page = {
+        view: "form",
+        id: "register-nutri",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    {
+                        view: "label",
+                        template: "Register nutri authority",
+                        css: {
+                            "font-size": "24px"
+                        }
+                    },
+                    {
+                        cols : [
+                            {
+                                view: "label",
+                                label: "Register"
+                            },
+                            {}
+                        ]
+                        
+                    },
+                    {
+                        type: "section",
+                        cols: [
+                            { view: "label", label: "user name", gravity: 0.1 },
+                            { view: "label", label: "job name", gravity: 0.1 },
+                            { view: "label", label: "user id", gravity: 0.1 },
+                            { view: "label", label: "user pass", gravity: 0.1 },
+                            { view: "label", label: "mobile", gravity: 0.1 },
+                            { gravity: 0.1 },
+                        ],
+                        css: {
+                            "background": "lightgrey!important",
+                        }
+                    },
+                    {
+                        view: "form",
+                        id: "register_nutri_form",
+                        margin: 10,
+                        borderless: true,
+                        cols: [
+                            { rows: [{ view: "text", placeholder: "user name", id: "user_name3", name: "user_name" }, {}], gravity: 0.1},
+                            { rows: [{ view: "text", placeholder: "job name", id: "job_name3", name: "job_name" }, {}], gravity: 0.1 },
+                            { rows: [{ view: "text", placeholder: "user id", id: "user_id3", name: "user_id" }, {}], gravity: 0.1 },
+                            { rows: [{ view: "text", placeholder: "user pass", id: "user_pass3", name: "user_pass" }, {}], gravity: 0.1 },
+                            { rows: [{ view: "text", placeholder: "mobile", id: "mobile3", name: "mobile" }, {}], gravity: 0.1 },
+                            { 
+                                rows: [
+                                    {
+                                        view: "button", value: "register", css: "webix-primary",
+                                        click: function(){
+                                            if ($$("register_nutri_form").validate()) {
+                                                const val = $$("register_nutri_form").getValues();
+                                                webix.ajax().post(schedulerUrl + "nutri/register", {
+                                                    data: val
+                                                }).then(function(data) {
+                                                    // if (data.text() != "") {
+                                                    //     webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
+                                                    //         sessionStorage.setItem("breed_idx", data.text())
+                                                    //         window.location.href="register-breed";
+                                                    //     })
+                                                    // }
+                                                    // else {
+                                                    //     webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
+                                                    // }
+                                                })
+                                            }
+                                        }
+                                    },
+                                    {}
+                                ],
+                                gravity: 0.1,
+                                css: {
+                                    "margin": "auto!important",
+                                    "padding": "20px"
+                                }
+                            },
+                        ],
+                        rules: {
+                            $all:webix.rules.isNotEmpty,
+                        }
+                    },
+                    {
+                        view: "label",
+                        label: "List of nutris"
+                    },
+                    {
+                        view:"datatable",
+                        id: "nutri_grid",
+                        autoConfig:true,
+                        url:function(params){
+                            // var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
+                            //     uID: user.id,
+                            //     fID: farm
+                            // }).responseText;
+                            // this.parse(data);
+                        },
+                        onClick:{
+                            "wxi-trash":function(event, id, node){
+                                webix.ajax().del(schedulerUrl + "nutri/remove?id=" + id.row).then(function(result) {
+                                    if (result.text() != "") {
+                                        // window.location.href = "register-breed"
+                                    }
+                                })
+                            },
+                            "wxi-pencil":function(event, id, node){
+                                webix.ajax().get(schedulerUrl + "nutri/select", {id: id.row}).then(function(result) {
+                                    // console.log(result.text());
+                                    // const breed = JSON.parse(result.text());
+                                    // breed_details.show();
+
+                                })
+                            }
+                        }
+                    },
+                ]
+            }
+        ],
+    };
+    // ----------- Register Nutri page End ----------------
     webix.ready(function () {
 		if (!user) {
 			window.location.href = "login";
-		}
-		webix.ui({
+		} else {
+            sessionStorage.setItem("user_id", user.id);
+        }
+
+        webix.ui({
 			rows: [
 				{
 					view: "toolbar", padding: 3, elements: [
@@ -1525,7 +2154,11 @@
 								},
 								manage_feed1,
                                 register_farm_page,
-                                register_breed_page
+                                register_breed_page,
+                                register_worker_page,
+                                supply_water,
+                                register_food_page,
+                                register_nutri_page
 							]
 						}
 
@@ -1534,7 +2167,7 @@
 
 			]
 		});
-    
+
         var columns = $$("grid").config.columns;
         if (columns.length > 3) {
             columns.splice(columns.length, 0,{
@@ -1551,6 +2184,23 @@
             });
             $$("grid").refreshColumns();
         }
+
+        var columns1 = $$("worker_grid").config.columns;
+        // if (columns1.length > 3) {
+        //     columns1.splice(columns1.length, 0,{
+        //         id:"trash",
+        //         header:"Delete",
+        //         template: "{common.trashIcon()}"
+        //     });
+        //     $$("worker_grid").refreshColumns();
+
+        //     columns1.splice(columns1.length-1, 0,{
+        //         id:"edit",
+        //         header:"Edit",
+        //         template: "{common.editIcon()}"
+        //     });
+        //     $$("worker_grid").refreshColumns();
+        // }
     });
 
 	function changeRange(sign){
@@ -1559,6 +2209,28 @@
 		let new_date = webix.Date.add(date, sign, "day");
 		$$("date").setValue(new_date);
 	}
+
+    function changeRange1(sign){
+		const date = $$("date1").getValue();
+
+		let new_date = webix.Date.add(date, sign, "day");
+		$$("date1").setValue(new_date);
+	}
+
+    function refresh_grid() {
+        var user_id = sessionStorage.getItem("user_id");
+        var user_group_idx = sessionStorage.getItem("user_group_idx");
+        var data = webix.ajax().sync().get(schedulerUrl + "breeds/all", {
+            uID: user_id,
+            fID: user_group_idx
+        }).responseText;
+        
+        $$("grid").clearAll();
+        if (data != "0") {
+            $$("grid").parse(JSON.parse(data));
+            $$("grid").refresh();
+        }
+    }
 </script>
 </body>
 
