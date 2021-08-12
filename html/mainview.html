@@ -325,8 +325,21 @@
 	</style>
 </head>
 
-<body class="webix_full_screen" oncontextmenu="return false"></body>
+<body class="webix_full_screen" oncontextmenu="return false">
+    <div id="template_container" hidden>
+        <div class='overall'>
+          <div class='name'>#code#.</div>
+          <div class='date'>#date#</div>
+          <div class='invetory'>#in_qnty# * #unit_price#</div>
+          <div class='amount'>#in_qnty# * #unit_price#</div>
+          <div class='edit_icon'>edit</div>
+          <div class='delete_icon'>delete</div>
+        </div>
+    </div>
+</body>
 <script>
+    const big_film_set = [{"id":1,"title":"The Shawshank Redemption","year":"1994","votes":"678,79","rating":"9,2","rank":"1"},{"id":2,"title":"The Godfather","year":"1972","votes":"511,495","rating":"9,2","rank":"2"},{"id":3,"title":"The Godfather: Part II","year":"1974","votes":"319,352","rating":"9","rank":"3"},{"id":4,"title":"The Good, the Bad and the Ugly","year":"1966","votes":"213,03","rating":"8,9","rank":"4"},{"id":5,"title":"My Fair Lady","year":"1964","votes":"533,848","rating":"8,9","rank":"5"},{"id":6,"title":"12 Angry Men","year":"1957","votes":"164,558","rating":"8,9","rank":"6"},{"id":7,"title":"Schindler's List","year":"1993","votes":"355,638","rating":"8,9","rank":"7"},{"id":8,"title":"One Flew Over the Cuckoo's Nest","year":"1975","votes":"283,176","rating":"8,8","rank":"8"},{"id":9,"title":"The Dark Knight","year":"2008","votes":"612,37","rating":"8,8","rank":"9"},{"id":10,"title":"The Lord of the Rings: The Return of the King","year":"2003","votes":"472,843","rating":"8,8","rank":"10"},{"id":11,"title":"Star Wars: Episode V - The Empire Strikes Back","year":"1980","votes":"348,012","rating":"8,8","rank":"11"},{"id":12,"title":"Inception","year":"2010","votes":"458,693","rating":"8,8","rank":"12"},{"id":13,"title":"Fight Club","year":"1999","votes":"507,723","rating":"8,8","rank":"13"},{"id":14,"title":"Seven Samurai","year":"1954","votes":"118,925","rating":"8,8","rank":"14"},{"id":15,"title":"Goodfellas","year":"1990","votes":"299,349","rating":"8,7","rank":"15"},{"id":16,"title":"The Lord of the Rings: The Fellowship of the Rin","year":"2001","votes":"494,003","rating":"8,7","rank":"16"},{"id":17,"title":"Star Wars","year":"1977","votes":"393,087","rating":"8,7","rank":"17"},{"id":18,"title":"City of God","year":"2002","votes":"222,818","rating":"8,7","rank":"18"},{"id":19,"title":"Casablanca","year":"1942","votes":"202,051","rating":"8,7","rank":"19"},{"id":20,"title":"Once Upon a Time in the West","year":"1968","votes":"97,931","rating":"8,7","rank":"20"},{"id":21,"title":"The Matrix","year":"1999","votes":"492,325","rating":"8,7","rank":"21"},{"id":22,"title":"Rear Window","year":"1954","votes":"148,162","rating":"8,7","rank":"22"},{"id":23,"title":"Raiders of the Lost Ark","year":"1981","votes":"300,252","rating":"8,7","rank":"23"},{"id":24,"title":"The Silence of the Lambs","year":"1991","votes":"324,419","rating":"8,7","rank":"24"},{"id":25,"title":"The Usual Suspects","year":"1995","votes":"331,99","rating":"8,7","rank":"25"},{"id":26,"title":"Psycho","year":"1960","votes":"182,319","rating":"8,6","rank":"26"},{"id":27,"title":"Se7en","year":"1995","votes":"380,479","rating":"8,6","rank":"27"},{"id":28,"title":"Forrest Gump","year":"1994","votes":"416,066","rating":"8,6","rank":"28"},{"id":29,"title":"The Lord of the Rings: The Two Towers","year":"2002","votes":"423,855","rating":"8,6","rank":"29"},{"id":30,"title":"It's a Wonderful Life","year":"1946","votes":"126,537","rating":"8,6","rank":"30"},{"id":31,"title":"Memento","year":"2000","votes":"358,354","rating":"8,6","rank":"31"},{"id":32,"title":"Leon: The Professional","year":"1994","votes":"274,245","rating":"8,6","rank":"32"},{"id":33,"title":"Sunset Blvd.","year":"1950","votes":"68,932","rating":"8,6","rank":"33"},{"id":34,"title":"Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb","year":"1964","votes":"185,368","rating":"8,6","rank":"34"},{"id":35,"title":"Apocalypse Now","year":"1979","votes":"214,205","rating":"8,6","rank":"35"},{"id":36,"title":"American History X","year":"1998","votes":"305,747","rating":"8,5","rank":"36"},{"id":37,"title":"North by Northwest","year":"1959","votes":"112,951","rating":"8,5","rank":"37"},{"id":38,"title":"Citizen Kane","year":"1941","votes":"163,906","rating":"8,5","rank":"38"},{"id":39,"title":"Terminator 2: Judgment Day","year":"1991","votes":"309,922","rating":"8,5","rank":"39"},{"id":40,"title":"Toy Story 3","year":"2010","votes":"173,833","rating":"8,5","rank":"40"},{"id":41,"title":"American Beauty","year":"1999","votes":"369,318","rating":"8,5","rank":"41"},{"id":42,"title":"Saving Private Ryan","year":"1998","votes":"349,866","rating":"8,5","rank":"42"},{"id":43,"title":"Taxi Driver","year":"1976","votes":"207,461","rating":"8,5","rank":"43"},{"id":44,"title":"Alien","year":"1979","votes":"227,723","rating":"8,5","rank":"44"},{"id":45,"title":"Spirited Away","year":"2001","votes":"142,366","rating":"8,5","rank":"45"},{"id":46,"title":"City Lights","year":"1931","votes":"38,898","rating":"8,5","rank":"46"},{"id":47,"title":"Vertigo","year":"1958","votes":"113,232","rating":"8,5","rank":"47"},{"id":48,"title":"The Shining","year":"1980","votes":"236,782","rating":"8,5","rank":"48"},{"id":49,"title":"Paths of Glory","year":"1957","votes":"56,418","rating":"8,5","rank":"49"},{"id":50,"title":"Am?lie","year":"2001","votes":"237,208","rating":"8,5","rank":"50"},{"id":51,"title":"The Pianist","year":"2002","votes":"181,523","rating":"8,5","rank":"51"},{"id":52,"title":"M","year":"1931","votes":"49,827","rating":"8,5","rank":"52"},{"id":53,"title":"WALLE","year":"2008","votes":"257,704","rating":"8,5","rank":"53"},{"id":54,"title":"Double Indemnity","year":"1944","votes":"46,968","rating":"8,5","rank":"54"},{"id":55,"title":"The Departed","year":"2006","votes":"347,565","rating":"8,4","rank":"55"},{"id":56,"title":"The Lives of Others","year":"2006","votes":"104,228","rating":"8,4","rank":"56"},{"id":57,"title":"A Clockwork Orange","year":"1971","votes":"244,189","rating":"8,4","rank":"57"},{"id":58,"title":"Lawrence of Arabia","year":"1962","votes":"95,054","rating":"8,4","rank":"58"},{"id":59,"title":"Aliens","year":"1986","votes":"212,588","rating":"8,4","rank":"59"},{"id":60,"title":"To Kill a Mockingbird","year":"1962","votes":"101,352","rating":"8,4","rank":"60"},{"id":61,"title":"Modern Times","year":"1936","votes":"48,296","rating":"8,4","rank":"61"},{"id":62,"title":"Life Is Beautiful","year":"1997","votes":"146,411","rating":"8,4","rank":"62"},{"id":63,"title":"Requiem for a Dream","year":"2000","votes":"243,963","rating":"8,4","rank":"63"},{"id":64,"title":"Eternal Sunshine of the Spotless Mind","year":"2004","votes":"286,331","rating":"8,4","rank":"64"},{"id":65,"title":"Das Boot","year":"1981","votes":"85,191","rating":"8,4","rank":"65"},{"id":66,"title":"Back to the Future","year":"1985","votes":"270,029","rating":"8,4","rank":"66"},{"id":67,"title":"Reservoir Dogs","year":"1992","votes":"271,098","rating":"8,4","rank":"67"},{"id":68,"title":"The Third Man","year":"1949","votes":"60,907","rating":"8,4","rank":"68"},{"id":69,"title":"L.A. Confidential","year":"1997","votes":"203,259","rating":"8,4","rank":"69"},{"id":70,"title":"The Prestige","year":"2006","votes":"291,029","rating":"8,4","rank":"70"},{"id":71,"title":"Chinatown","year":"1974","votes":"98,824","rating":"8,4","rank":"71"},{"id":72,"title":"The Treasure of the Sierra Madre","year":"1948","votes":"40,617","rating":"8,4","rank":"72"},{"id":73,"title":"Cinema Paradiso","year":"1988","votes":"59,743","rating":"8,4","rank":"73"},{"id":74,"title":"The Green Mile","year":"1999","votes":"271,474","rating":"8,4","rank":"74"},{"id":75,"title":"Monty Python and the Holy Grail","year":"1974","votes":"188,389","rating":"8,3","rank":"75"},{"id":76,"title":"Once Upon a Time in America","year":"1984","votes":"94,351","rating":"8,3","rank":"76"},{"id":77,"title":"The Great Dictator","year":"1940","votes":"49,085","rating":"8,3","rank":"77"},{"id":78,"title":"Rashomon","year":"1950","votes":"49,623","rating":"8,3","rank":"78"},{"id":79,"title":"Raging Bull","year":"1980","votes":"112,361","rating":"8,3","rank":"79"},{"id":80,"title":"Gladiator","year":"2000","votes":"372,697","rating":"8,3","rank":"80"},{"id":81,"title":"Some Like It Hot","year":"1959","votes":"83,549","rating":"8,3","rank":"81"},{"id":82,"title":"Amadeus","year":"1984","votes":"122,177","rating":"8,3","rank":"82"},{"id":83,"title":"Full Metal Jacket","year":"1987","votes":"198,428","rating":"8,3","rank":"83"},{"id":84,"title":"Singin' in the Rain","year":"1952","votes":"68,547","rating":"8,3","rank":"84"},{"id":85,"title":"All About Eve","year":"1950","votes":"42,339","rating":"8,3","rank":"85"},{"id":86,"title":"Bicycle Thieves","year":"1948","votes":"37,003","rating":"8,3","rank":"86"},{"id":87,"title":"The Bridge on the River Kwai","year":"1957","votes":"72,819","rating":"8,3","rank":"87"},{"id":88,"title":"Pan's Labyrinth","year":"2006","votes":"205,065","rating":"8,3","rank":"88"},{"id":89,"title":"Braveheart","year":"1995","votes":"309,611","rating":"8,3","rank":"89"},{"id":90,"title":"2001: A Space Odyssey","year":"1968","votes":"196,549","rating":"8,3","rank":"90"},{"id":91,"title":"Metropolis","year":"1927","votes":"51,421","rating":"8,3","rank":"91"},{"id":92,"title":"Oldboy","year":"2003","votes":"133,645","rating":"8,3","rank":"92"},{"id":93,"title":"The Apartment","year":"1960","votes":"47,052","rating":"8,3","rank":"93"},{"id":94,"title":"Unforgiven","year":"1992","votes":"128,601","rating":"8,3","rank":"94"},{"id":95,"title":"Downfall","year":"2004","votes":"110,171","rating":"8,3","rank":"95"},{"id":96,"title":"The Sting","year":"1973","votes":"82,181","rating":"8,3","rank":"96"},{"id":97,"title":"Star Wars: Episode VI - Return of the Jedi","year":"1983","votes":"267,993","rating":"8,3","rank":"97"},{"id":98,"title":"Inglourious Basterds","year":"2009","votes":"277,969","rating":"8,3","rank":"98"},{"id":99,"title":"Princess Mononoke","year":"1997","votes":"86,032","rating":"8,3","rank":"99"},{"id":100,"title":"Indiana Jones and the Last Crusade","year":"1989","votes":"217,054","rating":"8,3","rank":"100"},{"id":101,"title":"Mr. Smith Goes to Washington","year":"1939","votes":"40,325","rating":"8,3","rank":"101"},{"id":102,"title":"The Elephant Man","year":"1980","votes":"75,735","rating":"8,3","rank":"102"},{"id":103,"title":"Up","year":"2009","votes":"190,499","rating":"8,3","rank":"103"}];
+
 	const user = JSON.parse(sessionStorage.getItem("user"));
     const menu_data = [
         {
@@ -335,27 +348,18 @@
             ]
         },
         {
-            id: "layouts", icon: "mdi mdi-view-column", value: "analysis", data: [
-                { id: "accordions", value: "an1" },
-                { id: "portlets", value: "an2" }
-            ]
-        },
-        {
-            id: "tables", icon: "mdi mdi-table", value: "managingFeed", data: [
-                { id: "tables1", value: "manage1" },
-                { id: "tables2", value: "manage2" },
-                { id: "tables3", value: "manage3" }
-            ]
-        },
-        {
-            id: "uis", icon: "mdi mdi-puzzle", value: "managingFarm", data: [
+            id: "uis", icon: "mdi mdi-puzzle", value: "Management Farm", data: [
                 { id: "register-farm", value: "register farm"},
                 { id: "register-breed", value: "register breed"},
                 { id: "register-worker", value: "register worker"},
+                { id: "register-nutri", value: "register nutri"},
+                { id: "register-food", value: "register food"},
+            ]
+        },
+        {
+            id: "manage-breed", icon: "mdi mdi-table", value: "Management Breed", data: [
                 { id: "manage-feed", value: "manage feed"},
                 { id: "supply-water", value: "Supply water"},
-                { id: "register-food", value: "register food"},
-                { id: "register-nutri", value: "register nutri"},
             ]
         },
     ];
@@ -464,7 +468,7 @@
                         var farm = $$("farms").getSelectedId();
                         sessionStorage.setItem("user_group_idx", farm);
                         this.getTopParentView().hide();
-                        refresh_grid();
+                        refresh_breed_grid();
                     }
                 }
             ],
@@ -706,6 +710,7 @@
         name: "building_num",
         label: "Building Number",
         id: "building_num",
+        attributes:{type:"number"},
         placeholder: "Enter Building Number",
         required: true,
         validate: webix.rules.isNumber,
@@ -944,6 +949,7 @@
         placeholder: "Enter Capacity Breed",
         required: true,
         validate: webix.rules.isNotEmpty,
+        attributes: {type: "number"},
         invalidMessage: "Please enter your Capacity Breed!",
         on: {
             "onBlur": function () {
@@ -1265,7 +1271,8 @@
             { gravity: 0.1}
         ],
         css: {
-            "background": "lightgrey!important"
+            "background": "lightgrey!important",
+            "text-align": "center"
         }
     };
     const breed_register_form = {
@@ -1304,7 +1311,7 @@
                                 }).then(function(data) {
                                     if (data.text() != "") {
                                         webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
-                                            refresh_grid();
+                                            refresh_breed_grid();
                                             $$("breed_register_form").clear();
                                         })
                                     }
@@ -1356,6 +1363,7 @@
                 fID: user_group_idx
             }).responseText;
             if (data != "0") {
+                sessionStorage.setItem("breed_code", JSON.parse(data)[0].uuid);
                 this.parse(data);
             }
         },
@@ -1364,7 +1372,7 @@
             "wxi-trash":function(event, id, node){
                 webix.ajax().del(schedulerUrl + "breeds/remove?id=" + id.row).then(function(result) {
                     if (result.text() != "") {
-                        refresh_grid();
+                        refresh_breed_grid();
                     }
                 })
             },
@@ -1426,6 +1434,7 @@
         ],
         css: {
             "background": "lightgrey!important",
+            "text-align": "center"
         }
     }
     const register_worker_form = {
@@ -1444,14 +1453,19 @@
                     {
                         view: "button", value: "cb", gravity: 0.2,
                         click: function() {
-                            $$("user_id1").setValue("aaaa");
+                            
+                            webix.ajax().post(schedulerUrl + "workers/generate_name", {
+                                user_id: user.user_id
+                            }).then(function(data) {
+                                $$("user_id1").setValue(data.text());    
+                            })
                         }
                     }
                 ]
                 
             }, {}], gravity: 0.1 },
             { rows: [{ view: "text", placeholder: "user pass", id: "user_pass1", name: "user_pass" }, {}], gravity: 0.1 },
-            { rows: [{ view: "text", placeholder: "mobile", id: "mobile1", name: "mobile" }, {}], gravity: 0.1 },
+            { rows: [{ view: "text", placeholder: "mobile", id: "mobile1", name: "mobile", pattern: { mask: "###-####-####", allow: /[0-9]/g }}, {}], gravity: 0.1 },
             {
                 type: "section",
                 scroll: "y",
@@ -1460,7 +1474,7 @@
                         view:"flexlayout",
                         cols: [
                             { 
-                                view: "checkbox", id: "all_check", labelRight: "all", labelWidth: 0, minWidth: 60 , value: 0,
+                                view: "checkbox", id: "all_check", name: "all_check", labelRight: "all", labelWidth: 0, minWidth: 60 , value: 0,
                                 on: {
                                     onChange: function(newValue, oldValue, config) {
                                         for (let index = 1; index < 13; index++) {
@@ -1474,18 +1488,18 @@
                                     }
                                 }
                             },
-                            { view: "checkbox", id: "check1", labelRight: "bd1", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check2", labelRight: "bd2", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check3", labelRight: "bd3", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check4", labelRight: "bd4", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check5", labelRight: "bd5", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check6", labelRight: "bd6", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check7", labelRight: "bd7", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check8", labelRight: "bd8", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check9", labelRight: "bd9", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check10", labelRight: "bd10", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check11", labelRight: "bd11", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check12", labelRight: "bd12", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check1", name: "check1", labelRight: "bd1", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check2", name: "check2", labelRight: "bd2", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check3", name: "check3", labelRight: "bd3", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check4", name: "check4", labelRight: "bd4", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check5", name: "check5", labelRight: "bd5", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check6", name: "check6", labelRight: "bd6", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check7", name: "check7", labelRight: "bd7", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check8", name: "check8", labelRight: "bd8", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check9", name: "check9", labelRight: "bd9", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check10", name: "check10", labelRight: "bd10", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check11", name: "check11", labelRight: "bd11", labelWidth: 0, minWidth: 60, value: 0 },
+                            { view: "checkbox", id: "check12", name: "check12", labelRight: "bd12", labelWidth: 0, minWidth: 60, value: 0 },
                         ],
                         
                         autoHeight: true,
@@ -1500,18 +1514,32 @@
                         click: function(){
                             if ($$("register_worker_form").validate()) {
                                 const val = $$("register_worker_form").getValues();
+                                const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                                var check_values = [];
+                                for (let index = 1; index < 13; index++) {
+                                    check_values.push(val["check" + index]);
+                                }
                                 webix.ajax().post(schedulerUrl + "workers/register", {
-                                    data: val
+                                    user_id: val.user_id,
+                                    user_name: val.user_name,
+                                    user_pass: val.user_pass,
+                                    job_name: val.job_name,
+                                    user_group: "1",
+                                    user_group_idx: user_group_idx,
+                                    mobile: val.mobile,
+                                    check_values: check_values,
+                                    all_check: val.all_check,
+                                    giver_idx: user.id
                                 }).then(function(data) {
-                                    // if (data.text() != "") {
-                                    //     webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
-                                    //         sessionStorage.setItem("breed_idx", data.text())
-                                    //         window.location.href="register-breed";
-                                    //     })
-                                    // }
-                                    // else {
-                                    //     webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
-                                    // }
+                                    const response = data.text();
+                                    if (response == "success") {
+                                        webix.alert({ title: "Register Worker", type: "alert-success", text: "Register a worker successfully!" }).then(function (result){
+                                            refresh_worker_grid();
+                                            $$("register_worker_form").clear();
+                                        })
+                                    } else {
+                                        webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                                    }
                                 })
                             }
                         }
@@ -1538,33 +1566,42 @@
         view:"datatable",
         id: "worker_grid",
         autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"user_name",	header:"user_name", fillspace:true },
+            { id:"job_name",	header:"job_name", fillspace:true  },
+            { id:"user_id",	header:"user_id", fillspace:true  },
+            { id:"user_pass",	header:"user_pass", fillspace:true  },
+            { id:"mobile",	header:"mobile", fillspace:true  },
+            // { id:"rule_idx",	header:"rule_idx", fillspace:true  },
+        ],
         url:function(params){
-            // var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
-            //     uID: user.id,
-            //     fID: farm
-            // }).responseText;
-            // this.parse(data);
+            var user_id = sessionStorage.getItem("user_id");
+            var user_group_idx = sessionStorage.getItem("user_group_idx");
+            var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
+                uID: user.id,
+                fID: user_group_idx
+            }).responseText;
+            if (data != "0") {
+                this.parse(data);
+            }
         },
+        scroll:"y",
         onClick:{
             "wxi-trash":function(event, id, node){
                 webix.ajax().del(schedulerUrl + "workers/remove?id=" + id.row).then(function(result) {
                     if (result.text() != "") {
-                        // window.location.href = "register-breed"
+                        refresh_worker_grid();
                     }
                 })
             },
             "wxi-pencil":function(event, id, node){
                 webix.ajax().get(schedulerUrl + "workers/select", {id: id.row}).then(function(result) {
-                    // console.log(result.text());
-                    // const breed = JSON.parse(result.text());
-                    // breed_details.show();
-
+                    console.log(result.text());
                 })
             }
-        },
-    }
-
-
+        }
+    };
     const register_worker_page = {
         view: "form",
         id: "register-worker",
@@ -1583,7 +1620,344 @@
             }
         ],
     };
+
     // ----------- Register Worker page End ----------------
+    // ----------- Register Nutri page Start ----------------
+    const register_nutri_label = {
+        view: "label",
+        template: "Medicine Investory",
+        css: {
+            "font-size": "24px"
+        }
+    }
+    const register_nutri_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register"
+            },
+            {}
+        ]
+        
+    }
+    const register_nutri_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "name(code)", gravity: 0.1 },
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "med_type", gravity: 0.1 },
+            { view: "label", label: "measure_unit", gravity: 0.1 },
+            { view: "label", label: "measure", gravity: 0.1 },
+            { view: "label", label: "in_qnty", gravity: 0.1 },
+            { view: "label", label: "unit_price", gravity: 0.1 },
+            { view: "label", label: "max_qnty", gravity: 0.1 },
+            { gravity: 0.1 },
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    }
+    const register_nutri_form = {
+        view: "form",
+        id: "register_nutri_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", placeholder: "name", id: "code", name: "code" , gravity: 0.1},
+            { view: "datepicker", placeholder: "date", id: "date2", name: "date" , gravity: 0.1 },
+            { view: "richselect", placeholder: "med_type", id: "med_type", name: "med_type", gravity: 0.1, options: ["medi", "non-medi", "food-nutri"]},
+            { view: "text", placeholder: "measure_unit", id: "measure_unit", name: "measure_unit" , gravity: 0.1, attributes:{type:"number"}},
+            { view: "richselect", placeholder: "measure", id: "measure", name: "measure", gravity: 0.1, options: ["ml", "l", "gram", "kg", "pcs"]},
+            { view: "text", placeholder: "in_qnty", id: "in_qnty", name: "in_qnty" , gravity: 0.1, attributes:{type:"number"}},
+            { view: "text", placeholder: "unit_price", id: "unit_price", name: "unit_price" , gravity: 0.1, attributes:{type:"number"}},
+            { view: "text", placeholder: "max_qnty", id: "max_qnty", name: "max_qnty" , gravity: 0.1, attributes:{type:"number"}},
+            { 
+                rows: [
+                    {
+                        view: "button", value: "register", css: "webix-primary",
+                        click: function(){
+                            if ($$("register_nutri_form").validate()) {
+                                const val = $$("register_nutri_form").getValues();
+                                const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                                const breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+
+                                webix.ajax().post(schedulerUrl + "mednutri/register", {
+                                    user_idx: user.id,
+                                    farm_idx: user_group_idx,
+                                    breed_code: breed_code,
+                                    code: val.code,
+                                    date: val.date,
+                                    med_type: val.med_type,
+                                    measure_unit: val.measure_unit,
+                                    measure: val.measure,
+                                    in_qnty: val.in_qnty,
+                                    unit_price: val.unit_price,
+                                    max_qnty: val.max_qnty
+                                }).then(function(data) {
+                                    const response = data.text();
+                                    if (response == "success") {
+                                        webix.alert({ title: "Register Nutri", type: "alert-success", text: "Register a nutri successfully!" }).then(function (result){
+                                            $$("register_nutri_form").clear();
+                                        })
+                                    } else {
+                                        webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                                    }
+                                })
+                            }
+                        }
+                    },
+                    {}
+                ],
+                gravity: 0.1,
+                css: {
+                    "margin": "auto!important",
+                    "padding": "20px"
+                }
+            },
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        },
+        gravity: 0.2
+    }
+    const register_nutri_list_label = {
+        view: "label",
+        label: "List of medi"
+    }
+    const register_nutri_label_list1 = {
+        type: "section",
+        cols: [
+            { view: "label", label: "name", gravity: 0.1 },
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "invetory", gravity: 0.4 },
+            { view: "label", label: "amount", gravity: 0.2 },
+            { gravity: 0.1 },
+            { gravity: 0.1 },
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    }
+    const register_nutri_list = {
+        view:"dataview",
+        css: "movies",
+        type:{
+            width: 260,
+            height: 90,
+            template:"html->template_container"
+        },
+        url: function(params){
+            var user_id = sessionStorage.getItem("user_id");
+            var user_group_idx = sessionStorage.getItem("user_group_idx");
+            var breed_code = sessionStorage.getItem("breed_code");
+            var data = webix.ajax().sync().get(schedulerUrl + "mednutri/all", {
+                uID: user.id,
+                fID: user_group_idx,
+                bCode: breed_code
+            }).responseText;
+            console.log(data);
+            return data;
+        }
+    }
+    const register_nutri_page = {
+        view: "form",
+        id: "register-nutri",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_nutri_label,
+                    register_nutri_header,
+                    register_nutri_label_list,
+                    register_nutri_form,
+                    register_nutri_list_label,
+                    register_nutri_label_list1,
+                    register_nutri_list,
+                    {
+                        template: "non-medi list label"
+                    },
+                    {
+                        template: "non-medi label list"
+                    },
+                    {
+                        template: "non-medi list"
+                    },
+                    {
+                        template: "food nutri list label"
+                    },
+                    {
+                        template: "food nutri label list"
+                    },
+                    {
+                        template: "food nutri list"
+                    },
+                ]
+            }
+        ],
+    };
+    // ----------- Register Nutri page End ----------------
+    // ----------- Register Food page Start ----------------
+    const register_food_label = {
+        view: "label",
+        template: "Food Investory",
+        css: {
+            "font-size": "24px"
+        }
+    }
+    const register_food_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Food Register"
+            },
+            {}
+        ]
+        
+    }
+    const register_food_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "food name", gravity: 0.1 },
+            { view: "label", label: "sex", gravity: 0.1 },
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "in_kg", gravity: 0.1 },
+            { view: "label", label: "unit_price", gravity: 0.1 },
+            { view: "label", label: "tank_max", gravity: 0.1 },
+            { view: "label", label: "nutrition_name", gravity: 0.1 },
+            { view: "label", label: "nutrition_in_kg", gravity: 0.1 },
+            { gravity: 0.1 },
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    }
+    const register_food_form = {
+        view: "form",
+        id: "register_food_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", placeholder: "name", id: "food_name", name: "code" , gravity: 0.1},
+            { view: "richselect", placeholder: "Sex", id: "sex", name: "sex", gravity: 0.1, options: [{id: 1, value: "female"}, {id: 2, value: "male"}]},
+            { view: "datepicker", placeholder: "date", id: "date3", name: "date" , gravity: 0.1 },
+            { view: "text", placeholder: "in_kg", id: "in_kg", name: "in_kg" , gravity: 0.1, attributes:{type:"number"}},
+            { view: "text", placeholder: "unit_price", id: "unit_price1", name: "unit_price" , gravity: 0.1, attributes:{type:"number"}},
+            { view: "text", placeholder: "tank_max", id: "tank_max", name: "tank_max" , gravity: 0.1, attributes:{type:"number"}},
+            { view: "multiselect", placeholder: "nutrition_name", id: "nutrition_name", name: "nutrition_name", gravity: 0.1, options: ["nut1", "nut2", "nut3", "nut4"]},
+            { view: "text", placeholder: "nutrition_in_kg", id: "nutrition_in_kg", name: "nutrition_in_kg" , gravity: 0.1, attributes:{type:"number"}},
+            { 
+                rows: [
+                    {
+                        view: "button", value: "register", css: "webix-primary",
+                        click: function(){
+                            if ($$("register_food_form").validate()) {
+                                const val = $$("register_food_form").getValues();
+                                const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                                const breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+
+                                webix.ajax().post(schedulerUrl + "foods/register", {
+                                    user_idx: user.id,
+                                    farm_idx: user_group_idx,
+                                    breed_code: breed_code,
+                                    date: val.date,
+                                    code: val.code,
+                                    in_kg: val.in_kg,
+                                    unit_price: val.unit_price,
+                                    sex: val.sex,
+                                    tank_max: val.tank_max,
+                                    nutrition_name: val.nutrition_name,
+                                    nutrition_in_kg: val.nutrition_in_kg
+                                }).then(function(data) {
+                                    const response = data.text();
+                                    if (response == "success") {
+                                        webix.alert({ title: "Register Food", type: "alert-success", text: "Register a food successfully!" }).then(function (result){
+                                            $$("register_food_form").clear();
+                                        })
+                                    } else {
+                                        webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                                    }
+                                })
+                            }
+                        }
+                    },
+                    {}
+                ],
+                gravity: 0.1,
+                css: {
+                    "margin": "auto!important",
+                    "padding": "20px"
+                }
+            },
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        },
+        gravity: 0.2
+    }
+    const register_food_list_label = {
+        view: "label",
+        label: "Food List"
+    }
+    const register_food_label_list1 = {
+        type: "section",
+        cols: [
+            { view: "label", label: "food name", gravity: 0.1 },
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "invetory", gravity: 0.4 },
+            { view: "label", label: "amount", gravity: 0.2 },
+            { gravity: 0.1 },
+            { gravity: 0.1 },
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    }
+    const register_food_list = {
+        view:"dataview",
+        css: "movies",
+        type:{
+            width: 260,
+            height: 90,
+            template:"html->template_container"
+        },
+        url: function(params){
+            var user_id = sessionStorage.getItem("user_id");
+            var user_group_idx = sessionStorage.getItem("user_group_idx");
+            var breed_code = sessionStorage.getItem("breed_code");
+            var data = webix.ajax().sync().get(schedulerUrl + "foods/all", {
+                uID: user.id,
+                fID: user_group_idx,
+                bCode: breed_code
+            }).responseText;
+            console.log(data);
+            return data;
+        }
+    }
+    const register_food_page = {
+        view: "form",
+        id: "register-food",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_food_label,
+                    register_food_header,
+                    register_food_label_list,
+                    register_food_form,
+                    register_food_list_label,
+                    register_food_label_list1,
+                    register_food_list,
+                ]
+            }
+        ],
+    };
+    // ----------- Register Food page End ----------------
     // ----------- Manage feed first page Start ----------------
     const feed_label = {
         view: "label",
@@ -1599,7 +1973,12 @@
         value: new Date(2012, 6, 8),
         format: "%Y, %m-%d %l",
         timepicker: true,
-        width: 300
+        width: 300,
+        on:{
+            onChange:function(nv, ov){
+                webix.message("Value was "+ov+" <br>Value now "+nv);
+            },
+        }
     };
     const save_button = {
         view: "button",
@@ -1858,256 +2237,22 @@
 			]
 		};
 	// ----------- Supply water page End ----------------
-    // ----------- Register Food page Start ----------------
-    const register_food_page = {
-        view: "form",
-        id: "register-food",
-        elements: [
-            {
-                type: "section",
-                borderless: false,
-                rows: [
-                    {
-                        view: "label",
-                        template: "Register food authority",
-                        css: {
-                            "font-size": "24px"
-                        }
-                    },
-                    {
-                        cols : [
-                            {
-                                view: "label",
-                                label: "Register"
-                            },
-                            {}
-                        ]
-                        
-                    },
-                    {
-                        type: "section",
-                        cols: [
-                            { view: "label", label: "user name", gravity: 0.1 },
-                            { view: "label", label: "job name", gravity: 0.1 },
-                            { view: "label", label: "user id", gravity: 0.1 },
-                            { view: "label", label: "user pass", gravity: 0.1 },
-                            { view: "label", label: "mobile", gravity: 0.1 },
-                            { gravity: 0.1 },
-                        ],
-                        css: {
-                            "background": "lightgrey!important",
-                        }
-                    },
-                    {
-                        view: "form",
-                        id: "register_food_form",
-                        margin: 10,
-                        borderless: true,
-                        cols: [
-                            { rows: [{ view: "text", placeholder: "user name", id: "user_name2", name: "user_name" }, {}], gravity: 0.1},
-                            { rows: [{ view: "text", placeholder: "job name", id: "job_name2", name: "job_name" }, {}], gravity: 0.1 },
-                            { rows: [{ view: "text", placeholder: "user id", id: "user_id2", name: "user_id" }, {}], gravity: 0.1 },
-                            { rows: [{ view: "text", placeholder: "user pass", id: "user_pass2", name: "user_pass" }, {}], gravity: 0.1 },
-                            { rows: [{ view: "text", placeholder: "mobile", id: "mobile2", name: "mobile" }, {}], gravity: 0.1 },
-                            { 
-                                rows: [
-                                    {
-                                        view: "button", value: "register", css: "webix-primary",
-                                        click: function(){
-                                            if ($$("register_food_form").validate()) {
-                                                const val = $$("register_food_form").getValues();
-                                                webix.ajax().post(schedulerUrl + "food/register", {
-                                                    data: val
-                                                }).then(function(data) {
-                                                    // if (data.text() != "") {
-                                                    //     webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
-                                                    //         sessionStorage.setItem("breed_idx", data.text())
-                                                    //         window.location.href="register-breed";
-                                                    //     })
-                                                    // }
-                                                    // else {
-                                                    //     webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
-                                                    // }
-                                                })
-                                            }
-                                        }
-                                    },
-                                    {}
-                                ],
-                                gravity: 0.1,
-                                css: {
-                                    "margin": "auto!important",
-                                    "padding": "20px"
-                                }
-                            },
-                        ],
-                        rules: {
-                            $all:webix.rules.isNotEmpty,
-                        }
-                    },
-                    {
-                        view: "label",
-                        label: "List of foods"
-                    },
-                    {
-                        view:"datatable",
-                        id: "food_grid",
-                        autoConfig:true,
-                        url:function(params){
-                            // var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
-                            //     uID: user.id,
-                            //     fID: farm
-                            // }).responseText;
-                            // this.parse(data);
-                        },
-                        onClick:{
-                            "wxi-trash":function(event, id, node){
-                                webix.ajax().del(schedulerUrl + "food/remove?id=" + id.row).then(function(result) {
-                                    if (result.text() != "") {
-                                        // window.location.href = "register-breed"
-                                    }
-                                })
-                            },
-                            "wxi-pencil":function(event, id, node){
-                                webix.ajax().get(schedulerUrl + "food/select", {id: id.row}).then(function(result) {
-                                    // console.log(result.text());
-                                    // const breed = JSON.parse(result.text());
-                                    // breed_details.show();
+    webix.ui({
+        view:"popup",
+        id:"bell_pop",
+        body:{
+            view:"list",
+            width:320,
+            height:600,
+            template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+            type:{
+                height:62
+            },
+            select:true,
+            data:big_film_set
+        },
+    }).hide();
 
-                                })
-                            }
-                        }
-                    },
-                ]
-            }
-        ],
-    };
-    // ----------- Register Food page End ----------------
-    // ----------- Register Nutri page Start ----------------
-    const register_nutri_page = {
-        view: "form",
-        id: "register-nutri",
-        elements: [
-            {
-                type: "section",
-                borderless: false,
-                rows: [
-                    {
-                        view: "label",
-                        template: "Register nutri authority",
-                        css: {
-                            "font-size": "24px"
-                        }
-                    },
-                    {
-                        cols : [
-                            {
-                                view: "label",
-                                label: "Register"
-                            },
-                            {}
-                        ]
-                        
-                    },
-                    {
-                        type: "section",
-                        cols: [
-                            { view: "label", label: "user name", gravity: 0.1 },
-                            { view: "label", label: "job name", gravity: 0.1 },
-                            { view: "label", label: "user id", gravity: 0.1 },
-                            { view: "label", label: "user pass", gravity: 0.1 },
-                            { view: "label", label: "mobile", gravity: 0.1 },
-                            { gravity: 0.1 },
-                        ],
-                        css: {
-                            "background": "lightgrey!important",
-                        }
-                    },
-                    {
-                        view: "form",
-                        id: "register_nutri_form",
-                        margin: 10,
-                        borderless: true,
-                        cols: [
-                            { rows: [{ view: "text", placeholder: "user name", id: "user_name3", name: "user_name" }, {}], gravity: 0.1},
-                            { rows: [{ view: "text", placeholder: "job name", id: "job_name3", name: "job_name" }, {}], gravity: 0.1 },
-                            { rows: [{ view: "text", placeholder: "user id", id: "user_id3", name: "user_id" }, {}], gravity: 0.1 },
-                            { rows: [{ view: "text", placeholder: "user pass", id: "user_pass3", name: "user_pass" }, {}], gravity: 0.1 },
-                            { rows: [{ view: "text", placeholder: "mobile", id: "mobile3", name: "mobile" }, {}], gravity: 0.1 },
-                            { 
-                                rows: [
-                                    {
-                                        view: "button", value: "register", css: "webix-primary",
-                                        click: function(){
-                                            if ($$("register_nutri_form").validate()) {
-                                                const val = $$("register_nutri_form").getValues();
-                                                webix.ajax().post(schedulerUrl + "nutri/register", {
-                                                    data: val
-                                                }).then(function(data) {
-                                                    // if (data.text() != "") {
-                                                    //     webix.alert({ title: "Register Breed", type: "alert-success", text: "Register a breed successfully!" }).then(function() {
-                                                    //         sessionStorage.setItem("breed_idx", data.text())
-                                                    //         window.location.href="register-breed";
-                                                    //     })
-                                                    // }
-                                                    // else {
-                                                    //     webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
-                                                    // }
-                                                })
-                                            }
-                                        }
-                                    },
-                                    {}
-                                ],
-                                gravity: 0.1,
-                                css: {
-                                    "margin": "auto!important",
-                                    "padding": "20px"
-                                }
-                            },
-                        ],
-                        rules: {
-                            $all:webix.rules.isNotEmpty,
-                        }
-                    },
-                    {
-                        view: "label",
-                        label: "List of nutris"
-                    },
-                    {
-                        view:"datatable",
-                        id: "nutri_grid",
-                        autoConfig:true,
-                        url:function(params){
-                            // var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
-                            //     uID: user.id,
-                            //     fID: farm
-                            // }).responseText;
-                            // this.parse(data);
-                        },
-                        onClick:{
-                            "wxi-trash":function(event, id, node){
-                                webix.ajax().del(schedulerUrl + "nutri/remove?id=" + id.row).then(function(result) {
-                                    if (result.text() != "") {
-                                        // window.location.href = "register-breed"
-                                    }
-                                })
-                            },
-                            "wxi-pencil":function(event, id, node){
-                                webix.ajax().get(schedulerUrl + "nutri/select", {id: id.row}).then(function(result) {
-                                    // console.log(result.text());
-                                    // const breed = JSON.parse(result.text());
-                                    // breed_details.show();
-
-                                })
-                            }
-                        }
-                    },
-                ]
-            }
-        ],
-    };
-    // ----------- Register Nutri page End ----------------
     webix.ready(function () {
 		if (!user) {
 			window.location.href = "login";
@@ -2121,7 +2266,7 @@
 					view: "toolbar", padding: 3, elements: [
 						{
 							view: "icon", icon: "mdi mdi-menu", click: function () {
-								$$("$sidebar1").toggle();
+								$$("menu_list").toggle();
 							}
 						},
 						{ view: "label", label: "DonilFarm" },
@@ -2138,7 +2283,7 @@
 						},
 						{ view: "button", label: "myInfo", gravity: 0.3 },
 						{ view: "icon", icon: "mdi mdi-comment", badge: 4 },
-						{ view: "icon", icon: "mdi mdi-bell", badge: 10 }
+						{ view: "icon", id: "bell_icon", icon: "mdi mdi-bell", popup:"bell_pop"}
 					]
 				},
 				{
@@ -2156,9 +2301,9 @@
                                 register_farm_page,
                                 register_breed_page,
                                 register_worker_page,
-                                supply_water,
+                                register_nutri_page,
                                 register_food_page,
-                                register_nutri_page
+                                supply_water,
 							]
 						}
 
@@ -2168,6 +2313,8 @@
 			]
 		});
 
+        $$("bell_icon").config.badge = big_film_set.length;
+        $$("bell_icon").refresh();
         var columns = $$("grid").config.columns;
         if (columns.length > 3) {
             columns.splice(columns.length, 0,{
@@ -2186,28 +2333,30 @@
         }
 
         var columns1 = $$("worker_grid").config.columns;
-        // if (columns1.length > 3) {
-        //     columns1.splice(columns1.length, 0,{
-        //         id:"trash",
-        //         header:"Delete",
-        //         template: "{common.trashIcon()}"
-        //     });
-        //     $$("worker_grid").refreshColumns();
+        if (columns1.length > 3) {
+            columns1.splice(columns1.length, 0,{
+                id:"trash",
+                header:"Delete",
+                template: "{common.trashIcon()}"
+            });
+            $$("worker_grid").refreshColumns();
 
-        //     columns1.splice(columns1.length-1, 0,{
-        //         id:"edit",
-        //         header:"Edit",
-        //         template: "{common.editIcon()}"
-        //     });
-        //     $$("worker_grid").refreshColumns();
-        // }
+            columns1.splice(columns1.length-1, 0,{
+                id:"edit",
+                header:"Edit",
+                template: "{common.editIcon()}"
+            });
+            $$("worker_grid").refreshColumns();
+        }
     });
 
 	function changeRange(sign){
-		const date = $$("date").getValue();
+		const oldValue = $$("date").getValue();
 
-		let new_date = webix.Date.add(date, sign, "day");
-		$$("date").setValue(new_date);
+		let newValue = webix.Date.add(oldValue, sign, "day");
+		$$("date").setValue(newValue);
+
+        webix.message("Value was "+oldValue+" <br>Value now "+newValue);
 	}
 
     function changeRange1(sign){
@@ -2217,7 +2366,7 @@
 		$$("date1").setValue(new_date);
 	}
 
-    function refresh_grid() {
+    function refresh_breed_grid() {
         var user_id = sessionStorage.getItem("user_id");
         var user_group_idx = sessionStorage.getItem("user_group_idx");
         var data = webix.ajax().sync().get(schedulerUrl + "breeds/all", {
@@ -2229,6 +2378,21 @@
         if (data != "0") {
             $$("grid").parse(JSON.parse(data));
             $$("grid").refresh();
+        }
+    }
+
+    function refresh_worker_grid() {
+        var user_id = sessionStorage.getItem("user_id");
+        var user_group_idx = sessionStorage.getItem("user_group_idx");
+        var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
+            uID: user_id,
+            fID: user_group_idx
+        }).responseText;
+        
+        $$("worker_grid").clearAll();
+        if (data != "0") {
+            $$("worker_grid").parse(JSON.parse(data));
+            $$("worker_grid").refresh();
         }
     }
 </script>
