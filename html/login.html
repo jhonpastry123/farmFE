@@ -121,19 +121,14 @@
 								user_id: val.ID,
 								user_pass: val.password,
 							}).then(function(data){
-								const response = JSON.parse(data.text()); 
+								const response = data.json();
 								if (response != "") {
-									const user = response.user;
-									const res = response.response;
-									const farms = response.farms;
 									webix.alert({ 
-										title: "<img src='/html/assets/logo/logo_iFrm.png' class='logo_icon' ondragstart='false'/> \n Welcome " + user.user_id, 
+										title: "<img src='/html/assets/logo/logo_iFrm.png' class='logo_icon' ondragstart='false'/> \n Welcome " + response.user_id, 
 										type: "alert-success", 
-										text: "Your Email is " + user.user_email })
+										text: "Your Email is " + response.user_email })
 									.then(function(result){
-										sessionStorage.setItem("user", JSON.stringify(user));
-										sessionStorage.setItem("farms", JSON.stringify(farms));
-										sessionStorage.setItem("message", JSON.stringify(res));
+										sessionStorage.setItem("user", JSON.stringify(response));
 										window.location.href = "mainview";
 									})
 								}

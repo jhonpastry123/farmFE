@@ -323,6 +323,66 @@
 			background: blue !important;
 		}
 	</style>
+    <style>
+        .webix_list-x .webix_scroll_cont {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        div.webix_list_item {
+            padding: 2px;
+            cursor: unset;
+        }
+        div.webix_list_item .hoverButton {
+            display: initial;
+            float: right;
+        }
+        div.webix_list_item .close-icon {
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 14px;
+            background-color: white;
+            margin-left: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        div.webix_list_item .medi {
+            color: white;
+            background-color: orange;
+            padding: 0px 5px;
+            border-radius: 20px;
+            font-size: smaller;
+        }
+
+        div.webix_list_item .non-medi {
+            color: white;
+            background-color: blue;
+            padding: 0px 5px;
+            border-radius: 20px;
+            font-size: smaller;
+        }
+
+        .webix_icon.wxi-pencil, .webix_icon.wxi-trash {
+            cursor: pointer!important;
+        }
+    </style>
+    <style>
+        .slider {
+            width: 100%;
+        }
+        .food_inventory {
+            display: flex;
+        }
+        .medi_inventory {
+            display: flex;
+        }
+        .non_medi_inventory {
+            display: flex;
+        }
+        .food_nutri_inventory {
+            display: flex;
+        }
+    </style>
 </head>
 
 <body class="webix_full_screen" oncontextmenu="return false">
@@ -338,9 +398,12 @@
     </div>
 </body>
 <script>
-    const big_film_set = [{"id":1,"title":"The Shawshank Redemption","year":"1994","votes":"678,79","rating":"9,2","rank":"1"},{"id":2,"title":"The Godfather","year":"1972","votes":"511,495","rating":"9,2","rank":"2"},{"id":3,"title":"The Godfather: Part II","year":"1974","votes":"319,352","rating":"9","rank":"3"},{"id":4,"title":"The Good, the Bad and the Ugly","year":"1966","votes":"213,03","rating":"8,9","rank":"4"},{"id":5,"title":"My Fair Lady","year":"1964","votes":"533,848","rating":"8,9","rank":"5"},{"id":6,"title":"12 Angry Men","year":"1957","votes":"164,558","rating":"8,9","rank":"6"},{"id":7,"title":"Schindler's List","year":"1993","votes":"355,638","rating":"8,9","rank":"7"},{"id":8,"title":"One Flew Over the Cuckoo's Nest","year":"1975","votes":"283,176","rating":"8,8","rank":"8"},{"id":9,"title":"The Dark Knight","year":"2008","votes":"612,37","rating":"8,8","rank":"9"},{"id":10,"title":"The Lord of the Rings: The Return of the King","year":"2003","votes":"472,843","rating":"8,8","rank":"10"},{"id":11,"title":"Star Wars: Episode V - The Empire Strikes Back","year":"1980","votes":"348,012","rating":"8,8","rank":"11"},{"id":12,"title":"Inception","year":"2010","votes":"458,693","rating":"8,8","rank":"12"},{"id":13,"title":"Fight Club","year":"1999","votes":"507,723","rating":"8,8","rank":"13"},{"id":14,"title":"Seven Samurai","year":"1954","votes":"118,925","rating":"8,8","rank":"14"},{"id":15,"title":"Goodfellas","year":"1990","votes":"299,349","rating":"8,7","rank":"15"},{"id":16,"title":"The Lord of the Rings: The Fellowship of the Rin","year":"2001","votes":"494,003","rating":"8,7","rank":"16"},{"id":17,"title":"Star Wars","year":"1977","votes":"393,087","rating":"8,7","rank":"17"},{"id":18,"title":"City of God","year":"2002","votes":"222,818","rating":"8,7","rank":"18"},{"id":19,"title":"Casablanca","year":"1942","votes":"202,051","rating":"8,7","rank":"19"},{"id":20,"title":"Once Upon a Time in the West","year":"1968","votes":"97,931","rating":"8,7","rank":"20"},{"id":21,"title":"The Matrix","year":"1999","votes":"492,325","rating":"8,7","rank":"21"},{"id":22,"title":"Rear Window","year":"1954","votes":"148,162","rating":"8,7","rank":"22"},{"id":23,"title":"Raiders of the Lost Ark","year":"1981","votes":"300,252","rating":"8,7","rank":"23"},{"id":24,"title":"The Silence of the Lambs","year":"1991","votes":"324,419","rating":"8,7","rank":"24"},{"id":25,"title":"The Usual Suspects","year":"1995","votes":"331,99","rating":"8,7","rank":"25"},{"id":26,"title":"Psycho","year":"1960","votes":"182,319","rating":"8,6","rank":"26"},{"id":27,"title":"Se7en","year":"1995","votes":"380,479","rating":"8,6","rank":"27"},{"id":28,"title":"Forrest Gump","year":"1994","votes":"416,066","rating":"8,6","rank":"28"},{"id":29,"title":"The Lord of the Rings: The Two Towers","year":"2002","votes":"423,855","rating":"8,6","rank":"29"},{"id":30,"title":"It's a Wonderful Life","year":"1946","votes":"126,537","rating":"8,6","rank":"30"},{"id":31,"title":"Memento","year":"2000","votes":"358,354","rating":"8,6","rank":"31"},{"id":32,"title":"Leon: The Professional","year":"1994","votes":"274,245","rating":"8,6","rank":"32"},{"id":33,"title":"Sunset Blvd.","year":"1950","votes":"68,932","rating":"8,6","rank":"33"},{"id":34,"title":"Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb","year":"1964","votes":"185,368","rating":"8,6","rank":"34"},{"id":35,"title":"Apocalypse Now","year":"1979","votes":"214,205","rating":"8,6","rank":"35"},{"id":36,"title":"American History X","year":"1998","votes":"305,747","rating":"8,5","rank":"36"},{"id":37,"title":"North by Northwest","year":"1959","votes":"112,951","rating":"8,5","rank":"37"},{"id":38,"title":"Citizen Kane","year":"1941","votes":"163,906","rating":"8,5","rank":"38"},{"id":39,"title":"Terminator 2: Judgment Day","year":"1991","votes":"309,922","rating":"8,5","rank":"39"},{"id":40,"title":"Toy Story 3","year":"2010","votes":"173,833","rating":"8,5","rank":"40"},{"id":41,"title":"American Beauty","year":"1999","votes":"369,318","rating":"8,5","rank":"41"},{"id":42,"title":"Saving Private Ryan","year":"1998","votes":"349,866","rating":"8,5","rank":"42"},{"id":43,"title":"Taxi Driver","year":"1976","votes":"207,461","rating":"8,5","rank":"43"},{"id":44,"title":"Alien","year":"1979","votes":"227,723","rating":"8,5","rank":"44"},{"id":45,"title":"Spirited Away","year":"2001","votes":"142,366","rating":"8,5","rank":"45"},{"id":46,"title":"City Lights","year":"1931","votes":"38,898","rating":"8,5","rank":"46"},{"id":47,"title":"Vertigo","year":"1958","votes":"113,232","rating":"8,5","rank":"47"},{"id":48,"title":"The Shining","year":"1980","votes":"236,782","rating":"8,5","rank":"48"},{"id":49,"title":"Paths of Glory","year":"1957","votes":"56,418","rating":"8,5","rank":"49"},{"id":50,"title":"Am?lie","year":"2001","votes":"237,208","rating":"8,5","rank":"50"},{"id":51,"title":"The Pianist","year":"2002","votes":"181,523","rating":"8,5","rank":"51"},{"id":52,"title":"M","year":"1931","votes":"49,827","rating":"8,5","rank":"52"},{"id":53,"title":"WALLE","year":"2008","votes":"257,704","rating":"8,5","rank":"53"},{"id":54,"title":"Double Indemnity","year":"1944","votes":"46,968","rating":"8,5","rank":"54"},{"id":55,"title":"The Departed","year":"2006","votes":"347,565","rating":"8,4","rank":"55"},{"id":56,"title":"The Lives of Others","year":"2006","votes":"104,228","rating":"8,4","rank":"56"},{"id":57,"title":"A Clockwork Orange","year":"1971","votes":"244,189","rating":"8,4","rank":"57"},{"id":58,"title":"Lawrence of Arabia","year":"1962","votes":"95,054","rating":"8,4","rank":"58"},{"id":59,"title":"Aliens","year":"1986","votes":"212,588","rating":"8,4","rank":"59"},{"id":60,"title":"To Kill a Mockingbird","year":"1962","votes":"101,352","rating":"8,4","rank":"60"},{"id":61,"title":"Modern Times","year":"1936","votes":"48,296","rating":"8,4","rank":"61"},{"id":62,"title":"Life Is Beautiful","year":"1997","votes":"146,411","rating":"8,4","rank":"62"},{"id":63,"title":"Requiem for a Dream","year":"2000","votes":"243,963","rating":"8,4","rank":"63"},{"id":64,"title":"Eternal Sunshine of the Spotless Mind","year":"2004","votes":"286,331","rating":"8,4","rank":"64"},{"id":65,"title":"Das Boot","year":"1981","votes":"85,191","rating":"8,4","rank":"65"},{"id":66,"title":"Back to the Future","year":"1985","votes":"270,029","rating":"8,4","rank":"66"},{"id":67,"title":"Reservoir Dogs","year":"1992","votes":"271,098","rating":"8,4","rank":"67"},{"id":68,"title":"The Third Man","year":"1949","votes":"60,907","rating":"8,4","rank":"68"},{"id":69,"title":"L.A. Confidential","year":"1997","votes":"203,259","rating":"8,4","rank":"69"},{"id":70,"title":"The Prestige","year":"2006","votes":"291,029","rating":"8,4","rank":"70"},{"id":71,"title":"Chinatown","year":"1974","votes":"98,824","rating":"8,4","rank":"71"},{"id":72,"title":"The Treasure of the Sierra Madre","year":"1948","votes":"40,617","rating":"8,4","rank":"72"},{"id":73,"title":"Cinema Paradiso","year":"1988","votes":"59,743","rating":"8,4","rank":"73"},{"id":74,"title":"The Green Mile","year":"1999","votes":"271,474","rating":"8,4","rank":"74"},{"id":75,"title":"Monty Python and the Holy Grail","year":"1974","votes":"188,389","rating":"8,3","rank":"75"},{"id":76,"title":"Once Upon a Time in America","year":"1984","votes":"94,351","rating":"8,3","rank":"76"},{"id":77,"title":"The Great Dictator","year":"1940","votes":"49,085","rating":"8,3","rank":"77"},{"id":78,"title":"Rashomon","year":"1950","votes":"49,623","rating":"8,3","rank":"78"},{"id":79,"title":"Raging Bull","year":"1980","votes":"112,361","rating":"8,3","rank":"79"},{"id":80,"title":"Gladiator","year":"2000","votes":"372,697","rating":"8,3","rank":"80"},{"id":81,"title":"Some Like It Hot","year":"1959","votes":"83,549","rating":"8,3","rank":"81"},{"id":82,"title":"Amadeus","year":"1984","votes":"122,177","rating":"8,3","rank":"82"},{"id":83,"title":"Full Metal Jacket","year":"1987","votes":"198,428","rating":"8,3","rank":"83"},{"id":84,"title":"Singin' in the Rain","year":"1952","votes":"68,547","rating":"8,3","rank":"84"},{"id":85,"title":"All About Eve","year":"1950","votes":"42,339","rating":"8,3","rank":"85"},{"id":86,"title":"Bicycle Thieves","year":"1948","votes":"37,003","rating":"8,3","rank":"86"},{"id":87,"title":"The Bridge on the River Kwai","year":"1957","votes":"72,819","rating":"8,3","rank":"87"},{"id":88,"title":"Pan's Labyrinth","year":"2006","votes":"205,065","rating":"8,3","rank":"88"},{"id":89,"title":"Braveheart","year":"1995","votes":"309,611","rating":"8,3","rank":"89"},{"id":90,"title":"2001: A Space Odyssey","year":"1968","votes":"196,549","rating":"8,3","rank":"90"},{"id":91,"title":"Metropolis","year":"1927","votes":"51,421","rating":"8,3","rank":"91"},{"id":92,"title":"Oldboy","year":"2003","votes":"133,645","rating":"8,3","rank":"92"},{"id":93,"title":"The Apartment","year":"1960","votes":"47,052","rating":"8,3","rank":"93"},{"id":94,"title":"Unforgiven","year":"1992","votes":"128,601","rating":"8,3","rank":"94"},{"id":95,"title":"Downfall","year":"2004","votes":"110,171","rating":"8,3","rank":"95"},{"id":96,"title":"The Sting","year":"1973","votes":"82,181","rating":"8,3","rank":"96"},{"id":97,"title":"Star Wars: Episode VI - Return of the Jedi","year":"1983","votes":"267,993","rating":"8,3","rank":"97"},{"id":98,"title":"Inglourious Basterds","year":"2009","votes":"277,969","rating":"8,3","rank":"98"},{"id":99,"title":"Princess Mononoke","year":"1997","votes":"86,032","rating":"8,3","rank":"99"},{"id":100,"title":"Indiana Jones and the Last Crusade","year":"1989","votes":"217,054","rating":"8,3","rank":"100"},{"id":101,"title":"Mr. Smith Goes to Washington","year":"1939","votes":"40,325","rating":"8,3","rank":"101"},{"id":102,"title":"The Elephant Man","year":"1980","votes":"75,735","rating":"8,3","rank":"102"},{"id":103,"title":"Up","year":"2009","votes":"190,499","rating":"8,3","rank":"103"}];
-
 	const user = JSON.parse(sessionStorage.getItem("user"));
+    if (!user) {
+        window.location.href = "login";
+    }
+    var panelID="";
+    var building_num = 0;
     const menu_data = [
         {
             id: "dashboard", icon: "mdi mdi-view-dashboard", value: "main", data: [
@@ -349,15 +412,24 @@
         },
         {
             id: "uis", icon: "mdi mdi-puzzle", value: "Management Farm", data: [
+                { id: "register-partner", value: "register partner company"},
                 { id: "register-farm", value: "register farm"},
+                { id: "register-biotype", value: "register biotype"},
                 { id: "register-breed", value: "register breed"},
+                { id: "register-authority", value: "register authority rule"},
                 { id: "register-worker", value: "register worker"},
+                { id: "register-fmn", value: "register fmn code"},
                 { id: "register-nutri", value: "register nutri"},
                 { id: "register-food", value: "register food"},
+                { id: "register-saleitem", value: "register sale item"},
+                { id: "manage-sale", value: "Manage Sale"},
+                { id: "register-expenseitem", value: "register expense item"},
+                { id: "manage-expense", value: "Manage Expense"},
             ]
         },
         {
             id: "manage-breed", icon: "mdi mdi-table", value: "Management Breed", data: [
+                { id: "send-breed", value: "Send Breed"},
                 { id: "manage-feed", value: "manage feed"},
                 { id: "supply-water", value: "Supply water"},
             ]
@@ -375,45 +447,94 @@
 		on: {
 			onAfterSelect: function (id) {
                 $$("multi").setValue(id)
-                sessionStorage.setItem("lastPage", id);
-
-                const farms = JSON.parse(sessionStorage.getItem("farms"));
-
-				$$("multi").setValue(id)
-                sessionStorage.setItem("lastPage", id);
-                
                 switch (id) {
-                    case "register-breed":
-                        if (farms && farms.length > 0) {
-                            const user_group_idx = sessionStorage.getItem("user_group_idx");
-                            if (farms.length > 1) {
-                                var farms_value = [];
-                                farms.forEach(farm => {
-                                    farms_value.push({
-                                        id: farm.id,
-                                        title: farm.farm_name
-                                    })
-                                });
-                                $$("farms").define("data", farms_value);
-                                if (!user_group_idx) {
-                                    farm_select_win.show();
+                    case "dashboard1":
+                        webix.ajax().get(schedulerUrl + "farms/all", {
+                            owner_idx: user.id
+                        }).then(function(data) {
+                            const farms = data.json();
+                            
+                            if (farms && farms.length > 0) {
+                                const user_group_idx = sessionStorage.getItem("user_group_idx");
+                                const breed_code = sessionStorage.getItem("breed_code");
+                                if (farms.length > 1) {
+                                    var farms_value = [];
+                                    farms.forEach(farm => {
+                                        farms_value.push({
+                                            id: farm.id,
+                                            title: farm.farm_name
+                                        })
+                                    });
+                                    $$("farms").define("data", farms_value);
+                                    if (!user_group_idx) {
+                                        farm_select_win.show();
+                                    } else {
+                                        select_breed();
+                                    }
+                                } else {
+                                    sessionStorage.setItem("user_group_idx", farms[0].id);
+                                    select_breed();
                                 }
                             } else {
-                                sessionStorage.setItem("user_group_idx", farms[0].id);
+                                webix.alert({
+                                    title:"Warning!",
+                                    text:"You don't have any farms. please register farm first!",
+                                    type:"alert-warning"
+                                })
+                                .then(function(result){
+                                    $$("menu_list").select("register-farm");
+                                    $$("menu_list").open($$("menu_list").getParentId("register-farm"));
+                                })
                             }
-                        } else {
-                            webix.alert({
-                                title:"Warning!",
-                                text:"You don't have any farms. please register farm first!",
-                                type:"alert-warning"
-                            })
-                            .then(function(result){
-                                $$("menu_list").select("register-farm");
-			                    $$("menu_list").open($$("menu_list").getParentId("register-farm"));
-                            })
-                        }
+                        })
+                        
                         break;
-                
+                    case "register-farm":
+                        const farm = sessionStorage.getItem("user_group_idx");
+                        if (farm) {
+                            webix.ajax().get(schedulerUrl + "farms/select", {
+                                id: farm
+                            }).then(function(data) {
+                                const farm_info = data.json();
+                                $$("farm_code1").setValue(farm_info.farm_code);
+                                $$("farm_code2").setValue(farm_info.vete_code);
+                                $$("business_code").setValue(farm_info.business_code);
+                                $$("farm_name").setValue(farm_info.farm_name);
+                                $$("farm_address").setValue(farm_info.farm_addr1);
+                                $$("farm_address2").setValue(farm_info.farm_addr2);
+                                $$("ownership").setValue(farm_info.owned);
+                                $$("kind_farm").setValue(farm_info.farm_kind);
+                                $$("employee_domestic").setValue(farm_info.employee_domes);
+                                $$("employee_foreigner").setValue(farm_info.employee_forign);
+                                $$("partner").setValue(farm_info.partner_company);
+                                $$("windows").setValue(farm_info.window_type);
+                                $$("carridor").setValue(farm_info.wast_type);
+                                $$("building_num").setValue(farm_info.building_num);
+                                $$("kind_building").setValue(farm_info.building_type);
+                                $$("outer").setValue(farm_info.outer_type);
+                                $$("permission_date").setValue(new Date(farm_info.permission_date));
+                                $$("capacity_breed").setValue(farm_info.capacity_breed);
+                                $$("is_ict").setValue(farm_info.is_ict);
+                                $$("avatar").setValue(farm_info.avatar);
+                                $$("form_photo").setValue(schedulerUrl + "avatars/farm/" + farm_info.avatar);
+                                $$("farm_id").setValue(farm_info.id);
+                            });
+                        }
+
+                    case "register-breed":
+                        refresh_breed_grid();
+                        refresh_biotype_grid();
+                        break;
+                    case "register-partner":
+                        refre
+                        break;
+                    case "register-worker":
+                        refresh_worker_grid();
+                        break;
+                    case "manage-sale":
+                        refresh_sale_grid();
+                        refresh_sale_item_grid();
+                        break;
                     default:
                         break;
                 }
@@ -463,18 +584,299 @@
                     view:"list", template:"#title#", id: "farms", width: 250, height: 200, select: true
                 },
                 {
-                    view: "button", value: "Select", css: "webix_primary",
+                    view: "button", value: "Select",
                     click: function() {
                         var farm = $$("farms").getSelectedId();
                         sessionStorage.setItem("user_group_idx", farm);
                         this.getTopParentView().hide();
-                        refresh_breed_grid();
+
+                        select_breed();
                     }
                 }
             ],
         },
     });
-    
+    const breed_select_win = webix.ui({
+        view:"window",
+        id:"breed_select_win",
+        modal: true,
+        move: true,
+        position: "center",
+        responsive: "a1",
+        elementsConfig: { labelPosition: "left", },
+        head: {
+            view: "toolbar",
+            elements: [
+                {
+                    view: "label",
+                    label: "Select a breed",
+                    align: "center",
+                },
+                { 
+                    view: "icon",
+                    icon: "wxi-close",
+                    hotkey: "esc",
+                    width: 40,
+                    click: function () {
+                        $$("breed_select_win").hide();
+                    },
+                },
+            ],
+        },
+        body:{
+            view: "form",
+            id: "breed_select_form",
+            elementsConfig: {
+                bottomPadding: 18,
+                labelWidth: 100,
+            },
+            css: {
+                margin: "auto!important",
+            },
+            elements: [
+                { 
+                    view:"list", template:"#title#", id: "breeds", width: 250, height: 200, select: true
+                },
+                {
+                    view: "button", value: "Select",
+                    click: function() {
+                        var breed = $$("breeds").getSelectedId();
+
+                        sessionStorage.setItem("breed_code", breed);
+                        
+                        this.getTopParentView().hide();
+                    }
+                }
+            ],
+        },
+    });
+    // ----------- Register partner company Page Start ----------------
+    const register_partner_label = {
+        view: "label",
+        template: "Register Partner Company",
+        css: {
+            "font-size": "24px"
+        }
+    };
+    const register_partner_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register partner"
+            },
+            {},
+            { 
+                align:"right",
+                body:{ 
+                    view: "search", placeholder: "search", id: "partner_search", name: "search", icon: "wxi-search" , gravity: 0.1 , width: 200,
+                    on:{
+                        onChange: function(newValue, oldValue, config){
+                            refresh_partner_grid(newValue);
+                        }
+                    }
+                }
+            },
+        ]
+    };
+    const register_partner_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "category", gravity: 0.1 },
+            { view: "label", label: "name", gravity: 0.1 },
+            { view: "label", label: "business code", gravity: 0.1 },
+            { view: "label", label: "description", gravity: 0.1 },
+            { gravity: 0.1}
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    };
+    const register_partner_form = {
+        view: "form",
+        id: "register_partner_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", hidden: true, id: "partner_id", name: "id" },
+            { view: "datepicker", placeholder: "date", id: "date8", name: "date" , gravity: 0.1 },
+            { view: "richselect", placeholder: "Company Category", id: "partner_category", name: "partner_category", gravity: 0.1, options: [
+                { id: 1, value: "Meat Dealer" }, 
+                { id: 2, value: "Egg Dealer" },
+                { id: 3, value: "Administration" },
+                { id: 4, value: "Poultry Farm" },
+                { id: 5, value: "Veterinary" },
+                { id: 6, value: "Hatchery" },
+                { id: 7, value: "Suppler" },
+            ]},
+            { view: "text", placeholder: "company name", id: "partner_name", name: "partner_name" , gravity: 0.1 },
+            { view: "text", placeholder: "business code", id: "partner_businesscode", name: "partner_businesscode" , pattern: { mask: "###-##-#####", allow: /[0-9]/g }, gravity: 0.1 },
+            { view: "text", placeholder: "company description", id: "partner_description", name: "partner_description", gravity: 0.1 },
+            {
+                view: "button", value: "Register", gravity: 0.1, id: "register_partnercode_button",
+                click: function() {
+                    if ($$("register_partner_form").validate()) {
+                        const val = $$("register_partner_form").getValues();
+                        const user_idx = user.id;
+                        const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                        
+                        webix.ajax().post(schedulerUrl + "partners/register", {
+                            user_idx: user_idx,
+                            date: val.date,
+                            id: val.id,
+                            partner_category: val.partner_category,
+                            partner_name: val.partner_name,
+                            partner_businesscode: val.partner_businesscode,
+                            partner_description: val.partner_description
+                        }).then(function(data) {
+                            const response = JSON.parse(data.text());
+                            if (response != "") {
+                                if (val.id == "" ) {
+                                    webix.alert({ title: "Register partner", type: "alert-success", text: "Register a partner successfully!" }).then(function (result){
+                                        refresh_partner_grid("");
+                                        $$("register_partner_form").clear();
+                                        
+                                        webix.ajax().get(schedulerUrl + "partners/options?user_idx=" + user.id, function(text, data){
+                                            var options = data.json();
+                                        
+                                            var list = $$("partner").getPopup().getList();
+                                            list.clearAll();
+                                            list.parse(options);
+
+                                        });
+                                    })
+                                } else {
+                                    webix.alert({ title: "Update partner", type: "alert-success", text: "Update a partner successfully!" })
+                                    $$("register_partner_form").clear();
+                                    $$("register_partnercode_button").setValue("Register");
+
+                                    refresh_partner_grid("");
+                                    webix.ajax().get(schedulerUrl + "partners/options?user_idx=" + user.id, function(text, data){
+                                        var options = data.json();
+                                    
+                                        var list = $$("partner").getPopup().getList();
+                                        list.clearAll();
+                                        list.parse(options);
+
+                                    });
+                                }
+                            } else {
+                                webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                            }
+                        })
+                    }
+                }
+            }
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        }
+    };
+    const register_partner_list_label = {
+        view: "label",
+        label: "List of partner"
+    };
+    const register_partner_datatable = {
+        view:"datatable",
+        id: "partner_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"date", header:"Date", fillspace:true },
+            { id:"partner_category", header:"Company type", fillspace:true, template: function(obj) {
+                var result = "";
+                switch (obj.partner_category) {
+                    case "1":
+                        result = "Meat Dealer"
+                        break;
+                    case "2":
+                        result = "Egg Dealer"
+                        break;
+                    case "3":
+                        result = "Administration"
+                        break;
+                    case "4":
+                        result = "Poultry Farm"
+                        break;
+                    case "5":
+                        result = "Veterinary"
+                        break;
+                    case "6":
+                        result = "Hatchery"
+                        break;
+                    case "7":
+                        result = "Suppler"
+                        break;
+
+                    default:
+                        result = "Meat Dealer"
+                        break;
+                }
+
+                return result;
+            }},
+            { id:"partner_name", header:"Company Name", fillspace:true },
+            { id:"partner_businesscode", header:"Business code", fillspace:true },
+            { id:"partner_description",	header:"Company description", fillspace:true },
+        ],
+        url:function(params){
+            const user_id = user.id;
+            const user_group_idx = sessionStorage.getItem("user_group_idx");
+            var data = webix.ajax().sync().get(schedulerUrl + "partners/all", {
+                user_idx: user_id,
+            }).responseText;
+            this.parse(data);
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "partners/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_partner_grid("");
+                        webix.ajax().get(schedulerUrl + "partners/options?user_idx=" + user.id, function(text, data){
+                            var options = data.json();
+                        
+                            var list = $$("partner").getPopup().getList();
+                            list.clearAll();
+                            list.parse(options);
+                        });
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "partners/select", {id: id.row}).then(function(result) {
+                    const partner = result.json();
+                    $$("date8").setValue(new Date(partner.date));
+                    $$("partner_id").setValue(partner.id);
+                    $$("partner_category").setValue(partner.partner_category);
+                    $$("partner_name").setValue(partner.partner_name);
+                    $$("partner_businesscode").setValue(partner.partner_businesscode);
+                    $$("partner_description").setValue(partner.partner_description);
+                    $$("register_partnercode_button").setValue("Update");
+                })
+            }
+        }
+    };
+    const register_partner_page = {
+        view: "form",
+        id: "register-partner",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_partner_label,
+                    register_partner_header,
+                    register_partner_label_list,
+                    register_partner_form,
+                    register_partner_list_label,
+                    register_partner_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Register partner company Page End ----------------
     // ----------- Register Farm page Start ----------------
     const neccessary_label = {
         view: "label",
@@ -496,6 +898,7 @@
                 $$("avatar").send(function() {
                     const val = form.getValues();
                     webix.ajax().post(schedulerUrl + 'farms/register', {
+                        id: val.id,
                         farm_code: val.farm_code1,
                         vete_code: val.farm_code2,
                         business_code: val.business_code,
@@ -520,23 +923,21 @@
                         avatar: val.avatar
                     }).then(function (data) {
                         if (data.text() != "") {
-                            webix.alert({ title: "Register Farm", type: "alert-success", text: "Register a farm successfully!" }).then(function() {
-                                webix.confirm("Do you want to add more farms?", "confirm-warning")
-                                .then(function(result){
-                                    window.location.href = "register-farm";
-                                })
-                                .fail(function(){
-                                    sessionStorage.setItem("user_group_idx", data.text());
-
-                                    webix.ajax().get(schedulerUrl + "farms/breeds", { uID: user.id, fID: data.text() }).then(function(data){
-                                        if (parseInt(data.text()) > 0) {
-                                            sessionStorage.setItem("breedID", data.text())
-                                        } else {
-                                            window.location.href = "register-breed"
-                                        }
+                            if (val.id == "") {
+                                webix.alert({ title: "Register Farm", type: "alert-success", text: "Register a farm successfully!" }).then(function() {
+                                    webix.confirm("Do you want to add more farms?", "confirm-warning")
+                                    .then(function(result){
+                                        $$("register-farm").clear();
+                                        $$("farm_id").setValue("");
                                     })
-                                });
-                            })
+                                    .fail(function(){
+                                        $$("menu_list").select("dashboard1");
+                                        $$("menu_list").open($$("menu_list").getParentId("dashboard1"));
+                                    });
+                                })
+                            } else {
+                                webix.alert({ title: "Update Farm", type: "alert-success", text: "Update a farm successfully!" });
+                            }
                         }
                         else {
                             webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning" })
@@ -731,50 +1132,37 @@
         cols: [
             { view: "label", label: "Employees" },
             {
-                view: "select",
+                view: "richselect",
                 name: "employee_domestic",
+                id: "employee_domestic",
                 value: 1, options: [
                     { "id": 1, "value": "domestic" },
                     { "id": 2, "value": "5" },
                     { "id": 3, "value": "10" },
                     { "id": 4, "value": "20" },
                 ],
-                inputAlign: "right"
             },
             {
-                view: "select",
+                view: "richselect",
                 name: "employee_foreigner",
+                id: "employee_foreigner",
                 value: 1, options: [
                     { "id": 1, "value": "foreigner" },
                     { "id": 2, "value": "5" },
                     { "id": 3, "value": "10" },
                     { "id": 4, "value": "20" },
                 ],
-                inputAlign: "right"
             },
         ]
     }
     const partner_input = {
-        view: "text",
-        type: "text",
-        name: "partner",
+        view: "richselect",
         label: "Partner",
+        name: "partner",
         id: "partner",
-        placeholder: "Enter partner",
+        placeholder: "Partner",
         required: true,
-        validate: webix.rules.isNotEmpty,
-        invalidMessage: "Please enter your partner!",
-        on: {
-            "onBlur": function () {
-                var result = this.validate()
-            },
-            "onKeyPress": function (key, e) {
-                if (key == 13) {
-                    $$("business_code").focus();
-                }
-
-            }
-        },
+        options: schedulerUrl + "partners/options?user_idx=" + user.id,
     };
     const windows = {
         view: "radio",
@@ -925,7 +1313,7 @@
     const outer = {
         view: "radio",
         name: "outer",
-        id: "ourter",
+        id: "outer",
         label: "Outer (Roof)",
         value: 1, options: [
             { "id": 1, "value": "yes" },
@@ -936,6 +1324,7 @@
     const permission_date = {
         view:"datepicker", 
         name: "permission_date",
+        id: "permission_date",
         value: new Date(2012, 6, 8), 
         label: "Permission Date", 
         timepicker: false,
@@ -1042,11 +1431,93 @@
             padding: 10
         },
         elements: [
-
+            {
+                view: "text",
+                id: "farm_id",
+                name: "id",
+                hidden: true
+            },
+            {
+                align: "right",
+                body: {
+                    cols: [
+                        { 
+                            type: "section",
+                            borderless: true,
+                            cols:[
+                                { 
+                                    view:"icon", icon:"mdi mdi-plus",
+                                    click: function() {
+                                        $$("register-farm").clear();
+                                        $$("farm_id").setValue("");
+                                        $$("form_photo").setValue("/html/assets/img/avatar.png");
+                                    }
+                                },
+                                { 
+                                    view:"icon", icon:"mdi mdi-pencil",
+                                    click: function() {
+                                        const farm = sessionStorage.getItem("user_group_idx");
+                                        if (farm) {
+                                            webix.ajax().get(schedulerUrl + "farms/select", {
+                                                id: farm
+                                            }).then(function(data) {
+                                                const farm_info = data.json();
+                                                $$("farm_code1").setValue(farm_info.farm_code);
+                                                $$("farm_code2").setValue(farm_info.vete_code);
+                                                $$("business_code").setValue(farm_info.business_code);
+                                                $$("farm_name").setValue(farm_info.farm_name);
+                                                $$("farm_address").setValue(farm_info.farm_addr1);
+                                                $$("farm_address2").setValue(farm_info.farm_addr2);
+                                                $$("ownership").setValue(farm_info.owned);
+                                                $$("kind_farm").setValue(farm_info.farm_kind);
+                                                $$("employee_domestic").setValue(farm_info.employee_domes);
+                                                $$("employee_foreigner").setValue(farm_info.employee_forign);
+                                                $$("partner").setValue(farm_info.partner_company);
+                                                $$("windows").setValue(farm_info.window_type);
+                                                $$("carridor").setValue(farm_info.wast_type);
+                                                $$("building_num").setValue(farm_info.building_num);
+                                                $$("kind_building").setValue(farm_info.building_type);
+                                                $$("outer").setValue(farm_info.outer_type);
+                                                $$("permission_date").setValue(new Date(farm_info.permission_date));
+                                                $$("capacity_breed").setValue(farm_info.capacity_breed);
+                                                $$("is_ict").setValue(farm_info.is_ict);
+                                                $$("avatar").setValue(farm_info.avatar);
+                                                $$("form_photo").setValue(schedulerUrl + "avatars/farm/" + farm_info.avatar);
+                                                $$("farm_id").setValue(farm_info.id);
+                                            });
+                                        }
+                                        else {
+                                            $$("menu_list").select("dashboard1");
+                                            $$("menu_list").open($$("menu_list").getParentId("dashboard1"));
+                                        }
+                                    }
+                                },
+                                { 
+                                    view:"icon", icon:"mdi mdi-delete",
+                                    click: function() {
+                                        webix.confirm("Do you want to delete current farm?", "confirm-warning")
+                                        .then(function(result){
+                                            const farm = sessionStorage.getItem("user_group_idx");
+                                            webix.ajax().del(schedulerUrl + "farms/remove?id=" + farm).then(function(result) {
+                                                if (result.text() != "") {
+                                                    sessionStorage.clear();
+                                                    window.location.href = "login";
+                                                }
+                                            })
+                                        })
+                                    }
+                                }
+                            ],
+                            gravity: 0.2
+                        }
+                    ]
+                }
+                
+            },
             {
                 cols: [
                     neccessary_label,
-                    save_farm_button
+                    save_farm_button,
                 ]
             },
             {
@@ -1091,6 +1562,218 @@
         ]
     };
     // ----------- Register Farm page End ----------------
+    // ----------- Register biotype page Start ----------------
+    const register_biotype_label = {
+        view: "label",
+        template: "Register Bio Type Bio - Code",
+        css: {
+            "font-size": "24px"
+        }
+    };
+    const register_biotype_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register biotype"
+            },
+            {},
+            { 
+                align:"right",
+                body:{ 
+                    view: "search", placeholder: "search", id: "biotype_search", name: "search", icon: "wxi-search" , gravity: 0.1 , width: 200,
+                    on:{
+                        onChange: function(newValue, oldValue, config){
+                            refresh_biotype_grid(newValue);
+                        }
+                    }
+                }
+            },
+        ]
+    };
+    const register_biotype_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "category", gravity: 0.1 },
+            { view: "label", label: "biotype code", gravity: 0.1 },
+            { view: "label", label: "description", gravity: 0.1 },
+            { gravity: 0.1}
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    };
+    const register_biotype_form = {
+        view: "form",
+        id: "register_biotype_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", hidden: true, id: "biotype_id", name: "id" },
+            { view: "datepicker", placeholder: "date", id: "date9", name: "date" , gravity: 0.1 },
+            { view: "richselect", placeholder: "Bio Category", id: "category", name: "category", gravity: 0.1, options: [
+                { id: 1, value: "Chicken for meat" }, 
+                { id: 2, value: "Chicken for Egg" },
+                { id: 3, value: "Chicken for BirthEgg" },
+            ]},
+            { view: "text", placeholder: "biotype code name", id: "name1", name: "name" , gravity: 0.1 },
+            { view: "text", placeholder: "biotype code description", id: "description1", name: "description", gravity: 0.1 },
+            {
+                view: "button", value: "Register", id: "register_biotype_button", gravity: 0.1,
+                click: function() {
+                    if ($$("register_biotype_form").validate()) {
+                        const val = $$("register_biotype_form").getValues();
+                        const user_idx = user.id;
+                        const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                        
+                        webix.ajax().post(schedulerUrl + "biotypes/register", {
+                            id: val.id,
+                            user_idx: user_idx,
+                            farm_idx: user_group_idx,
+                            date: val.date,
+                            category: val.category,
+                            name: val.name,
+                            description: val.description
+                        }).then(function(data) {
+                            const response = data.text();
+                            if (response != "") {
+                                if (val.id == "" ) {
+                                    webix.alert({ title: "Register biotype", type: "alert-success", text: "Register a biotype successfully!" }).then(function (result){
+                                        refresh_biotype_grid("");
+                                        $$("register_biotype_form").clear();
+                                        
+                                        webix.ajax().get(schedulerUrl + "biotypes/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                                            var options = data.json();
+                                        
+                                            var list = $$("biotype").getPopup().getList();
+                                            list.clearAll();
+                                            list.parse(options);
+
+                                        });
+                                    })
+                                } else {
+                                    webix.alert({ title: "Update biotype", type: "alert-success", text: "Update a biotype successfully!" })
+                                    $$("register_biotype_form").clear();
+                                    $$("register_biotype_button").setValue("Register");
+
+                                    refresh_biotype_grid("");
+                                    webix.ajax().get(schedulerUrl + "biotypes/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                                        var options = data.json();
+                                    
+                                        var list = $$("biotype").getPopup().getList();
+                                        list.clearAll();
+                                        list.parse(options);
+
+                                    });
+                                }
+                            } else {
+                                webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                            }
+                        })
+                    }
+                }
+            }
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        }
+    };
+    const register_biotype_list_label = {
+        view: "label",
+        label: "List of biotype"
+    };
+    const register_biotype_datatable = {
+        view:"datatable",
+        id: "biotype_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"date", header:"Date", fillspace:true },
+            { id:"category", header:"Bio Type", fillspace:true, template: function(obj) {
+                var result = "";
+                switch (obj.partner_category) {
+                    case "1":
+                        result = "Chicken for meat"
+                        break;
+                    case "2":
+                        result = "Chicken for Egg"
+                        break;
+                    case "3":
+                        result = "Chicken for BirthEgg"
+                        break;
+
+                    default:
+                        result = "Chicken for meat"
+                        break;
+                }
+
+                return result;
+            }},
+            { id:"name", header:"Bio Type Name", fillspace:true },
+            { id:"description", header:"Bio Type Description", fillspace:true },
+        ],
+        url:function(params){
+            const user_id = user.id;
+            const user_group_idx = sessionStorage.getItem("user_group_idx");
+            var data = webix.ajax().sync().get(schedulerUrl + "biotypes/all", {
+                user_idx: user_id,
+                farm_idx: user_group_idx,
+            }).responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "biotypes/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_biotype_grid("");
+                        
+                        const user_group_idx = sessionStorage.getItem("user_group_idx");
+                        webix.ajax().get(schedulerUrl + "biotypes/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                            var options = data.json();
+                        
+                            var list = $$("biotype").getPopup().getList();
+                            list.clearAll();
+                            list.parse(options);
+                        });
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "biotypes/select", {id: id.row}).then(function(result) {
+                    const biotype = result.json();
+                    $$("date9").setValue(new Date(biotype.date));
+                    $$("category").setValue(biotype.category);
+                    $$("name1").setValue(biotype.name);
+                    $$("description1").setValue(biotype.description);
+                    $$("biotype_id").setValue(biotype.id);
+                    $$("register_biotype_button").setValue("Update");
+                })
+            }
+        }
+    };
+    const register_biotype_page = {
+        view: "form",
+        id: "register-biotype",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_biotype_label,
+                    register_biotype_header,
+                    register_biotype_label_list,
+                    register_biotype_form,
+                    register_biotype_list_label,
+                    register_biotype_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Register biotype page End ----------------
     // ----------- Register Breed page Start ----------------
     const breed_details = webix.ui({
         view:"window",
@@ -1102,8 +1785,8 @@
         scroll: true,
         borderless	: 	true,
         autowidth: true,
-        width: 1500,
-        height: 800,
+        width: 1200,
+        height: 600,
         elementsConfig: { labelPosition: "left", },
         head: {
             view: "toolbar",
@@ -1136,28 +1819,28 @@
                 margin: "auto!important",
             },
             elements: [
-                {view: "label", label: "farm information"},
-                {
-                    cols: [
-                        {
-                            rows: [
-                                {view: "text", label: "Farm Name", id: "breed_farm_name", name: "breed_farm_name", readonly:true},
-                                {view: "text", label: "Province", id: "breed_province", name: "breed_province", readonly:true},
-                                {view: "text", label: "Mobile", id: "mobile", name: "mobile", readonly:true},
-                                {view: "text", label: "User ID", id: "user_id", name: "user_id", readonly:true},
-                                {view: "text", label: "Office", id: "office", name: "office", readonly:true},
-                            ]
-                        },
-                        {
-                            rows: [
-                                {view: "text", label: "Owner Name", id: "owner_name", name: "owner_name", readonly:true},
-                                {view: "text", label: "Onwer Addr", id: "owner_addr", name: "owner_addr", readonly:true},
-                                {view: "text", label: "Number Of Building", id: "building_num1", name: "building_num", readonly:true},
-                                {view: "text", label: "Password", id: "password", name: "password", readonly:true},
-                            ]
-                        }
-                    ]
-                },
+                // {view: "label", label: "farm information"},
+                // {
+                //     cols: [
+                //         {
+                //             rows: [
+                //                 {view: "text", label: "Farm Name", id: "breed_farm_name", name: "breed_farm_name", readonly:true},
+                //                 {view: "text", label: "Province", id: "breed_province", name: "breed_province", readonly:true},
+                //                 {view: "text", label: "Mobile", id: "mobile", name: "mobile", readonly:true},
+                //                 {view: "text", label: "User ID", id: "user_id", name: "user_id", readonly:true},
+                //                 {view: "text", label: "Office", id: "office", name: "office", readonly:true},
+                //             ]
+                //         },
+                //         {
+                //             rows: [
+                //                 {view: "text", label: "Owner Name", id: "owner_name", name: "owner_name", readonly:true},
+                //                 {view: "text", label: "Onwer Addr", id: "owner_addr", name: "owner_addr", readonly:true},
+                //                 {view: "text", label: "Number Of Building", id: "building_num1", name: "building_num", readonly:true},
+                //                 {view: "text", label: "Password", id: "password", name: "password", readonly:true},
+                //             ]
+                //         }
+                //     ]
+                // },
                 {view: "label", label: "breed information"},
                 {
                     cols: [
@@ -1234,14 +1917,14 @@
             }
         },
     });
-    const breed_label = {
+    const register_breed_label = {
         view: "label",
         template: "Breed Information",
         css: {
             "font-size": "24px"
         }
     };
-    const breed_register_header = {
+    const register_breed_header = {
         cols : [
             {
                 view: "label",
@@ -1252,18 +1935,21 @@
                 type: "section",
                 borderless: true,
                 cols:[
-                    {}, { view:"icon", icon:"mdi mdi-printer"},{ view:"icon", icon:"mdi mdi-folder-upload"},{ view:"icon", icon:"mdi mdi-folder-download"}
+                    {}, { view:"icon", icon:"mdi mdi-printer"},
+                    { view:"icon", icon:"mdi mdi-folder-upload"},
+                    { view:"icon", icon:"mdi mdi-folder-download"}
                 ]
             },
         ]
     };
-    const breed_label_list = {
+    const register_breed_label_list = {
         type: "section",
         cols: [
             { view: "label", label: "biotype", gravity: 0.1 },
             { view: "label", label: "breedtype", gravity: 0.1 },
             { view: "label", label: "partner", gravity: 0.1 },
             { view: "label", label: "start_date", gravity: 0.1 },
+            // { view: "label", label: "end_date", gravity: 0.1 },
             { view: "label", label: "biocode", gravity: 0.1 },
             { view: "label", label: "female_head", gravity: 0.1 },
             { view: "label", label: "male_head", gravity: 0.1 },
@@ -1275,16 +1961,25 @@
             "text-align": "center"
         }
     };
-    const breed_register_form = {
+    const register_breed_form = {
         view: "form",
         id: "breed_register_form",
         margin: 10,
         borderless: true,
         cols: [
-            { view: "richselect", placeholder: "biotype", id: "biotype", name: "biotype", gravity: 0.1, options: ["egg", "meet"]},
+            {
+                view: "richselect",
+                name: "biotype",
+                id: "biotype",
+                placeholder: "biotype",
+                required: true,
+                gravity: 0.1,
+                options: schedulerUrl + "biotypes/options?user_idx=" + user.id + "&farm_idx=" + sessionStorage.getItem("user_group_idx"),
+            },
             { view: "richselect", placeholder: "breedtype", id: "breedtype", name: "breedtype", gravity: 0.1, options: ["order", "own"]},
             { view: "text", placeholder: "partner", id: "partner1", name: "partner", gravity: 0.1 },
             { view: "datepicker", placeholder: "start_date", id: "start_date", name: "start_date", gravity: 0.1 },
+            // { view: "datepicker", placeholder: "end_date", id: "end_date1", name: "end_date", gravity: 0.1 },
             { view: "richselect", placeholder: "biocode", id: "biocode", name: "biocode", gravity: 0.1, options: ["AA", "BB", "AB"]},
             { view: "text", placeholder: "female_head", id: "female_head", name: "female_head", gravity: 0.1, attributes:{type:"number"} },
             { view: "text", placeholder: "male_head", id: "male_head", name: "male_head", gravity: 0.1, attributes:{type:"number"} },
@@ -1292,7 +1987,7 @@
             { 
                 rows: [
                     {
-                        view: "button", value: "register", css: "webix-primary",
+                        view: "button", value: "register",
                         click: function(){
                             if ($$("breed_register_form").validate()) {
                                 const val = $$("breed_register_form").getValues();
@@ -1302,7 +1997,8 @@
                                     biotype: val.biotype,
                                     breedtype: val.breedtype,
                                     partner: val.partner,
-                                    date: val.start_date,
+                                    start_date: val.start_date,
+                                    end_date: val.start_date,
                                     biocode: val.biocode,
                                     female_head: val.female_head,
                                     male_head: val.male_head,
@@ -1335,11 +2031,11 @@
             $all:webix.rules.isNotEmpty,
         }
     };
-    const breed_list_label = {
+    const register_breed_list_label = {
         view: "label",
         label: "List of breed"
     };
-    const breed_datatable = {
+    const register_breed_datatable = {
         view:"datatable",
         id: "grid",
         autoConfig:true,
@@ -1349,21 +2045,21 @@
             { id:"biotype",	header:"Bio Type", fillspace:true  },
             { id:"breedtype",	header:"Breed Type", fillspace:true  },
             { id:"partner",	header:"Partner", fillspace:true  },
-            { id:"date",	header:"Date", fillspace:true  },
+            { id:"start_date",	header:"Start Date", fillspace:true  },
+            { id:"end_date",	header:"End Date", fillspace:true  },
             { id:"biocode",	header:"Bio Code", fillspace:true  },
             { id:"female_head",	header:"Female Head", fillspace:true  },
             { id:"male_head",	header:"Male Head", fillspace:true  },
             { id:"start_weekage",	header:"Start Weekage", fillspace:true  },
         ],
         url:function(params){
-            var user_id = sessionStorage.getItem("user_id");
+            var user_id = user.id;
             var user_group_idx = sessionStorage.getItem("user_group_idx");
             var data = webix.ajax().sync().get(schedulerUrl + "breeds/all", {
-                uID: user.id,
+                uID: user_id,
                 fID: user_group_idx
             }).responseText;
-            if (data != "0") {
-                sessionStorage.setItem("breed_code", JSON.parse(data)[0].uuid);
+            if (data != "") {
                 this.parse(data);
             }
         },
@@ -1392,17 +2088,175 @@
                 type: "section",
                 borderless: false,
                 rows: [
-                    breed_label,
-                    breed_register_header,
-                    breed_label_list,
-                    breed_register_form,
-                    breed_list_label,
-                    breed_datatable,
+                    register_breed_label,
+                    register_breed_header,
+                    register_breed_label_list,
+                    register_breed_form,
+                    register_breed_list_label,
+                    register_breed_datatable,
                 ]
             }
         ],
     };
     // ----------- Register Breed page End ----------------
+    // ----------- Register authority rule page Start ----------------
+    const register_authority_label = {
+        view: "label",
+        template: "Register Authority Rules",
+        css: {
+            "font-size": "24px"
+        }
+    };
+    const register_authority_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register authority"
+            },
+            {},
+            { 
+                align:"right",
+                body:{ 
+                    view: "search", placeholder: "search", id: "rule_search", name: "search", icon: "wxi-search" , gravity: 0.1 , width: 200,
+                    on:{
+                        onChange: function(newValue, oldValue, config){
+                            refresh_auth_rule_grid(newValue);
+                        }
+                    }
+                }
+            },
+        ]
+    };
+    const register_authority_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "name", gravity: 0.1 },
+            { view: "label", label: "value", gravity: 0.1 },
+            { view: "label", label: "description", gravity: 0.1 },
+            { gravity: 0.1}
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    };
+    const register_authority_form = {
+        view: "form",
+        id: "register_authority_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", hidden: true, id: "rule_id", name: "id" },
+            { view: "text", placeholder: "rule name", id: "rule_name", name: "name" , gravity: 0.1 },
+            { view: "text", placeholder: "rule value", id: "rule_value", name: "value" , gravity: 0.1 },
+            { view: "text", placeholder: "rule description", id: "rule_description", name: "description" , gravity: 0.1 },
+            {
+                view: "button", value: "Register", id: "register_rule_button", gravity: 0.1,
+                click: function() {
+                    if ($$("register_authority_form").validate()) {
+                        const val = $$("register_authority_form").getValues();
+                        
+                        webix.ajax().post(schedulerUrl + "auth_rules/register", {
+                            id: val.id,
+                            name: val.name,
+                            value: val.value,
+                            description: val.description
+                        }).then(function(data) {
+                            const response = data.text();
+                            if (response != "") {
+                                if (val.id == "" ) {
+                                    webix.alert({ title: "Register auth_rule", type: "alert-success", text: "Register a auth_rule successfully!" }).then(function (result){
+                                        refresh_auth_rule_grid("");
+                                        $$("register_authority_form").clear();
+                                    })
+                                } else {
+                                    webix.alert({ title: "Update auth_rule", type: "alert-success", text: "Update a auth_rule successfully!" })
+                                    $$("register_authority_form").clear();
+                                    $$("register_rule_button").setValue("Register");
+
+                                    refresh_auth_rule_grid("");
+
+                                    webix.ajax().get(schedulerUrl + "biotypes/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                                        var options = data.json();
+                                    
+                                        var list = $$("biotype").getPopup().getList();
+                                        list.clearAll();
+                                        list.parse(options);
+
+                                    });
+                                }
+                            } else {
+                                webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                            }
+                        })
+                    }
+                }
+            }
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        }
+    };
+    const register_authority_list_label = {
+        view: "label",
+        label: "List of authority"
+    };
+    const register_authority_datatable = {
+        view:"datatable",
+        id: "auth_rule_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"name", header:"Rule Name", fillspace:true },
+            { id:"value", header:"Rule Value", fillspace:true },
+            { id:"description", header:"Rule Description", fillspace:true },
+        ],
+        url:function(params){
+            var data = webix.ajax().sync().get(schedulerUrl + "auth_rules/all").responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "auth_rules/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_auth_rule_grid("");
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "auth_rules/select", {id: id.row}).then(function(result) {
+                    const rule = result.json();
+                    $$("rule_name").setValue(rule.name);
+                    $$("rule_value").setValue(rule.value);
+                    $$("rule_description").setValue(rule.description);
+                    $$("rule_id").setValue(rule.id);
+                    $$("register_rule_button").setValue("Update");
+                })
+            }
+        }
+    };
+    const register_authority_page = {
+        view: "form",
+        id: "register-authority",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_authority_label,
+                    register_authority_header,
+                    register_authority_label_list,
+                    register_authority_form,
+                    register_authority_list_label,
+                    register_authority_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Register authority rule page End ----------------
     // ----------- Register Worker page Start ----------------
     const register_worker_label = {
         view: "label",
@@ -1429,7 +2283,7 @@
             { view: "label", label: "user id", gravity: 0.1 },
             { view: "label", label: "user pass", gravity: 0.1 },
             { view: "label", label: "mobile", gravity: 0.1 },
-            { view: "label", label: "rule_idx", gravity: 0.4 },
+            { view: "label", label: "rule_idx", gravity: 0.1 },
             { gravity: 0.1 },
         ],
         css: {
@@ -1443,9 +2297,10 @@
         margin: 10,
         borderless: true,
         cols: [
-            { rows: [{ view: "text", placeholder: "user name", id: "user_name1", name: "user_name" }, {}], gravity: 0.1},
-            { rows: [{ view: "text", placeholder: "job name", id: "job_name", name: "job_name" }, {}], gravity: 0.1 },
-            { rows: [{ 
+            { view: "text", hidden: true, id: "worker_id", name: "id" },
+            { view: "text", placeholder: "user name", id: "user_name1", name: "user_name", gravity: 0.1},
+            { view: "text", placeholder: "job name", id: "job_name", name: "job_name", gravity: 0.1 },
+            { 
                 cols: [
                     {
                         view: "text", placeholder: "user id", id: "user_id1", name: "user_id" , gravity: 0.8, readonly: true,
@@ -1461,91 +2316,59 @@
                             })
                         }
                     }
-                ]
-                
-            }, {}], gravity: 0.1 },
-            { rows: [{ view: "text", placeholder: "user pass", id: "user_pass1", name: "user_pass" }, {}], gravity: 0.1 },
-            { rows: [{ view: "text", placeholder: "mobile", id: "mobile1", name: "mobile", pattern: { mask: "###-####-####", allow: /[0-9]/g }}, {}], gravity: 0.1 },
+                ], 
+                gravity: 0.1 
+            },
+            { view: "text", placeholder: "user pass", id: "user_pass1", name: "user_pass", gravity: 0.1 },
+            { view: "text", placeholder: "mobile", id: "mobile1", name: "mobile", pattern: { mask: "###-####-####", allow: /[0-9]/g }, gravity: 0.1 },
             {
-                type: "section",
-                scroll: "y",
-                rows: [
-                    {
-                        view:"flexlayout",
-                        cols: [
-                            { 
-                                view: "checkbox", id: "all_check", name: "all_check", labelRight: "all", labelWidth: 0, minWidth: 60 , value: 0,
-                                on: {
-                                    onChange: function(newValue, oldValue, config) {
-                                        for (let index = 1; index < 13; index++) {
-                                            if (newValue == 1) {
-                                                $$("check"+index).disable();
-                                                $$("check"+index).setValue(oldValue);
-                                            }
-                                            else 
-                                                $$("check"+index).enable();
-                                        }
-                                    }
-                                }
-                            },
-                            { view: "checkbox", id: "check1", name: "check1", labelRight: "bd1", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check2", name: "check2", labelRight: "bd2", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check3", name: "check3", labelRight: "bd3", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check4", name: "check4", labelRight: "bd4", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check5", name: "check5", labelRight: "bd5", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check6", name: "check6", labelRight: "bd6", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check7", name: "check7", labelRight: "bd7", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check8", name: "check8", labelRight: "bd8", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check9", name: "check9", labelRight: "bd9", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check10", name: "check10", labelRight: "bd10", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check11", name: "check11", labelRight: "bd11", labelWidth: 0, minWidth: 60, value: 0 },
-                            { view: "checkbox", id: "check12", name: "check12", labelRight: "bd12", labelWidth: 0, minWidth: 60, value: 0 },
-                        ],
-                        
-                        autoHeight: true,
-                    },
-                ],
-                gravity: 0.4,
+                view: "multiselect",
+                name: "rule_idx",
+                id: "rule_idx",
+                placeholder: "Rule idx",
+                required: true,
+                options: schedulerUrl + "auth_rules/options?farm_idx=" + sessionStorage.getItem("user_group_idx"),
+                gravity: 0.1,
             },
             { 
-                rows: [
-                    {
-                        view: "button", value: "register", css: "webix-primary",
-                        click: function(){
-                            if ($$("register_worker_form").validate()) {
-                                const val = $$("register_worker_form").getValues();
-                                const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
-                                var check_values = [];
-                                for (let index = 1; index < 13; index++) {
-                                    check_values.push(val["check" + index]);
+                view: "button", value: "register", id: "register_worker_button",
+                click: function(){
+                    if ($$("register_worker_form").validate()) {
+                        const val = $$("register_worker_form").getValues();
+                        const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+
+                        webix.ajax().post(schedulerUrl + "workers/register", {
+                            id: val.id,
+                            user_id: val.user_id,
+                            user_name: val.user_name,
+                            user_pass: val.user_pass,
+                            job_name: val.job_name,
+                            user_group: "1",
+                            user_group_idx: user_group_idx,
+                            mobile: val.mobile,
+                            rule_idx: val.rule_idx,
+                            giver_idx: user.id
+                        }).then(function(data) {
+                            const response = data.text();
+                            if (response != "") {
+                                if (val.id == "" ) {
+                                    webix.alert({ title: "Register worker", type: "alert-success", text: "Register a worker successfully!" }).then(function (result){
+                                        refresh_worker_grid("");
+                                        $$("register_worker_form").clear();
+                                    })
+                                } else {
+                                    webix.alert({ title: "Update worker", type: "alert-success", text: "Update a worker successfully!" })
+                                    $$("register_worker_form").clear();
+                                    $$("register_worker_button").setValue("Register");
+
+                                    refresh_worker_grid("");
                                 }
-                                webix.ajax().post(schedulerUrl + "workers/register", {
-                                    user_id: val.user_id,
-                                    user_name: val.user_name,
-                                    user_pass: val.user_pass,
-                                    job_name: val.job_name,
-                                    user_group: "1",
-                                    user_group_idx: user_group_idx,
-                                    mobile: val.mobile,
-                                    check_values: check_values,
-                                    all_check: val.all_check,
-                                    giver_idx: user.id
-                                }).then(function(data) {
-                                    const response = data.text();
-                                    if (response == "success") {
-                                        webix.alert({ title: "Register Worker", type: "alert-success", text: "Register a worker successfully!" }).then(function (result){
-                                            refresh_worker_grid();
-                                            $$("register_worker_form").clear();
-                                        })
-                                    } else {
-                                        webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
-                                    }
-                                })
+                            } else {
+                                webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
                             }
-                        }
-                    },
-                    {}
-                ],
+                        })
+                    }
+                },
                 gravity: 0.1,
                 css: {
                     "margin": "auto!important",
@@ -1566,6 +2389,8 @@
         view:"datatable",
         id: "worker_grid",
         autoConfig:true,
+        scroll: "x",
+        resizeColumn:true,
         columns:[
             { id:"id", header:"#", width: 50 },
             { id:"user_name",	header:"user_name", fillspace:true },
@@ -1573,16 +2398,16 @@
             { id:"user_id",	header:"user_id", fillspace:true  },
             { id:"user_pass",	header:"user_pass", fillspace:true  },
             { id:"mobile",	header:"mobile", fillspace:true  },
-            // { id:"rule_idx",	header:"rule_idx", fillspace:true  },
+            { id:"rule_idx",	header:"rule_idx", fillspace: true },
         ],
         url:function(params){
-            var user_id = sessionStorage.getItem("user_id");
+            var user_id = user.id;
             var user_group_idx = sessionStorage.getItem("user_group_idx");
             var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
-                uID: user.id,
+                uID: user_id,
                 fID: user_group_idx
             }).responseText;
-            if (data != "0") {
+            if (data != "") {
                 this.parse(data);
             }
         },
@@ -1597,7 +2422,15 @@
             },
             "wxi-pencil":function(event, id, node){
                 webix.ajax().get(schedulerUrl + "workers/select", {id: id.row}).then(function(result) {
-                    console.log(result.text());
+                    const worker = result.json();
+                    $$("user_name1").setValue(worker.user_name);
+                    $$("job_name").setValue(worker.job_name);
+                    $$("user_id1").setValue(worker.user_id);
+                    $$("user_pass1").setValue(worker.user_pass);
+                    $$("mobile1").setValue(worker.mobile);
+                    $$("rule_idx").setValue(worker.rule_idx);
+                    $$("worker_id").setValue(worker.id);
+                    $$("register_worker_button").setValue("Update");
                 })
             }
         }
@@ -1620,8 +2453,207 @@
             }
         ],
     };
-
     // ----------- Register Worker page End ----------------
+    // ----------- Register fmn code modal Start ----------------
+    const register_fmn_label = {
+        view: "label",
+        template: "Register Food & Medicine & Nutrition & Etc",
+        css: {
+            "font-size": "24px"
+        }
+    };
+    const register_fmn_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register fmn code"
+            },
+            {},
+            { 
+                align:"right",
+                body:{ 
+                    view: "search", placeholder: "search", id: "fmn_search", name: "search", icon: "wxi-search" , gravity: 0.1 , width: 200,
+                    on:{
+                        onChange: function(newValue, oldValue, config){
+                            refresh_fmn_code_grid(newValue);
+                        }
+                    }
+                }
+            },
+        ]
+    };
+    const register_fmn_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "type", gravity: 0.1 },
+            { view: "label", label: "name", gravity: 0.1 },
+            { view: "label", label: "provider", gravity: 0.1 },
+            { view: "label", label: "description", gravity: 0.1 },
+            { gravity: 0.1}
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    };
+    const register_fmn_form = {
+        view: "form",
+        id: "register_fmn_code_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", hidden: true, id: "fmn_id", name: "id" },
+            { view: "datepicker", placeholder: "date", id: "date7", name: "date" , gravity: 0.1 },
+            { view: "richselect", placeholder: "item type", id: "type", name: "type", gravity: 0.1, options: [
+                { id: 1, value: "Food" }, 
+                { id: 2, value: "Medicine" },
+                { id: 3, value: "nutrition" },
+                { id: 4, value: "quarantine" },
+            ]},
+            { view: "text", placeholder: "item name", id: "name", name: "name" , gravity: 0.1 },
+            { view: "richselect", placeholder: "provider", id: "provider", name: "provider", gravity: 0.1, options: [
+                { id: 1, value: "Partner1" }, 
+                { id: 2, value: "Partner2" },
+                { id: 3, value: "Partner3" },
+                { id: 4, value: "Partner4" },
+            ]},
+            { view: "text", placeholder: "item description", id: "description", name: "description", gravity: 0.1 },
+            {
+                view: "button", value: "Register", id: "register_fmn_button", gravity: 0.1,
+                click: function() {
+                    if ($$("register_fmn_code_form").validate()) {
+                        const val = $$("register_fmn_code_form").getValues();
+                        const user_idx = user.id;
+                        const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                        
+                        webix.ajax().post(schedulerUrl + "fmn_codes/register", {
+                            id: val.id,
+                            user_idx: user_idx,
+                            farm_idx: user_group_idx,
+                            date: val.date,
+                            type: val.type,
+                            name: val.name,
+                            provider: val.provider,
+                            description: val.description,
+                        }).then(function(data) {
+                            const response = data.text();
+                            if (response != "") {
+                                if (val.id == "" ) {
+                                    webix.alert({ title: "Register fmn code item", type: "alert-success", text: "Register a fmn code successfully!" }).then(function (result){
+                                        refresh_fmn_code_grid("");
+                                        $$("register_fmn_code_form").clear();
+                                    })
+                                } else {
+                                    webix.alert({ title: "Update fmn code", type: "alert-success", text: "Update a fmn code successfully!" })
+                                    $$("register_fmn_code_form").clear();
+                                    $$("register_fmn_button").setValue("Register");
+
+                                    refresh_fmn_code_grid("");
+                                }
+                            } else {
+                                webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                            }
+                        })
+                    }
+                }
+            }
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        }
+    };
+    const register_fmn_list_label = {
+        view: "label",
+        label: "List of fmn code"
+    };
+    const register_fmn_datatable = {
+        view:"datatable",
+        id: "fmn_code_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"date",    header:"Date", fillspace:true },
+            { id:"name",    header:"Item Name", fillspace:true },
+            { id:"code",    header:"Item Code", fillspace:true },
+            { id:"provider",    header:"Provider", fillspace:true, template: function(obj) {
+                var result = "";
+                switch (obj.provider) {
+                    case "1":
+                        result = "Partner1"
+                        break;
+                    case "2":
+                        result = "Partner2"
+                        break;
+                    case "3":
+                        result = "Partner3"
+                        break;
+                    case "4":
+                        result = "Partner4"
+                        break;
+                    default:
+                        result = "Partner1"
+                        break;
+                }
+
+                return result;
+            }},
+            { id:"description", header:"Item Description", fillspace:true  },
+        ],
+        url:function(params){
+            const user_id = user.id;
+            const user_group_idx = sessionStorage.getItem("user_group_idx");
+            var data = webix.ajax().sync().get(schedulerUrl + "fmn_codes/all", {
+                user_idx: user_id,
+                farm_idx: user_group_idx,
+            }).responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "fmn_codes/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_fmn_code_grid("");
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "fmn_codes/select", {id: id.row}).then(function(result) {
+                    const fmn = result.json();
+                    console.log(fmn);
+                    $$("date7").setValue(new Date(fmn.date));
+                    $$("type").setValue(fmn.type);
+                    $$("name").setValue(fmn.name);
+                    $$("provider").setValue(fmn.provider);
+                    $$("description").setValue(fmn.description);
+                    $$("fmn_id").setValue(fmn.id);
+                    $$("register_fmn_button").setValue("Update");
+                })
+            }
+        }
+    };
+    const register_fmn_page = {
+        view: "form",
+        id: "register-fmn",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_fmn_label,
+                    register_fmn_header,
+                    register_fmn_label_list,
+                    register_fmn_form,
+                    register_fmn_list_label,
+                    register_fmn_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Register fmn code End ----------------
     // ----------- Register Nutri page Start ----------------
     const register_nutri_label = {
         view: "label",
@@ -1664,6 +2696,7 @@
         margin: 10,
         borderless: true,
         cols: [
+            { view: "text", hidden: true, id: "nutri_id", name: "id" },
             { view: "text", placeholder: "name", id: "code", name: "code" , gravity: 0.1},
             { view: "datepicker", placeholder: "date", id: "date2", name: "date" , gravity: 0.1 },
             { view: "richselect", placeholder: "med_type", id: "med_type", name: "med_type", gravity: 0.1, options: ["medi", "non-medi", "food-nutri"]},
@@ -1675,7 +2708,7 @@
             { 
                 rows: [
                     {
-                        view: "button", value: "register", css: "webix-primary",
+                        view: "button", value: "Register", id: "register_mednutri_button",
                         click: function(){
                             if ($$("register_nutri_form").validate()) {
                                 const val = $$("register_nutri_form").getValues();
@@ -1683,6 +2716,7 @@
                                 const breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
 
                                 webix.ajax().post(schedulerUrl + "mednutri/register", {
+                                    id: val.id,
                                     user_idx: user.id,
                                     farm_idx: user_group_idx,
                                     breed_code: breed_code,
@@ -1696,10 +2730,23 @@
                                     max_qnty: val.max_qnty
                                 }).then(function(data) {
                                     const response = data.text();
-                                    if (response == "success") {
-                                        webix.alert({ title: "Register Nutri", type: "alert-success", text: "Register a nutri successfully!" }).then(function (result){
-                                            $$("register_nutri_form").clear();
-                                        })
+                                    if (response != "") {
+                                        if (val.id == "" ) {
+                                            webix.alert({ title: "Register Nutri", type: "alert-success", text: "Register a nutri successfully!" }).then(function (result){
+                                                $$("register_nutri_form").clear();
+                                                refresh_medi_grid();
+                                                refresh_non_medi_grid();
+                                                refresh_food_nutri_grid();
+                                            })
+                                        } else {
+                                            webix.alert({ title: "Update Nutri", type: "alert-success", text: "Update a nutri successfully!" }).then(function (result){
+                                                $$("register_nutri_form").clear();
+                                                $$("register_mednutri_button").setValue("Register");
+                                                refresh_medi_grid();
+                                                refresh_non_medi_grid();
+                                                refresh_food_nutri_grid();
+                                            })
+                                        }
                                     } else {
                                         webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
                                     }
@@ -1721,44 +2768,205 @@
         },
         gravity: 0.2
     }
-    const register_nutri_list_label = {
+    const register_medi_list_label = {
         view: "label",
         label: "List of medi"
     }
-    const register_nutri_label_list1 = {
-        type: "section",
-        cols: [
-            { view: "label", label: "name", gravity: 0.1 },
-            { view: "label", label: "date", gravity: 0.1 },
-            { view: "label", label: "invetory", gravity: 0.4 },
-            { view: "label", label: "amount", gravity: 0.2 },
-            { gravity: 0.1 },
-            { gravity: 0.1 },
+    const register_medi_list = {
+        view:"datatable",
+        id: "medi_grid",
+        autoConfig:true,
+        height: 300,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"code",	header:"Name", fillspace:true },
+            { id:"date",	header:"date", fillspace:true  },
+            { id:"inventory",	header:"inventory", fillspace:4, 
+                template: function(obj) {
+                    var percent = parseFloat(obj.in_qnty) / parseFloat(obj.max_qnty) * 100;
+                    return `<div class="medi_inventory">
+                        <span style="width: 50px; text-align: right;">0</span>
+                        <input type="range" min="1" max="100" value="${percent}" class="slider" id="myRange" disabled="true" title="${percent}%">
+                        <span style="width: 50px;">100%</span>
+                    </div>` 
+                }
+            },
+            { id:"amount",	header:"amount", fillspace:true, template: function(obj) {
+                return parseInt(obj.in_qnty) * parseInt(obj.unit_price);
+            }},
         ],
-        css: {
-            "background": "lightgrey!important",
-            "text-align": "center"
-        }
-    }
-    const register_nutri_list = {
-        view:"dataview",
-        css: "movies",
-        type:{
-            width: 260,
-            height: 90,
-            template:"html->template_container"
-        },
-        url: function(params){
-            var user_id = sessionStorage.getItem("user_id");
+        url:function(params){
+            var user_id = user.id;
             var user_group_idx = sessionStorage.getItem("user_group_idx");
             var breed_code = sessionStorage.getItem("breed_code");
             var data = webix.ajax().sync().get(schedulerUrl + "mednutri/all", {
-                uID: user.id,
+                uID: user_id,
                 fID: user_group_idx,
-                bCode: breed_code
+                breed_code: breed_code,
+                med_type: "medi"
             }).responseText;
-            console.log(data);
-            return data;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "mednutri/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_medi_grid();
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "mednutri/select", {id: id.row}).then(function(result) {
+                    const medi = result.json();
+                    $$("code").setValue(medi.code);
+                    $$("date2").setValue(new Date(medi.date));
+                    $$("med_type").setValue(medi.med_type);
+                    $$("measure_unit").setValue(medi.measure_unit);
+                    $$("measure").setValue(medi.measure);
+                    $$("in_qnty").setValue(medi.in_qnty);
+                    $$("unit_price").setValue(medi.unit_price);
+                    $$("max_qnty").setValue(medi.max_qnty);
+                    $$("nutri_id").setValue(medi.id);
+                    $$("register_mednutri_button").setValue("Update");
+                })
+            }
+        }
+    }
+    const register_non_medi_list_label = {
+        view: "label",
+        label: "List of non medi"
+    }
+    const register_non_medi_list = {
+        view:"datatable",
+        id: "non_medi_grid",
+        autoConfig:true,
+        height: 300,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"code",	header:"Name", fillspace:true },
+            { id:"date",	header:"date", fillspace:true  },
+            { id:"inventory",	header:"inventory", fillspace:4, 
+                template: function(obj) {
+                    var percent = parseFloat(obj.in_qnty) / parseFloat(obj.max_qnty) * 100;
+                    return `<div class="medi_inventory">
+                        <span style="width: 50px; text-align: right;">0</span>
+                        <input type="range" min="1" max="100" value="${percent}" class="slider" id="myRange" disabled="true" title="${percent}%">
+                        <span style="width: 50px;">100%</span>
+                    </div>` 
+                }
+            },
+            { id:"amount",	header:"amount", fillspace:true, template: function(obj) {
+                return parseInt(obj.in_qnty) * parseInt(obj.unit_price);
+            }},
+        ],
+        url:function(params){
+            var user_id = user.id;
+            var user_group_idx = sessionStorage.getItem("user_group_idx");
+            var breed_code = sessionStorage.getItem("breed_code");
+            var data = webix.ajax().sync().get(schedulerUrl + "mednutri/all", {
+                uID: user_id,
+                fID: user_group_idx,
+                breed_code: breed_code,
+                med_type: "non-medi"
+            }).responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "mednutri/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_medi_grid();
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "mednutri/select", {id: id.row}).then(function(result) {
+                    const medi = result.json();
+                    $$("code").setValue(medi.code);
+                    $$("date2").setValue(new Date(medi.date));
+                    $$("med_type").setValue(medi.med_type);
+                    $$("measure_unit").setValue(medi.measure_unit);
+                    $$("measure").setValue(medi.measure);
+                    $$("in_qnty").setValue(medi.in_qnty);
+                    $$("unit_price").setValue(medi.unit_price);
+                    $$("max_qnty").setValue(medi.max_qnty);
+                    $$("nutri_id").setValue(medi.id);
+                    $$("register_mednutri_button").setValue("Update");
+                })
+            }
+        }
+    }
+    const register_food_nutri_list_label = {
+        view: "label",
+        label: "List of food nutri"
+    }
+    const register_food_nutri_list = {
+        view:"datatable",
+        id: "food_nutri_grid",
+        autoConfig:true,
+        height: 300,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"code",	header:"Name", fillspace:true },
+            { id:"date",	header:"date", fillspace:true  },
+            { id:"inventory",	header:"inventory", fillspace:4, 
+                template: function(obj) {
+                    var percent = parseFloat(obj.in_qnty) / parseFloat(obj.max_qnty) * 100;
+                    return `<div class="medi_inventory">
+                        <span style="width: 50px; text-align: right;">0</span>
+                        <input type="range" min="1" max="100" value="${percent}" class="slider" id="myRange" disabled="true" title="${percent}%">
+                        <span style="width: 50px;">100%</span>
+                    </div>` 
+                }
+            },
+            { id:"amount",	header:"amount", fillspace:true, template: function(obj) {
+                return parseInt(obj.in_qnty) * parseInt(obj.unit_price);
+            }},
+        ],
+        url:function(params){
+            var user_id = user.id;
+            var user_group_idx = sessionStorage.getItem("user_group_idx");
+            var breed_code = sessionStorage.getItem("breed_code");
+            var data = webix.ajax().sync().get(schedulerUrl + "mednutri/all", {
+                uID: user_id,
+                fID: user_group_idx,
+                breed_code: breed_code,
+                med_type: "food-nutri"
+            }).responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "mednutri/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_medi_grid();
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "mednutri/select", {id: id.row}).then(function(result) {
+                    const medi = result.json();
+                    $$("code").setValue(medi.code);
+                    $$("date2").setValue(new Date(medi.date));
+                    $$("med_type").setValue(medi.med_type);
+                    $$("measure_unit").setValue(medi.measure_unit);
+                    $$("measure").setValue(medi.measure);
+                    $$("in_qnty").setValue(medi.in_qnty);
+                    $$("unit_price").setValue(medi.unit_price);
+                    $$("max_qnty").setValue(medi.max_qnty);
+                    $$("nutri_id").setValue(medi.id);
+                    $$("register_mednutri_button").setValue("Update");
+                })
+            }
         }
     }
     const register_nutri_page = {
@@ -1773,27 +2981,12 @@
                     register_nutri_header,
                     register_nutri_label_list,
                     register_nutri_form,
-                    register_nutri_list_label,
-                    register_nutri_label_list1,
-                    register_nutri_list,
-                    {
-                        template: "non-medi list label"
-                    },
-                    {
-                        template: "non-medi label list"
-                    },
-                    {
-                        template: "non-medi list"
-                    },
-                    {
-                        template: "food nutri list label"
-                    },
-                    {
-                        template: "food nutri label list"
-                    },
-                    {
-                        template: "food nutri list"
-                    },
+                    register_medi_list_label,
+                    register_medi_list,
+                    register_non_medi_list_label,
+                    register_non_medi_list,
+                    register_food_nutri_list_label,
+                    register_food_nutri_list
                 ]
             }
         ],
@@ -1841,6 +3034,7 @@
         margin: 10,
         borderless: true,
         cols: [
+            { view: "text", hidden: true, id: "food_id", name: "id" },
             { view: "text", placeholder: "name", id: "food_name", name: "code" , gravity: 0.1},
             { view: "richselect", placeholder: "Sex", id: "sex", name: "sex", gravity: 0.1, options: [{id: 1, value: "female"}, {id: 2, value: "male"}]},
             { view: "datepicker", placeholder: "date", id: "date3", name: "date" , gravity: 0.1 },
@@ -1852,7 +3046,7 @@
             { 
                 rows: [
                     {
-                        view: "button", value: "register", css: "webix-primary",
+                        view: "button", value: "register", id: "register_food_button",
                         click: function(){
                             if ($$("register_food_form").validate()) {
                                 const val = $$("register_food_form").getValues();
@@ -1875,6 +3069,7 @@
                                     const response = data.text();
                                     if (response == "success") {
                                         webix.alert({ title: "Register Food", type: "alert-success", text: "Register a food successfully!" }).then(function (result){
+                                            refresh_food_grid();
                                             $$("register_food_form").clear();
                                         })
                                     } else {
@@ -1902,41 +3097,67 @@
         view: "label",
         label: "Food List"
     }
-    const register_food_label_list1 = {
-        type: "section",
-        cols: [
-            { view: "label", label: "food name", gravity: 0.1 },
-            { view: "label", label: "date", gravity: 0.1 },
-            { view: "label", label: "invetory", gravity: 0.4 },
-            { view: "label", label: "amount", gravity: 0.2 },
-            { gravity: 0.1 },
-            { gravity: 0.1 },
+    const register_food_datatable = {
+        view:"datatable",
+        id: "food_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"code",	header:"Food Name"},
+            { id:"date",	header:"Date"},
+            { 
+                id:"in_kg",	header:"Food Inventory Graph", fillspace:true,
+                template: function(obj) {
+                    var percent = parseFloat(obj.in_kg) / parseFloat(obj.tank_max) * 100;
+                    return `<div class="medi_inventory">
+                        <span style="width: 50px; text-align: right;">0</span>
+                        <input type="range" min="1" max="100" value="${percent}" class="slider" id="myRange" disabled="true" title="${percent}%">
+                        <span style="width: 50px;">100%</span>
+                    </div>` 
+                }
+            },
+            { id:"unit_price",	header:"Amount", template: function(obj) {
+                return parseInt(obj.in_kg) * parseInt(obj.unit_price);
+            }},
         ],
-        css: {
-            "background": "lightgrey!important",
-            "text-align": "center"
-        }
-    }
-    const register_food_list = {
-        view:"dataview",
-        css: "movies",
-        type:{
-            width: 260,
-            height: 90,
-            template:"html->template_container"
-        },
-        url: function(params){
-            var user_id = sessionStorage.getItem("user_id");
+        url:function(params){
+            var user_id = user.id;
             var user_group_idx = sessionStorage.getItem("user_group_idx");
             var breed_code = sessionStorage.getItem("breed_code");
             var data = webix.ajax().sync().get(schedulerUrl + "foods/all", {
-                uID: user.id,
+                uID: user_id,
                 fID: user_group_idx,
-                bCode: breed_code
+                breed_code: breed_code
             }).responseText;
-            console.log(data);
-            return data;
-        }
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "foods/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_food_grid();
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "foods/select", {id: id.row}).then(function(result) {
+                    const food = result.json();
+                    $$("food_name").setValue(food.code);
+                    $$("sex").setValue(new Date(food.sex));
+                    $$("date3").setValue(food.date);
+                    $$("in_kg").setValue(food.in_kg);
+                    $$("unit_price1").setValue(food.unit_price);
+                    $$("tank_max").setValue(food.tank_max);
+                    $$("nutrition_name").setValue(food.nutrition_name);
+                    $$("nutrition_in_kg").setValue(food.nutrition_in_kg);
+                    $$("food_id").setValue(food.id);
+                    $$("register_food_button").setValue("Update");
+                })
+            }
+        },
     }
     const register_food_page = {
         view: "form",
@@ -1951,13 +3172,763 @@
                     register_food_label_list,
                     register_food_form,
                     register_food_list_label,
-                    register_food_label_list1,
-                    register_food_list,
+                    register_food_datatable,
                 ]
             }
         ],
     };
     // ----------- Register Food page End ----------------
+    // ----------- Register sale item modal Start ----------------
+    const register_sale_item_label = {
+        view: "label",
+        template: "Register sale item code",
+        css: {
+            "font-size": "24px"
+        }
+    };
+    const register_sale_item_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register sale_item code"
+            },
+            {},
+        ]
+    };
+    const register_sale_item_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "name", gravity: 0.1 },
+            { view: "label", label: "description", gravity: 0.1 },
+            { gravity: 0.1}
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    };
+    const register_sale_item_form = {
+        view: "form",
+        id: "register_sale_item_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", hidden: true, id: "sale_item_id", name: "id" },
+            { view: "text", id: "item_name", placeholder: "item_name", name: "item_name"},
+            { view: "text", id: "item_description", placeholder: "item_description", name: "item_description" },
+            {
+                view: "button", value: "Register", id: "register_sale_item_button",
+                click: function() {
+                    if ($$("register_sale_item_form").validate()) {
+                        const val = $$("register_sale_item_form").getValues();
+                        const user_idx = user.id;
+                        const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                        const breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+                        
+                        webix.ajax().post(schedulerUrl + "sales/items/register", {
+                            id: val.id,
+                            user_idx: user_idx,
+                            farm_idx: user_group_idx,
+                            breed_code: breed_code,
+                            date: new Date(),
+                            item_name: val.item_name,
+                            item_description: val.item_description,
+                        }).then(function(data) {
+                            const response = data.text();
+                            const user_group_idx = sessionStorage.getItem("user_group_idx");
+                            if (response != "") {
+                                if (val.id == "" ) {
+                                    webix.alert({ title: "Register sales item", type: "alert-success", text: "Register a sales item successfully!" }).then(function (result){
+                                        refresh_sale_item_grid();
+                                        $$("register_sale_item_form").clear();
+                                        webix.ajax().get(schedulerUrl + "sales/items/options?user_idx=" + user.id +"&farm_idx=" + user_group_idx, function(text, data){
+                                            var options = data.json();
+                                        
+                                            var list = $$("sales_item").getPopup().getList();
+                                            list.clearAll();
+                                            list.parse(options);
+
+                                        });
+                                    })
+                                } else {
+                                    webix.alert({ title: "Update sales item", type: "alert-success", text: "Update a sales item successfully!" })
+                                    $$("register_sale_item_form").clear();
+                                    $$("register_sale_item_button").setValue("Register");
+
+                                    refresh_sale_item_grid("");
+                                    webix.ajax().get(schedulerUrl + "sales/items/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                                        var options = data.json();
+                                    
+                                        var list = $$("sales_item").getPopup().getList();
+                                        list.clearAll();
+                                        list.parse(options);
+
+                                    });
+                                }
+                            } else {
+                                webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                            }
+                        })
+                    }
+                }
+            }
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        }
+    };
+    const register_sale_item_list_label = {
+        view: "label",
+        label: "List of sale_item code"
+    };
+    const register_sale_item_datatable = {
+        view:"datatable",
+        id: "sale_item_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"date",    header:"Date", fillspace:true },
+            { id:"item_name",   header:"Item Name", fillspace:true },
+            { id:"item_description",    header:"Item Description", fillspace:true  },
+        ],
+        url:function(params){
+            const user_id = user.id;
+            const user_group_idx = sessionStorage.getItem("user_group_idx");
+            const breed_code = sessionStorage.getItem("breed_code");
+            var data = webix.ajax().sync().get(schedulerUrl + "sales/items/all", {
+                user_idx: user_id,
+                farm_idx: user_group_idx,
+                breed_code: breed_code
+            }).responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                const user_group_idx = sessionStorage.getItem("user_group_idx");
+                webix.ajax().del(schedulerUrl + "sales/items/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_sale_item_grid();
+                        webix.ajax().get(schedulerUrl + "sales/items/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                            var options = data.json();
+                        
+                            var list = $$("sales_item").getPopup().getList();
+                            list.clearAll();
+                            list.parse(options);
+                        });
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "sales/items/select", {id: id.row}).then(function(result) {
+                    const item = result.json();
+                    $$("item_name").setValue(item.item_name);
+                    $$("item_description").setValue(item.item_description);
+                    $$("sale_item_id").setValue(item.id);
+                    $$("register_sale_item_button").setValue("Update");
+                })
+            }
+        }
+    };
+    const register_sale_item_page = {
+        view: "form",
+        id: "register-saleitem",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_sale_item_label,
+                    register_sale_item_header,
+                    register_sale_item_label_list,
+                    register_sale_item_form,
+                    register_sale_item_list_label,
+                    register_sale_item_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Register sale page End ----------------
+    // ----------- Manage sale page Start ----------------
+    const manage_sale_label = {
+        view: "label",
+        template: "Input sales data",
+        css: {
+            "font-size": "24px"
+        }
+    }
+    const manage_sale_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register sales data"
+            },
+            {}
+        ]
+        
+    }
+    const manage_sale_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "sales items", gravity: 0.1 },
+            { view: "label", label: "qnty", gravity: 0.1 },
+            { view: "label", label: "unit price", gravity: 0.1 },
+            { view: "label", label: "amount", gravity: 0.1 },
+            { gravity: 0.1 },
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    }
+    const manage_sale_form = {
+        view: "form",
+        id: "manage_sale_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", hidden: true, id: "sale_id", name: "id" },
+            { view: "datepicker", placeholder: "date", id: "date5", name: "date", gravity: 0.1 },
+            {
+                view: "richselect",
+                name: "sales_item",
+                id: "sales_item",
+                placeholder: "sales item",
+                required: true,
+                gravity: 0.1,
+                options: schedulerUrl + "sales/items/options?user_idx=" + user.id + "&farm_idx=" + sessionStorage.getItem("user_group_idx"),
+            },
+            { view: "text", placeholder: "qnty", id: "qnty", name: "qnty", gravity: 0.1, attributes:{type:"number"}, 
+                on: {
+                    onChange: function(nv, ov) {
+                        const amount = parseInt(nv) * parseInt($$("unit_price2").getValue());
+                        $$("amount").setValue(amount);
+                    }
+                }    
+            },
+            { view: "text", placeholder: "unit_price", id: "unit_price2", name: "unit_price", gravity: 0.1, attributes:{type:"number"} ,
+                on: {
+                    onChange: function(nv, ov) {
+                        const amount = parseInt(nv) * parseInt($$("qnty").getValue());
+                        $$("amount").setValue(amount);
+                    }
+                }  
+            },
+            { view: "text", placeholder: "amount", id: "amount", name: "amount", gravity: 0.1, attributes:{type:"number"}, readonly: true},
+            { 
+                rows: [
+                    {
+                        view: "button", value: "register", id: "register_sale_button",
+                        click: function(){
+                            if ($$("manage_sale_form").validate()) {
+                                const val = $$("manage_sale_form").getValues();
+                                const user_idx = user.id;
+                                const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                                const breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+                                
+                                webix.ajax().post(schedulerUrl + "sales/register", {
+                                    id: val.id,
+                                    user_idx: user_idx,
+                                    farm_idx: user_group_idx,
+                                    breed_code: breed_code,
+                                    date: val.date,
+                                    item_idx: val.sales_item,
+                                    unit_price: val.unit_price,
+                                    qnty: val.qnty
+                                }).then(function(data) {
+                                    const response = data.text();
+                                    if (response != "") {
+                                        if (val.id == "" ) {
+                                            webix.alert({ title: "Register sales", type: "alert-success", text: "Register a sales successfully!" }).then(function (result){
+                                                refresh_sale_grid();
+                                                $$("manage_sale_form").clear();
+                                            })
+                                        } else {
+                                            webix.alert({ title: "Update sales", type: "alert-success", text: "Update a sales successfully!" })
+                                            $$("manage_sale_form").clear();
+                                            $$("register_sale_button").setValue("Register");
+
+                                            refresh_sale_grid();
+                                        }
+                                    } else {
+                                        webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                                    }
+                                    
+                                })
+                            }
+                        }
+                    },
+                    {}
+                ],
+                gravity: 0.1,
+                css: {
+                    "margin": "auto!important",
+                    "padding": "20px"
+                }
+            },
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        },
+        gravity: 0.2
+    }
+    const manage_sale_list_label = {
+        view: "label",
+        label: "List of sales item"
+    }
+    const manage_sale_datatable = {
+        view:"datatable",
+        id: "sale_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"date",	header:"date", fillspace:true },
+            { id:"item_idx",	header:"item", fillspace:true, template: function(obj) {
+                var data = webix.ajax().sync().get(schedulerUrl + "sales/items/select", {
+                    id: obj.item_idx
+                }).responseText;
+                return JSON.parse(data).item_name;
+            }},
+            { id:"qnty",	header:"qnty", fillspace:true  },
+            { id:"unit_price",	header:"unit_price", fillspace:true  },
+            { id:"amount",	header:"amount", fillspace:true, template: function(obj) {
+                return parseInt(obj.qnty) * parseInt(obj.unit_price);
+            }},
+        ],
+        url:function(params){
+            const user_id = user.id;
+            const user_group_idx = sessionStorage.getItem("user_group_idx");
+            const breed_code = sessionStorage.getItem("breed_code");
+            var data = webix.ajax().sync().get(schedulerUrl + "sales/all", {
+                user_idx: user_id,
+                farm_idx: user_group_idx,
+                breed_code: breed_code
+            }).responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "sales/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_sale_grid();
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "sales/select", {id: id.row}).then(function(result) {
+                    const sale = result.json();
+                    const sale_amount = parseInt(sale.qnty) * parseInt(sale.unit_price);
+                    $$("sale_id").setValue(sale.id);
+                    $$("date5").setValue(new Date(sale.date));
+                    $$("sales_item").setValue(sale.item_idx);
+                    $$("qnty").setValue(sale.qnty);
+                    $$("unit_price2").setValue(sale.unit_price);
+                    $$("amount").setValue(sale_amount);
+                    $$("register_sale_button").setValue("Update");
+                })
+            }
+        }
+    };
+    const manage_sale_page = {
+        view: "form",
+        id: "manage-sale",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    manage_sale_label,
+                    manage_sale_header,
+                    manage_sale_label_list,
+                    manage_sale_form,
+                    manage_sale_list_label,
+                    manage_sale_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Manage sale page End ----------------
+    // ----------- Register expense item modal Start ----------------
+    const register_expense_item_label = {
+        view: "label",
+        template: "Register expense item code",
+        css: {
+            "font-size": "24px"
+        }
+    };
+    const register_expense_item_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register expense_item code"
+            },
+            {},
+        ]
+    };
+    const register_expense_item_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "name", gravity: 0.1 },
+            { view: "label", label: "description", gravity: 0.1 },
+            { gravity: 0.1}
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    };
+    const register_expense_item_form = {
+        view: "form",
+        id: "register_expense_item_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", hidden: true, id: "expense_item_id", name: "id" },
+            { view: "text", id: "item_name1", placeholder: "item_name", name: "item_name" },
+            { view: "text", id: "item_description1", placeholder: "item_description", name: "item_description" },
+            {
+                view: "button", value: "Register", id: "register_expense_item_button",
+                click: function() {
+                    if ($$("register_expense_item_form").validate()) {
+                        const val = $$("register_expense_item_form").getValues();
+                        const user_idx = user.id;
+                        const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                        const breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+                        
+                        webix.ajax().post(schedulerUrl + "expenses/items/register", {
+                            user_idx: user_idx,
+                            farm_idx: user_group_idx,
+                            breed_code: breed_code,
+                            id: val.id,
+                            date: new Date(),
+                            item_name: val.item_name,
+                            item_description: val.item_description,
+                        }).then(function(data) {
+                            const response = data.text();
+                            if (response != "") {
+                                if (val.id == "" ) {
+                                    webix.alert({ title: "Register expenses item", type: "alert-success", text: "Register a expenses item successfully!" }).then(function (result){
+                                        refresh_expense_item_grid();
+                                        $$("register_expense_item_form").clear();
+                                        webix.ajax().get(schedulerUrl + "expenses/items/options?user_idx=" + user.id +"&farm_idx=" + user_group_idx, function(text, data){
+                                            var options = data.json();
+                                        
+                                            var list = $$("expenses_item").getPopup().getList();
+                                            list.clearAll();
+                                            list.parse(options);
+
+                                        });
+                                    })
+                                } else {
+                                    webix.alert({ title: "Update expenses item", type: "alert-success", text: "Update a expenses item successfully!" })
+                                    $$("register_expense_item_form").clear();
+                                    $$("register_expense_item_button").setValue("Register");
+
+                                    refresh_expense_item_grid("");
+                                    webix.ajax().get(schedulerUrl + "expenses/items/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                                        var options = data.json();
+                                    
+                                        var list = $$("expenses_item").getPopup().getList();
+                                        list.clearAll();
+                                        list.parse(options);
+
+                                    });
+                                }
+                            } else {
+                                webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                            }
+                        })
+                    }
+                }
+            }
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        }
+    };
+    const register_expense_item_list_label = {
+        view: "label",
+        label: "List of expense_item code"
+    };
+    const register_expense_item_datatable = {
+        view:"datatable",
+        id: "expense_item_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"date",    header:"Date", fillspace:true },
+            { id:"item_name",   header:"Item Name", fillspace:true },
+            { id:"item_description",    header:"Item Description", fillspace:true  },
+        ],
+        url:function(params){
+            const user_id = user.id;
+            const user_group_idx = sessionStorage.getItem("user_group_idx");
+            const breed_code = sessionStorage.getItem("breed_code");
+            var data = webix.ajax().sync().get(schedulerUrl + "expenses/items/all", {
+                user_idx: user_id,
+                farm_idx: user_group_idx,
+                breed_code: breed_code
+            }).responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "expenses/items/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_expense_item_grid();
+                        webix.ajax().get(schedulerUrl + "expenses/items/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                            var options = data.json();
+                        
+                            var list = $$("expenses_item").getPopup().getList();
+                            list.clearAll();
+                            list.parse(options);
+                        });
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "expenses/items/select", {id: id.row}).then(function(result) {
+                    webix.ajax().get(schedulerUrl + "expenses/items/select", {id: id.row}).then(function(result) {
+                    const item = result.json();
+                    $$("item_name1").setValue(item.item_name);
+                    $$("item_description1").setValue(item.item_description);
+                    $$("expense_item_id").setValue(item.id);
+                    $$("register_expense_item_button").setValue("Update");
+                })
+                })
+            }
+        }
+    };
+    const register_expense_item_page = {
+        view: "form",
+        id: "register-expenseitem",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    register_expense_item_label,
+                    register_expense_item_header,
+                    register_expense_item_label_list,
+                    register_expense_item_form,
+                    register_expense_item_list_label,
+                    register_expense_item_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Register expense page End ----------------
+    // ----------- Manage expense page Start ----------------
+    const manage_expense_label = {
+        view: "label",
+        template: "Input expenses data",
+        css: {
+            "font-size": "24px"
+        }
+    }
+    const manage_expense_header = {
+        cols : [
+            {
+                view: "label",
+                label: "Register expenses data"
+            },
+            {}
+        ]
+        
+    }
+    const manage_expense_label_list = {
+        type: "section",
+        cols: [
+            { view: "label", label: "date", gravity: 0.1 },
+            { view: "label", label: "expenses items", gravity: 0.1 },
+            { view: "label", label: "qnty", gravity: 0.1 },
+            { view: "label", label: "unit price", gravity: 0.1 },
+            { view: "label", label: "amount", gravity: 0.1 },
+            { gravity: 0.1 },
+        ],
+        css: {
+            "background": "lightgrey!important",
+            "text-align": "center"
+        }
+    }
+    const manage_expense_form = {
+        view: "form",
+        id: "manage_expense_form",
+        margin: 10,
+        borderless: true,
+        cols: [
+            { view: "text", hidden: true, id: "expense_id", name: "id" },
+            { view: "datepicker", placeholder: "date", id: "date6", name: "date", gravity: 0.1 },
+            {
+                view: "richselect",
+                name: "expenses_item",
+                id: "expenses_item",
+                placeholder: "expenses item",
+                required: true,
+                gravity: 0.1,
+                options: schedulerUrl + "expenses/items/options?user_idx=" + user.id + "&farm_idx=" + sessionStorage.getItem("user_group_idx"),
+            },
+            { view: "text", placeholder: "qnty", id: "qnty2", name: "qnty", gravity: 0.1, attributes:{type:"number"} ,
+                on: {
+                    onChange: function(nv, ov) {
+                        const amount = parseInt(nv) * parseInt($$("unit_price3").getValue());
+                        $$("amount1").setValue(amount);
+                    }
+                } 
+            },
+            { view: "text", placeholder: "unit_price", id: "unit_price3", name: "unit_price", gravity: 0.1, attributes:{type:"number"},
+                on: {
+                    onChange: function(nv, ov) {
+                        const amount = parseInt(nv) * parseInt($$("qnty2").getValue());
+                        $$("amount1").setValue(amount);
+                    }
+                } 
+            },
+            { view: "text", placeholder: "amount", id: "amount1", name: "amount", gravity: 0.1, attributes:{type:"number"}, readonly: true },
+            { 
+                rows: [
+                    {
+                        view: "button", value: "register", id: "register_expense_button",
+                        click: function(){
+                            if ($$("manage_expense_form").validate()) {
+                                const val = $$("manage_expense_form").getValues();
+                                const user_idx = user.id;
+                                const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                                const breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+                                
+                                webix.ajax().post(schedulerUrl + "expenses/register", {
+                                    id: val.id,
+                                    user_idx: user_idx,
+                                    farm_idx: user_group_idx,
+                                    breed_code: breed_code,
+                                    date: val.date,
+                                    item_idx: val.expenses_item,
+                                    unit_price: val.unit_price,
+                                    qnty: val.qnty
+                                }).then(function(data) {
+                                    const response = data.text();
+                                    if (response != "") {
+                                        if (val.id == "" ) {
+                                            webix.alert({ title: "Register expenses", type: "alert-success", text: "Register a expenses successfully!" }).then(function (result){
+                                                refresh_expense_grid();
+                                                $$("manage_expense_form").clear();
+                                            })
+                                        } else {
+                                            webix.alert({ title: "Update expenses", type: "alert-success", text: "Update a expenses successfully!" })
+                                            $$("manage_expense_form").clear();
+                                            $$("register_expense_button").setValue("Register");
+
+                                            refresh_expense_grid();
+                                        }
+                                    } else {
+                                        webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                                    }
+                                })
+                            }
+                        }
+                    },
+                    {}
+                ],
+                gravity: 0.1,
+                css: {
+                    "margin": "auto!important",
+                    "padding": "20px"
+                }
+            },
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        },
+        gravity: 0.2
+    }
+    const manage_expense_list_label = {
+        view: "label",
+        label: "List of expenses item"
+    }
+    const manage_expense_datatable = {
+        view:"datatable",
+        id: "expense_grid",
+        autoConfig:true,
+        columns:[
+            { id:"id", header:"#", width: 50 },
+            { id:"date",	header:"date", fillspace:true },
+            { id:"item_idx",	header:"item", fillspace:true, template: function(obj) {
+                var data = webix.ajax().sync().get(schedulerUrl + "expenses/items/select", {
+                    id: obj.item_idx
+                }).responseText;
+                return JSON.parse(data).item_name; 
+            }},
+            { id:"qnty",	header:"qnty", fillspace:true  },
+            { id:"unit_price",	header:"unit_price", fillspace:true  },
+            { id:"amount",	header:"amount", fillspace:true, template: function(obj) {
+                return parseInt(obj.qnty) * parseInt(obj.unit_price);
+            }},
+        ],
+        url:function(params){
+            const user_id = user.id;
+            const user_group_idx = sessionStorage.getItem("user_group_idx");
+            const breed_code = sessionStorage.getItem("breed_code");
+            var data = webix.ajax().sync().get(schedulerUrl + "expenses/all", {
+                user_idx: user_id,
+                farm_idx: user_group_idx,
+                breed_code: breed_code
+            }).responseText;
+            if (data != "") {
+                this.parse(data);
+            }
+        },
+        scroll:"y",
+        onClick:{
+            "wxi-trash":function(event, id, node){
+                webix.ajax().del(schedulerUrl + "expenses/remove?id=" + id.row).then(function(result) {
+                    if (result.text() != "") {
+                        refresh_expense_grid();
+                    }
+                })
+            },
+            "wxi-pencil":function(event, id, node){
+                webix.ajax().get(schedulerUrl + "expenses/select", {id: id.row}).then(function(result) {
+                    const expense = result.json();
+                    const expense_amount = parseInt(expense.qnty) * parseInt(expense.unit_price);
+                    $$("expense_id").setValue(expense.id);
+                    $$("date6").setValue(new Date(expense.date));
+                    $$("expenses_item").setValue(expense.item_idx);
+                    $$("qnty2").setValue(expense.qnty);
+                    $$("unit_price3").setValue(expense.unit_price);
+                    $$("amount1").setValue(expense_amount);
+                    $$("register_expense_button").setValue("Update");
+                })
+            }
+        }
+    };
+    const manage_expense_page = {
+        view: "form",
+        id: "manage-expense",
+        elements: [
+            {
+                type: "section",
+                borderless: false,
+                rows: [
+                    manage_expense_label,
+                    manage_expense_header,
+                    manage_expense_label_list,
+                    manage_expense_form,
+                    manage_expense_list_label,
+                    manage_expense_datatable,
+                ]
+            }
+        ],
+    };
+    // ----------- Manage expense page End ----------------
     // ----------- Manage feed first page Start ----------------
     const feed_label = {
         view: "label",
@@ -1970,6 +3941,7 @@
     const datepicker = {
         view: "datepicker",
 		id: "date",
+        name: "date",
         value: new Date(2012, 6, 8),
         format: "%Y, %m-%d %l",
         timepicker: true,
@@ -1983,19 +3955,52 @@
     const save_button = {
         view: "button",
         label: "Save",
-        id: "save_button"
+        id: "save_button",
+        click: function(){
+            if ($$("manage_feed_form").validate()) {
+                const val = $$("$panel1");
+
+                const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                const breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+              
+                console.log(val.getValues());
+
+                // webix.ajax().post(schedulerUrl + "foods/register", {
+                //     user_idx: user.id,
+                //     farm_idx: user_group_idx,
+                //     breed_code: breed_code,
+                //     date: val.date,
+                //     code: val.code,
+                //     in_kg: val.in_kg,
+                //     unit_price: val.unit_price,
+                //     sex: val.sex,
+                //     tank_max: val.tank_max,
+                //     nutrition_name: val.nutrition_name,
+                //     nutrition_in_kg: val.nutrition_in_kg
+                // }).then(function(data) {
+                //     const response = data.text();
+                //     if (response == "success") {
+                //         webix.alert({ title: "Register Food", type: "alert-success", text: "Register a food successfully!" }).then(function (result){
+                //             $$("register_food_form").clear();
+                //         })
+                //     } else {
+                //         webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                //     }
+                // })
+            }
+        }
     }
     const panel = {
         view: "panel",
+        type: "form",
         body: {
-            padding: 20,
             rows: [
                 {
                     cols: [
                         {
                             view: "template",
                             name: "$value",
-                            template: "<span style='border-radius: 50%; padding: 5px; background: lightgrey;'>#month#</span>",
+                            template: "<span style='border-radius: 50%; padding: 5px; background: lightgrey; width: 20px; height: 20px;'>#building_no#</span>",
                             css: {
                                 "border": "none!important;"
                             }
@@ -2019,35 +4024,212 @@
                         }
                     ]
                 },
-                { height: 20 },
+                // {
+                //     cols: [
+                //         {
+                //             view: "text",
+                //             value: "100",
+                //             label: "male_feed",
+                //             labelPosition: "top",
+                //             css: "borderR",
+                //             gravity: 0.3,
+                //             on: {
+                //                 onChange: function (nv, ov) {
+                //                     var user_id = user.id;
+                //                     var farm_id = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                //                     var breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+                //                     var panel_id = parseInt(panelID.slice(6));
+                //                     var male_feed = parseInt(nv);
+                //                     var female_feed = parseInt(this.getParentView().getChildViews()[1].getValue());
+                //                     var total = male_feed + female_feed;
+                //                     this.getParentView().getChildViews()[2].setValue(total);
+
+                //                     webix.ajax().post(schedulerUrl + "feeds/update", {
+                //                         user_idx: user_id,
+                //                         farm_idx: farm_id,
+                //                         breed_code: breed_code,
+                //                         building_id: panel_id,
+                //                         female_feed: female_feed,
+                //                         male_feed: male_feed,
+                //                         date: $$("date").getValue()
+                //                     });
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             view: "text",
+                //             bottomLabel: "female_feed",
+                //             value: "100",
+                //             align: "center",
+                //             css: "borderR",
+                //             gravity: 0.3,
+                //             on: {
+                //                 onChange: function (nv, ov) {
+                //                     var user_id = user.id;
+                //                     var farm_id = JSON.parse(sessionStorage.getItem("user_group_idx"));
+                //                     var breed_code = JSON.parse(sessionStorage.getItem("breed_code"));
+                //                     var panel_id = parseInt(panelID.slice(6));
+                //                     var male_feed = parseInt(this.getParentView().getChildViews()[0].getValue());
+                //                     var female_feed = parseInt(nv);
+                //                     var total = male_feed + female_feed;
+                //                     this.getParentView().getChildViews()[2].setValue(total);
+
+                //                     webix.ajax().post(schedulerUrl + "feeds/update", {
+                //                         building_id: panel_id,
+                //                         female_feed: female_feed,
+                //                         male_feed: male_feed,
+                //                         date: $$("date").getValue()
+                //                     });
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             view: "text",
+                //             value: "100",
+                //             readonly: true,
+                //             bottomLabel: "total_feed",
+                //             align: "center",
+                //             css: "borderR",
+                //             gravity: 0.3
+                //         },
+                //     ],
+                //     css: {
+                //         "background": "lightgrey",
+                //         "color": "blue",
+                //         "text-align": "center"
+                //     }
+                // },
                 {
-                    cols: [
+                    rows: [
                         {
                             view: "label",
-                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>male feed</div>",
-                            align: "center",
-                            css: "borderR"
+                            label: "female",
+                            align: "center"
                         },
                         {
-                            view: "label",
-                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>female feed</div>",
-                            align: "center",
-                            css: "borderR"
-                        },
-                        {
-                            view: "label",
-                            template: "<div style='color: blue'>200</div><div>total feed</div>",
-                            align: "center",
-                        },
+                            cols: [
+                                {
+                                    rows: [
+                                        {
+                                            view: "label",
+                                            label: "each",
+                                            align: "center"
+                                        },
+                                        {
+                                            cols: [
+                                                {
+                                                    view: "text",
+                                                },
+                                                {
+                                                    view: "label",
+                                                    label: "g",
+                                                    autowidth: true
+                                                }
+                                            ],
+                                        }
+                                    ]
+                                },
+                                { width: 50 },
+                                {
+                                    rows: [
+                                        {
+                                            view: "label",
+                                            label: "total",
+                                            align: "center"
+                                        },
+                                        {
+                                            cols: [
+                                                {
+                                                    view: "text",
+
+                                                },
+                                                {
+                                                    view: "label",
+                                                    label: "kg",
+                                                    autowidth: true
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
                     ],
+                    padding: 10,
                     css: {
-                        "padding": "10px",
                         "background": "lightgrey",
-                        "width": "auto!important",
-                        "margin-right": "20px"
+                        "margin-bottom": "10px!important",
                     }
                 },
-                { height: 80 },
+                {
+                    rows: [
+                        {
+                            view: "label",
+                            label: "male",
+                            align: "center"
+                        },
+                        {
+                            cols: [
+                                {
+                                    rows: [
+                                        {
+                                            view: "label",
+                                            label: "each",
+                                            align: "center"
+                                        },
+                                        {
+                                            cols: [
+                                                {
+                                                    view: "text",
+
+                                                },
+                                                {
+                                                    view: "label",
+                                                    label: "g",
+                                                    autowidth: true
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                { width: 50 },
+                                {
+                                    rows: [
+                                        {
+                                            view: "label",
+                                            label: "total",
+                                            align: "center"
+                                        },
+                                        {
+                                            cols: [
+                                                {
+                                                    view: "text",
+
+                                                },
+                                                {
+                                                    view: "label",
+                                                    label: "kg",
+                                                    autowidth: true
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                }
+                            ]
+                        }
+                    ],
+                    padding: 10,
+                    css: {
+                        "background": "lightgrey",
+                        "margin-bottom": "10px!important",
+                    }
+                },
+                {
+                    cols: [
+                        { view: "richselect", placeholder: "select femalefood", name: "female_food", options: [{id: 1, value: "20215326"}, {id: 2, value: "20216532"}]},
+                        { view: "richselect", placeholder: "select malefood", name: "male_food", options: [{id: 1, value: "20215326"}, {id: 2, value: "20216532"}]},
+                    ]
+                },
                 {
                     view: "label",
                     label: "female-feed-graph",
@@ -2059,44 +4241,66 @@
                 },
                 { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "male-feed" }
             ],
-            height: 400
+            minHeight: 550
         },
         minWidth: 330,
-        minHeight: 400
+        minHeight: 550,
     }
     const panels = {
         margin: 10, padding: 0,
         view: "flexdatalayout",
         cols: [panel],
-        url: "https://docs.webix.com/samples/60_pro/13_layout/data/year.js"
+        url: function(params) {
+            const farm_idx = sessionStorage.getItem("user_group_idx");
+
+            var data = webix.ajax().sync().get(schedulerUrl + "feeds/all", {
+                farm_idx: farm_idx
+            }).responseText;
+
+            if (JSON.parse(data) == 0) {
+                building_num = JSON.parse(data).length;
+            }
+
+            return data;
+        }
     }
-	const manage_feed1 = {
+	const manage_feed_form = {
+        view: "form",
+        id: "manage_feed_form",
+        rows: [
+            {
+                cols: [
+                    feed_label,
+                    {},
+                    { view:"icon", icon:"wxi-angle-left", id:"prev", click: function(){ 
+                        changeRange(-1);
+                    }},
+                    datepicker,
+                    { view:"icon", icon:"wxi-angle-right", id:"next", click: function(){
+                        changeRange(1);
+                    }},
+                    {},
+                    save_button
+                ]
+            },
+            {
+                view: "label",
+                label: "Info feeding"
+            },
+            {
+                view: "scrollview",
+                body: webix.copy(panels)
+            }
+        ],
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        }
+    }
+    const manage_feed = {
 			view: "form",
 			id: "manage-feed",
 			elements: [
-				{
-					cols: [
-						feed_label,
-						{},
-						{ view:"icon", icon:"wxi-angle-left", id:"prev", click: function(){ 
-							changeRange(-1);
-						}},
-						datepicker,
-						{ view:"icon", icon:"wxi-angle-right", id:"next", click: function(){
-							changeRange(1);
-						}},
-						{},
-						save_button
-					]
-				},
-				{
-					view: "label",
-					label: "Info feeding"
-				},
-				{
-					view: "scrollview",
-					body: webix.copy(panels)
-				}
+                manage_feed_form
 			]
 		};
 	// ----------- Manage feed first page End ----------------
@@ -2132,7 +4336,7 @@
                         {
                             view: "template",
                             name: "$value",
-                            template: "<span style='border-radius: 50%; padding: 5px; background: lightgrey;'>#month#</span>",
+                            template: "<span style='border-radius: 50%; padding: 5px; background: lightgrey;'>#building_no#</span>",
                             css: {
                                 "border": "none!important;"
                             }
@@ -2158,101 +4362,250 @@
                 },
                 { height: 20 },
                 {
+                    view: "label",
+                    padding: 10,
+                    template: "<div style='color: blue'>200</div><div>total water</div>",
+                    align: "center",
+                    css: {
+                        "background": "lightgrey",
+                    }
+                },
+                { height: 20 },
+                {
                     cols: [
                         {
                             view: "label",
-                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>male feed</div>",
-                            align: "center",
-                            css: "borderR"
+                            label: "water supply time"
                         },
                         {
-                            view: "label",
-                            template: "<input style='color: blue; width: 50px; margin: auto; text-align: center' value='100'/><div>female feed</div>",
-                            align: "center",
-                            css: "borderR"
+                            fillspace: true,
                         },
                         {
-                            view: "label",
-                            template: "<div style='color: blue'>200</div><div>total feed</div>",
-                            align: "center",
+                            view: "button",
+                            label: "add",
+                            type:"icon", icon:"wxi-plus",
+                            autowidth: true,
+                            click: function() {
+                                const list = this.getParentView().getParentView().getChildViews()[6];
+                                list.add({title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1})
+                            }
                         },
-                    ],
-                    css: {
-                        "padding": "10px",
-                        "background": "lightgrey",
-                        "width": "auto!important",
-                        "margin-right": "20px"
-                    }
+                        {
+                            view: "button",
+                            label: "del",
+                            type:"icon", icon:"wxi-minus",
+                            autowidth: true,
+                            click: function() {
+                                const list = this.getParentView().getParentView().getChildViews()[6];
+                                if (list.getSelectedId())
+                                    list.remove(list.getSelectedId());
+                            }
+                        }
+                    ]
                 },
-                { height: 80 },
+                { height: 10 },
+                {
+                    view: "list",
+                    template: 
+                        "<div style='display: flex; justify-content: space-around; align-items: center'>" + 
+                            "<input type='number' style='width: 30px;'/>HH " + 
+                            "<input type='number' style='width: 30px;'/>MM - " + 
+                            "<input type='number' style='width: 30px;'/>HH "+
+                            "<input type='number' style='width: 30px;'/>MM" +
+                        "</div>",
+                    select: true,
+                    height: 100
+                },
+                { height: 20 },
+                {
+                    cols: [
+                        { view: "richselect", placeholder: "med_type", options: ["medi", "non-medi"] },
+                        { view: "richselect", placeholder: "measure", options: ["medi1", "medi2", "medi3", "medi4", "medi5"] },
+                        { view: "text", placeholder: "in_qnty", attributes: {type: "number"} }
+                    ]
+                },
+                { height: 20 },
+                {  
+                    view:"list", 
+                    select: false,
+                    type: {
+                        height: 'auto',
+                    },
+                    layout: "x",
+                    template: (row) => 
+                    /* click on the button should invoke createMenu(<id>) where <id> is property of list item */
+                        `<div class="tag_list ` + row.type + `"><span class="hoverButton">
+                            <button type="button" class="webix_icon_button">
+                                <span class="webix_icon wxi-close close-icon"></span>
+                            </button>
+                        </span>`+ row.value + `</div>`,
+                    data:[
+                        {id: 1, value: 'medi1', type: "medi"},
+                        {id: 2, value: 'medi2', type: "medi"},
+                        {id: 3, value: 'no-medi1', type: "non-medi"},
+                        {id: 4, value: 'no-medi2', type: "non-medi"},
+                        {id: 5, value: 'medi3', type: "medi"},
+                    ], 
+                },
                 {
                     view: "label",
-                    label: "female-feed-graph",
+                    label: "medi",
                 },
                 { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "female-feed" },
                 {
                     view: "label",
-                    label: "male-feed-graph",
+                    label: "non-medi",
                 },
                 { view: "slider", value: "50", min: 0, max: 100, title: "#value#", css: "male-feed" }
             ],
-            height: 400
         },
         minWidth: 330,
-        minHeight: 400
+        minHeight: 600
     }
     const water_panels = {
         margin: 10, padding: 0,
         view: "flexdatalayout",
         cols: [water_panel],
-        url: "https://docs.webix.com/samples/60_pro/13_layout/data/year.js"
+        url: function(params) {
+            const farm_idx = sessionStorage.getItem("user_group_idx");
+
+            var data = webix.ajax().sync().get(schedulerUrl + "feeds/all", {
+                farm_idx: farm_idx
+            }).responseText;
+            return data;
+        }
     }
 	const supply_water = {
-			view: "form",
-			id: "supply-water",
-			elements: [
-				{
-					cols: [
-                        water_label,
-						{},
-						{ view:"icon", icon:"wxi-angle-left", id:"prev1", click: function(){ 
-							changeRange1(-1);
-						}},
-						datepicker1,
-						{ view:"icon", icon:"wxi-angle-right", id:"next1", click: function(){
-							changeRange1(1);
-						}},
-						{},
-						save_button1
-					]
-				},
-				{
-					view: "label",
-					label: "Info water"
-				},
-				{
-					view: "scrollview",
-					body: webix.copy(water_panels)
-				}
-			]
-		};
-	// ----------- Supply water page End ----------------
-    webix.ui({
-        view:"popup",
-        id:"bell_pop",
-        body:{
-            view:"list",
-            width:320,
-            height:600,
-            template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
-            type:{
-                height:62
+        view: "form",
+        id: "supply-water",
+        elements: [
+            {
+                cols: [
+                    water_label,
+                    {},
+                    { view:"icon", icon:"wxi-angle-left", id:"prev1", click: function(){ 
+                        changeRange1(-1);
+                    }},
+                    datepicker1,
+                    { view:"icon", icon:"wxi-angle-right", id:"next1", click: function(){
+                        changeRange1(1);
+                    }},
+                    {},
+                    save_button1
+                ]
             },
-            select:true,
-            data:big_film_set
+            {
+                view: "label",
+                label: "Info water"
+            },
+            {
+                view: "scrollview",
+                body: webix.copy(water_panels)
+            }
+        ]
+    };
+	// ----------- Supply water page End ----------------
+    // ----------- Send Breed page Start ----------------
+    const send_breed_label = {
+        view: "label",
+        label: "Send Breed",
+        css: {
+            "font-size": "20px",
+            "font-weight": "bold"
+        }
+    }
+    const send_breed_list = { 
+        view:"dbllist",
+        list:{ 
+            select: true,
+            autoHeight: true,
+            scroll: true,
+            template:function(obj, common){
+                var dir = (common.id  === "left" ? "right" : "left");
+                return "<div style='display: flex; justify-content: space-between;'>BD_No <span style='border-right: 2px solid; margin-right: 2px;'></span> " + obj.bd_no + "<span style='border-right: 2px solid; margin: 2px;'></span>" + 
+                        "Female <span style='border-right: 2px solid; margin-right: 2px;'></span> " + obj.female + "<span style='border-right: 2px solid; margin: 2px;'></span>" +
+                        "Male <span style='border-right: 2px solid; margin-right: 2px;'></span> " + obj.male + "<span style='border-right: 2px solid; margin: 2px;'></span>" + 
+                        "Weekage <span style='border-right: 2px solid; margin-right: 2px;'></span> " + obj.weekage + "<span style='border-right: 2px solid; margin: 2px;'></span></div>";
+            },
         },
-    }).hide();
+        labelBottomLeft:"Object for send",
+        labelBottomRight:"Object selected",
+        data:[
+            {id:"1", bd_no:"1", female: "5000", male: "0", weekage: "32"},
+            {id:"2", bd_no:"2", female: "5000", male: "0", weekage: "32"},
+            {id:"3", bd_no:"3", female: "3000", male: "0", weekage: "32"},
+            {id:"4", bd_no:"4", female: "4000", male: "0", weekage: "32"},
+            {id:"5", bd_no:"5", female: "5000", male: "0", weekage: "32"},
+            {id:"6", bd_no:"6", female: "6000", male: "0", weekage: "32"},
+            {id:"7", bd_no:"7", female: "3000", male: "0", weekage: "32"},
+            {id:"8", bd_no:"8", female: "5000", male: "0", weekage: "32"},
+        ]
+    };
+    const send_breed_form = {
+        view: "form",
+        id: "send_breed_form",
+        margin: 10,
+        borderless: true,
+        rows: [
+            {
+                cols: [
+                    { view: "richselect", placeholder: "Breed_code", id: "breed_code", name: "breed_code", label: "Breed_code", labelWidth: 130, gravity: 0.1, options: [{id: 1, value: "20215326"}, {id: 2, value: "20216532"}]},
+                    { view: "datepicker", placeholder: "Date_send", id: "date4", name: "date" , label: "Date_send", labelWidth: 130, gravity: 0.1 },
+                    { view: "richselect", placeholder: "To_farm_idx", id: "to_farm_idx", name: "to_farm_idx", label: "To_farm_idx", labelWidth: 130, gravity: 0.1, options: [{id: 1, value: "farm1"}, {id: 2, value: "farm2"}]},
+                    { view: "multiselect", placeholder: "Vehicle_no", id: "vehicle_no", name: "vehicle_no", label: "Vehicle_no", labelWidth: 130, gravity: 0.1, options: ["AC123A12", "SD232S54"]},
+                ],
+            },
+            { 
+                align:"right",
+                body:{ 
+                    view: "button",
+                    value: "SEND",
+                    width: 100,
+                    click: function() {
+                        if ($$("send_breed_form").validate()) {
+                            const val = $$("send_breed_form").getValues();
+                            const user_group_idx = JSON.parse(sessionStorage.getItem("user_group_idx"));
 
+                            webix.ajax().post(schedulerUrl + "breeds/transfer", {
+                                user_idx: user.id,
+                                farm_idx: user_group_idx,
+                                breed_code: val.breed_code,
+                                date: val.date,
+                                to_farm_idx: val.to_farm_idx,
+                                vehicle_no: val.vehicle_no
+                            }).then(function(data) {
+                                const response = data.text();
+                                if (response == "success") {
+                                    webix.alert({ title: "Send Breed", type: "alert-success", text: "Send Breed successfully!" }).then(function (result){
+                                        $$("send_breed_form").clear();
+                                    })
+                                } else {
+                                    webix.alert({ title: "Some input values are not Correct \n Please try again", type: "alert-warning"})
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        ],
+        
+        rules: {
+            $all:webix.rules.isNotEmpty,
+        },
+        gravity: 0.2
+    }
+    const send_breed_page = {
+        view: "form",
+        id: "send-breed",
+        elements: [
+            send_breed_label,
+            send_breed_form,
+            {
+                view:"forminput", name:"screens", body:send_breed_list, labelWidth:0 
+            },
+        ]
+    };
+    // ----------- Send Breed page End ----------------
     webix.ready(function () {
 		if (!user) {
 			window.location.href = "login";
@@ -2283,7 +4636,7 @@
 						},
 						{ view: "button", label: "myInfo", gravity: 0.3 },
 						{ view: "icon", icon: "mdi mdi-comment", badge: 4 },
-						{ view: "icon", id: "bell_icon", icon: "mdi mdi-bell", popup:"bell_pop"}
+						{ view: "icon", id: "bell_icon", icon: "mdi mdi-bell"}
 					]
 				},
 				{
@@ -2297,13 +4650,22 @@
 									id: "dashboard1",
 									template: "dashboard"
 								},
-								manage_feed1,
+								manage_feed,
+                                register_partner_page,
                                 register_farm_page,
+                                register_biotype_page,
                                 register_breed_page,
+                                register_authority_page,
                                 register_worker_page,
+                                register_fmn_page,
                                 register_nutri_page,
                                 register_food_page,
+                                register_sale_item_page,
+                                manage_sale_page,
+                                register_expense_item_page,
+                                manage_expense_page,
                                 supply_water,
+                                send_breed_page
 							]
 						}
 
@@ -2313,42 +4675,82 @@
 			]
 		});
 
-        $$("bell_icon").config.badge = big_film_set.length;
-        $$("bell_icon").refresh();
-        var columns = $$("grid").config.columns;
-        if (columns.length > 3) {
-            columns.splice(columns.length, 0,{
-                id:"trash",
-                header:"Delete",
-                template: "{common.trashIcon()}"
-            });
-            $$("grid").refreshColumns();
-
-            columns.splice(columns.length-1, 0,{
-                id:"edit",
-                header:"Edit",
-                template: "{common.editIcon()}"
-            });
-            $$("grid").refreshColumns();
-        }
-
-        var columns1 = $$("worker_grid").config.columns;
-        if (columns1.length > 3) {
-            columns1.splice(columns1.length, 0,{
-                id:"trash",
-                header:"Delete",
-                template: "{common.trashIcon()}"
-            });
-            $$("worker_grid").refreshColumns();
-
-            columns1.splice(columns1.length-1, 0,{
-                id:"edit",
-                header:"Edit",
-                template: "{common.editIcon()}"
-            });
-            $$("worker_grid").refreshColumns();
-        }
+        add_controls($$("grid"));
+        add_controls($$("worker_grid"));
+        add_controls($$("sale_grid"));
+        add_controls($$("sale_item_grid"));
+        add_controls($$("expense_grid"));
+        add_controls($$("expense_item_grid"));
+        add_controls($$("fmn_code_grid"));
+        add_controls($$("partner_grid"));
+        add_controls($$("biotype_grid"));
+        add_controls($$("auth_rule_grid"));
+        add_controls($$("food_grid"));
+        add_controls($$("medi_grid"));
+        add_controls($$("non_medi_grid"));
+        add_controls($$("food_nutri_grid"));
+        //--
+        webix.attachEvent("onClick", function(e) {
+            if (e) {
+                //check if the clicked element is a view
+                if ($$(e.target)) {
+                    if ($$(e.target).getParentView()) {
+                        var layout = $$(e.target).getParentView();
+                        while(layout.config.view !== "panel") {
+                            layout = layout.getParentView();
+                            if (!layout) {
+                                return false;
+                            }
+                        }
+                        if (layout.config.view == "panel") {
+                                webix.message(layout.config.id);
+                                panelID= layout.config.id;
+                                
+                        }
+                    }
+                }
+            }
+        })
     });
+
+    function select_breed() {
+        const farm_idx = sessionStorage.getItem("user_group_idx");
+        webix.ajax().get(schedulerUrl + "farms/breeds", {
+            user_idx: user.id,
+            farm_idx: farm_idx
+        }).then(function(data) {
+            const breeds = data.json();
+            
+            if (breeds && breeds.length > 0) {
+                const breed_code = sessionStorage.getItem("breed_code");
+                if (breeds.length > 1) {
+                    var breeds_value = [];
+                    breeds.forEach(breed => {
+                        breeds_value.push({
+                            id: breed.uuid,
+                            title: breed.uuid
+                        })
+                    });
+                    $$("breeds").define("data", breeds_value);
+                    if (!breed_code) {
+                        breed_select_win.show();
+                    }
+                } else {
+                    sessionStorage.setItem("breed_code", breeds[0].uuid);
+                }
+            } else {
+                webix.alert({
+                    title:"Warning!",
+                    text:"You don't have any breeds. please register breed first!",
+                    type:"alert-warning"
+                })
+                .then(function(result){
+                    $$("menu_list").select("register-breed");
+                    $$("menu_list").open($$("menu_list").getParentId("register-breed"));
+                })
+            }
+        })
+    }
 
 	function changeRange(sign){
 		const oldValue = $$("date").getValue();
@@ -2367,7 +4769,7 @@
 	}
 
     function refresh_breed_grid() {
-        var user_id = sessionStorage.getItem("user_id");
+        var user_id = user.id;
         var user_group_idx = sessionStorage.getItem("user_group_idx");
         var data = webix.ajax().sync().get(schedulerUrl + "breeds/all", {
             uID: user_id,
@@ -2375,14 +4777,14 @@
         }).responseText;
         
         $$("grid").clearAll();
-        if (data != "0") {
+        if (data != "") {
             $$("grid").parse(JSON.parse(data));
             $$("grid").refresh();
         }
     }
 
     function refresh_worker_grid() {
-        var user_id = sessionStorage.getItem("user_id");
+        var user_id = user.id;
         var user_group_idx = sessionStorage.getItem("user_group_idx");
         var data = webix.ajax().sync().get(schedulerUrl + "workers/all", {
             uID: user_id,
@@ -2390,9 +4792,226 @@
         }).responseText;
         
         $$("worker_grid").clearAll();
-        if (data != "0") {
+        if (data != "") {
             $$("worker_grid").parse(JSON.parse(data));
             $$("worker_grid").refresh();
+        }
+    }
+    
+    function refresh_food_grid() {
+        var user_id = user.id;
+        var user_group_idx = sessionStorage.getItem("user_group_idx");
+        var breed_code = sessionStorage.getItem("breed_code");
+        var data = webix.ajax().sync().get(schedulerUrl + "foods/all", {
+            uID: user_id,
+            fID: user_group_idx,
+            breed_code: breed_code
+        }).responseText;
+        
+        $$("food_grid").clearAll();
+        if (data != "") {
+            $$("food_grid").parse(JSON.parse(data));
+            $$("food_grid").refresh();
+        }
+    }
+    
+    function refresh_sale_grid() {
+        const user_idx = user.id
+        const user_group_idx = sessionStorage.getItem("user_group_idx");
+        const breed_code = sessionStorage.getItem("breed_code");
+        var data = webix.ajax().sync().get(schedulerUrl + "sales/all", {
+            user_idx: user_idx,
+            farm_idx: user_group_idx,
+            breed_code: breed_code
+        }).responseText;
+        
+        $$("sale_grid").clearAll();
+        if (data != "") {
+            $$("sale_grid").parse(JSON.parse(data));
+            $$("sale_grid").refresh();
+        }
+    }
+
+    function refresh_sale_item_grid() {
+        const user_idx = user.id
+        const user_group_idx = sessionStorage.getItem("user_group_idx");
+        const breed_code = sessionStorage.getItem("breed_code");
+        var data = webix.ajax().sync().get(schedulerUrl + "sales/items/all", {
+            user_idx: user_idx,
+            farm_idx: user_group_idx,
+            breed_code: breed_code
+        }).responseText;
+        
+        $$("sale_item_grid").clearAll();
+        if (data != "") {
+            $$("sale_item_grid").parse(JSON.parse(data));
+            $$("sale_item_grid").refresh();
+        }
+    }
+
+    function refresh_expense_grid() {
+        const user_idx = user.id
+        const user_group_idx = sessionStorage.getItem("user_group_idx");
+        const breed_code = sessionStorage.getItem("breed_code");
+        var data = webix.ajax().sync().get(schedulerUrl + "expenses/all", {
+            user_idx: user_idx,
+            farm_idx: user_group_idx,
+            breed_code: breed_code
+        }).responseText;
+        
+        $$("expense_grid").clearAll();
+        if (data != "") {
+            $$("expense_grid").parse(JSON.parse(data));
+            $$("expense_grid").refresh();
+        }
+    }
+
+    function refresh_expense_item_grid() {
+        const user_idx = user.id
+        const user_group_idx = sessionStorage.getItem("user_group_idx");
+        const breed_code = sessionStorage.getItem("breed_code");
+        var data = webix.ajax().sync().get(schedulerUrl + "expenses/items/all", {
+            user_idx: user_idx,
+            farm_idx: user_group_idx,
+            breed_code: breed_code
+        }).responseText;
+        
+        $$("expense_item_grid").clearAll();
+        if (data != "") {
+            $$("expense_item_grid").parse(JSON.parse(data));
+            $$("expense_item_grid").refresh();
+        }
+    }
+    
+    function refresh_fmn_code_grid(search) {
+        const user_idx = user.id
+        const user_group_idx = sessionStorage.getItem("user_group_idx");
+        var data = webix.ajax().sync().get(schedulerUrl + "fmn_codes/all", {
+            user_idx: user_idx,
+            farm_idx: user_group_idx,
+            search: search
+        }).responseText;
+        
+        $$("fmn_code_grid").clearAll();
+        if (data != "") {
+            $$("fmn_code_grid").parse(JSON.parse(data));
+            $$("fmn_code_grid").refresh();
+        }
+    }
+
+    function refresh_partner_grid(search) {
+        const user_idx = user.id
+        const user_group_idx = sessionStorage.getItem("user_group_idx");
+        var data = webix.ajax().sync().get(schedulerUrl + "partners/all", {
+            user_idx: user_idx,
+            search: search
+        }).responseText;
+        
+        $$("partner_grid").clearAll();
+        $$("partner_grid").parse(JSON.parse(data));
+        $$("partner_grid").refresh();
+    }
+
+    function refresh_biotype_grid(search) {
+        const user_idx = user.id
+        const user_group_idx = sessionStorage.getItem("user_group_idx");
+        var data = webix.ajax().sync().get(schedulerUrl + "biotypes/all", {
+            user_idx: user_idx,
+            farm_idx: user_group_idx,
+            search: search
+        }).responseText;
+        
+        $$("biotype_grid").clearAll();
+        if (data != "") {
+            $$("biotype_grid").parse(JSON.parse(data));
+            $$("biotype_grid").refresh();
+        }
+    }
+    
+    function refresh_auth_rule_grid(search) {
+        const user_idx = user.id
+        const user_group_idx = sessionStorage.getItem("user_group_idx");
+        var data = webix.ajax().sync().get(schedulerUrl + "auth_rules/all", {
+            search: search
+        }).responseText;
+        
+        $$("auth_rule_grid").clearAll();
+        if (data != "") {
+            $$("auth_rule_grid").parse(JSON.parse(data));
+            $$("auth_rule_grid").refresh();
+        }
+    }
+    
+    function refresh_medi_grid() {
+        var user_id = user.id;
+        var user_group_idx = sessionStorage.getItem("user_group_idx");
+        var breed_code = sessionStorage.getItem("breed_code");
+        var data = webix.ajax().sync().get(schedulerUrl + "mednutri/all", {
+            uID: user_id,
+            fID: user_group_idx,
+            breed_code: breed_code,
+            med_type: "medi"
+        }).responseText;
+        
+        $$("medi_grid").clearAll();
+        if (data != "") {
+            $$("medi_grid").parse(JSON.parse(data));
+            $$("medi_grid").refresh();
+        }
+    }
+
+    function refresh_non_medi_grid() {
+        var user_id = user.id;
+        var user_group_idx = sessionStorage.getItem("user_group_idx");
+        var breed_code = sessionStorage.getItem("breed_code");
+        var data = webix.ajax().sync().get(schedulerUrl + "mednutri/all", {
+            uID: user_id,
+            fID: user_group_idx,
+            breed_code: breed_code,
+            med_type: "non-medi"
+        }).responseText;
+        
+        $$("non_medi_grid").clearAll();
+        if (data != "") {
+            $$("non_medi_grid").parse(JSON.parse(data));
+            $$("non_medi_grid").refresh();
+        }
+    }
+
+    function refresh_food_nutri_grid() {
+        var user_id = user.id;
+        var user_group_idx = sessionStorage.getItem("user_group_idx");
+        var breed_code = sessionStorage.getItem("breed_code");
+        var data = webix.ajax().sync().get(schedulerUrl + "mednutri/all", {
+            uID: user_id,
+            fID: user_group_idx,
+            breed_code: breed_code,
+            med_type: "food-nutri"
+        }).responseText;
+        
+        $$("food_nutri_grid").clearAll();
+        if (data != "") {
+            $$("food_nutri_grid").parse(JSON.parse(data));
+            $$("food_nutri_grid").refresh();
+        }
+    }
+ 
+    function add_controls(value) {
+        var columns = value.config.columns;
+        if (columns.length > 3) {
+            columns.splice(columns.length, 0,{
+                id:"trash",
+                header:"Delete",
+                template: "{common.trashIcon()}"
+            });
+            value.refreshColumns();
+
+            columns.splice(columns.length-1, 0,{
+                id:"edit",
+                header:"Edit",
+                template: "{common.editIcon()}"
+            });
+            value.refreshColumns();
         }
     }
 </script>
