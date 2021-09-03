@@ -447,6 +447,8 @@
 		on: {
 			onAfterSelect: function (id) {
                 $$("multi").setValue(id)
+                
+                const user_group_idx = sessionStorage.getItem("user_group_idx");
                 switch (id) {
                     case "dashboard1":
                         webix.ajax().get(schedulerUrl + "farms/all", {
@@ -489,6 +491,9 @@
                         })
                         
                         break;
+                    case "register-partner":
+                        refresh_partner_grid("");
+                        break;
                     case "register-farm":
                         const farm = sessionStorage.getItem("user_group_idx");
                         if (farm) {
@@ -520,20 +525,71 @@
                                 $$("farm_id").setValue(farm_info.id);
                             });
                         }
-
-                    case "register-breed":
-                        refresh_breed_grid();
-                        refresh_biotype_grid();
+                    case "register-biotype":
+                        refresh_biotype_grid("");
                         break;
-                    case "register-partner":
-                        refre
+                    case "register-breed":
+                        webix.ajax().get(schedulerUrl + "biotypes/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                            var options = data.json();
+                        
+                            var list = $$("biotype").getPopup().getList();
+                            list.clearAll();
+                            list.parse(options);
+                        });
+                        refresh_breed_grid();
+                        break;
+                    case "register-authority":
+                        refresh_auth_rule_grid("");
                         break;
                     case "register-worker":
+                        webix.ajax().get(schedulerUrl + "auth_rules/options?farm_idx=" + user_group_idx, function(text, data){
+                            var options = data.json();
+                        
+                            var list = $$("rule_idx").getPopup().getList();
+                            list.clearAll();
+                            list.parse(options);
+
+                        });
                         refresh_worker_grid();
                         break;
-                    case "manage-sale":
-                        refresh_sale_grid();
+                    case "register-fmn":
+                        refresh_fmn_code_grid("");
+                        break;
+                    case "register-nutri":
+                        refresh_medi_grid();
+                        refresh_non_medi_grid();
+                        refresh_food_nutri_grid();
+                        break;
+                    case "register-food":
+                        refresh_food_grid();
+                        break;
+                    case "register-saleitem":
                         refresh_sale_item_grid();
+                        break;
+                    case "manage-sale":
+                        webix.ajax().get(schedulerUrl + "sales/items/options?user_idx=" + user.id +"&farm_idx=" + user_group_idx, function(text, data){
+                            var options = data.json();
+                        
+                            var list = $$("sales_item").getPopup().getList();
+                            list.clearAll();
+                            list.parse(options);
+
+                        });
+                        refresh_sale_grid();
+                        break;
+                    case "register-expenseitem":
+                        refresh_expense_item_grid();
+                        break;
+                    case "manage-expense":
+                        webix.ajax().get(schedulerUrl + "expenses/items/options?user_idx=" + user.id +"&farm_idx=" + user_group_idx, function(text, data){
+                            var options = data.json();
+                        
+                            var list = $$("expenses_item").getPopup().getList();
+                            list.clearAll();
+                            list.parse(options);
+
+                        });
+                        refresh_expense_grid();
                         break;
                     default:
                         break;
@@ -780,10 +836,18 @@
     const register_partner_datatable = {
         view:"datatable",
         id: "partner_grid",
-        autoConfig:true,
+        autoConfig:true, sort:"multi",
         columns:[
             { id:"id", header:"#", width: 50 },
-            { id:"date", header:"Date", fillspace:true },
+            { id:"date", header:"Date", fillspace:true, template: function(obj) {
+                const date = new Date(obj.date);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');;
+                const day = String(date.getDate()).padStart(2, '0');
+
+                const result = year + "-" + month + "-" + day;
+                return result;
+            }},
             { id:"partner_category", header:"Company type", fillspace:true, template: function(obj) {
                 var result = "";
                 switch (obj.partner_category) {
@@ -1649,7 +1713,6 @@
                                             var list = $$("biotype").getPopup().getList();
                                             list.clearAll();
                                             list.parse(options);
-
                                         });
                                     })
                                 } else {
@@ -2163,11 +2226,20 @@
                             description: val.description
                         }).then(function(data) {
                             const response = data.text();
+                            const user_group_idx = sessionStorage.getItem("user_group_idx");
                             if (response != "") {
                                 if (val.id == "" ) {
                                     webix.alert({ title: "Register auth_rule", type: "alert-success", text: "Register a auth_rule successfully!" }).then(function (result){
                                         refresh_auth_rule_grid("");
                                         $$("register_authority_form").clear();
+
+                                        webix.ajax().get(schedulerUrl + "auth_rules/options?farm_idx=" + user_group_idx, function(text, data){
+                                            var options = data.json();
+                                        
+                                            var list = $$("rule_idx").getPopup().getList();
+                                            list.clearAll();
+                                            list.parse(options);
+                                        });
                                     })
                                 } else {
                                     webix.alert({ title: "Update auth_rule", type: "alert-success", text: "Update a auth_rule successfully!" })
@@ -2176,10 +2248,10 @@
 
                                     refresh_auth_rule_grid("");
 
-                                    webix.ajax().get(schedulerUrl + "biotypes/options?user_idx=" + user.id + "&farm_idx=" + user_group_idx, function(text, data){
+                                    webix.ajax().get(schedulerUrl + "auth_rules/options?farm_idx=" + user_group_idx, function(text, data){
                                         var options = data.json();
                                     
-                                        var list = $$("biotype").getPopup().getList();
+                                        var list = $$("rule_idx").getPopup().getList();
                                         list.clearAll();
                                         list.parse(options);
 
@@ -4711,6 +4783,25 @@
                 }
             }
         })
+
+        $$("partner_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("biotype_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("auth_rule_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("worker_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("fmn_code_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("medi_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("non_medi_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("food_nutri_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("food_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("partner_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("partner_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("partner_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("partner_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("partner_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("partner_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        $$("partner_grid").attachEvent("onHeaderClick", function(header, event, target){this.sort({ by:header.column });});
+        
     });
 
     function select_breed() {
